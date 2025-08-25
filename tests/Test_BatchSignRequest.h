@@ -3,7 +3,7 @@
 #include <cppunit/TestCase.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "ur-registry/src/batch_sign_request.h"
+#include "../src/batch_sign_request.h"
 
 class TestBatchSignRequest : public CppUnit::TestFixture
 {

@@ -282,6 +282,7 @@ void CoinIdentity::fromMap(CborValue* map) {
 std::string CoinIdentity::toUaiStr() const {
     std::string uai {};
 
+    // cppcheck-suppress unassignedVariable
     for (const auto& [curve_name, curve_int] : CurveMap) {
         if (curve_int == m_curve) {
             uai = "uai://" + curve_name + "." + std::to_string(m_type);

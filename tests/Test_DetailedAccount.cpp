@@ -5,8 +5,8 @@
 #include <string>
 
 #include "Test_DetailedAccount.h"
-#include "ur-registry/src/detailed_account.h"
-#include "ur-registry/tests/Test_UrHelpers.h"
+#include "../src/detailed_account.h"
+#include "Test_UrHelpers.h"
 
 void TestDetailedAccount::setUp(void)
 {

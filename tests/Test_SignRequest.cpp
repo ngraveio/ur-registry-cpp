@@ -5,8 +5,8 @@
 #include <string>
 
 #include "Test_SignRequest.h"
-#include "ur-registry/src/sign_request.h"
-#include "ur-registry/tests/Test_UrHelpers.h"
+#include "../src/sign_request.h"
+#include "Test_UrHelpers.h"
 #include "Test_CoinIdentity.h"
 #include "Test_Keypath.h"
 

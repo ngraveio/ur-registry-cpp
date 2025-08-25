@@ -52,9 +52,11 @@ void OutputDescriptor::toMap(CborEncoder* parentEncoder) const {
         std::sregex_token_iterator{}
     };
     
+    // cppcheck-suppress knownConditionTrueFalse
     if(matches.empty() && !m_keys.empty())
         throw CborException("Keys field should be empty since the source is in textual format (no placeholder).", CborErrorImproperValue);
 
+    // cppcheck-suppress knownConditionTrueFalse
     if(!matches.empty()) {
         if(m_keys.empty())
             throw CborException("Keys field cannot be empty since the source has placeholders.", CborErrorImproperValue);

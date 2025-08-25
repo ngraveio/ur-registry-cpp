@@ -1,4 +1,4 @@
-#include "libs/libwally-core/include/wally_core.h"
+#include <wally_core.h>
 #include "cbor_exception.h"
 
 #include "hdkey_bip32.h"

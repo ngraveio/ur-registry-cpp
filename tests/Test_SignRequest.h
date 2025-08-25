@@ -4,7 +4,7 @@
 #include <cppunit/TestCase.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "ur-registry/src/sign_request.h"
+#include "../src/sign_request.h"
 
 class TestSignRequest : public CppUnit::TestFixture
 {
