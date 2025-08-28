@@ -6,7 +6,10 @@ AC_CONFIG_HEADERS([config.h])
 
 AC_PROG_CXX
 AC_PROG_INSTALL
-LT_INIT
+
+AC_ENABLE_STATIC([yes])
+AC_ENABLE_SHARED([yes])
+LT_INIT([shared static])
 
 AC_CONFIG_FILES([
   Makefile
