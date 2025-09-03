@@ -4,7 +4,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "libs/ur-registry/src/hdkey.h"
+#include "../src/hdkey.h"
 
 class TestHDKey : public CppUnit::TestFixture
 {

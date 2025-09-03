@@ -4,7 +4,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "libs/ur-registry/src/keypath.h"
+#include "../src/keypath.h"
 
 class TestKeypath : public CppUnit::TestFixture
 {

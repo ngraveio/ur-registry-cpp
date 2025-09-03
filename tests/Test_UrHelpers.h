@@ -4,8 +4,8 @@
 #include <QString>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "libs/ur-registry/src/registry_item.h"
-#include "libs/ur-registry/src/hdkey_bip32.h"
+#include "../src/registry_item.h"
+#include "../src/hdkey_bip32.h"
 
 inline std::vector<uint8_t> convertQByteArrayToVector(const QByteArray& byteArray)
 {

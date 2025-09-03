@@ -2,7 +2,7 @@
 #define TEST_COINIDENTITY_H
 
 #include <cppunit/extensions/HelperMacros.h>
-#include "libs/ur-registry/src/coin_identity.h"
+#include "../src/coin_identity.h"
 
 class TestCoinIdentity : public CPPUNIT_NS::TestFixture {
     CPPUNIT_TEST_SUITE(TestCoinIdentity);

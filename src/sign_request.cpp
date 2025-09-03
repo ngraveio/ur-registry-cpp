@@ -1,5 +1,4 @@
 #include "sign_request.h"
-#include <QByteArray>
 #include <bc-ur/utils.hpp>
 
 SignRequest::SignRequest() {

@@ -4,7 +4,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "libs/ur-registry/src/portfolio_metadata.h"
+#include "../src/portfolio_metadata.h"
 
 class TestPortfolioMetadata : public CppUnit::TestFixture
 {

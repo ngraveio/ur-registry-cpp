@@ -4,13 +4,13 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "libs/ur-registry/src/portfolio.h"
-#include "libs/ur-registry/src/portfolio_coin.h"
-#include "libs/ur-registry/src/portfolio_metadata.h"
-#include "libs/ur-registry/src/coin_identity.h"
-#include "libs/ur-registry/src/detailed_account.h"
-#include "libs/ur-registry/src/hdkey.h"
-#include "libs/ur-registry/src/output_descriptor.h"
+#include "../src/portfolio.h"
+#include "../src/portfolio_coin.h"
+#include "../src/portfolio_metadata.h"
+#include "../src/coin_identity.h"
+#include "../src/detailed_account.h"
+#include "../src/hdkey.h"
+#include "../src/output_descriptor.h"
 
 class TestPortfolio : public CppUnit::TestFixture
 {

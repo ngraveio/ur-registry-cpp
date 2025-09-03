@@ -4,7 +4,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "libs/ur-registry/src/coininfo.h"
+#include "../src/coininfo.h"
 
 class TestCoinInfo : public CppUnit::TestFixture
 {

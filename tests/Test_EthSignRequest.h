@@ -4,7 +4,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "libs/ur-registry/src/eth_sign_request.h"
+#include "../src/eth_sign_request.h"
 
 class TestEthSignRequest : public CppUnit::TestFixture
 {

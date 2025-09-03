@@ -5,8 +5,8 @@
 #include <string>
 
 #include "Test_OutputDescriptor.h"
-#include "ur-registry/src/output_descriptor.h"
-#include "ur-registry/tests/Test_UrHelpers.h"
+#include "../src/output_descriptor.h"
+#include "Test_UrHelpers.h"
 
 void TestOutputDescriptor::setUp(void)
 {

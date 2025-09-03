@@ -1,10 +1,10 @@
 #include "Test_UrSignatures.h"
 #include "Test_UrHelpers.h"
 
-#include "libs/ur-registry/src/eth_signature.h"
-#include "libs/ur-registry/src/sign_response.h"
-#include "libs/ur-registry/src/batch_sign_response.h"
-#include "libs/ur-registry/src/cosmos_signature.h"
+#include "../src/eth_signature.h"
+#include "../src/sign_response.h"
+#include "../src/batch_sign_response.h"
+#include "../src/cosmos_signature.h"
 
 void TestUrSignatures::setUp()
 {
