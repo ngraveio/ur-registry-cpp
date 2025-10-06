@@ -16,9 +16,9 @@ void TestCoinInfo::EncodeBtcMainnet(void)
     CoinInfo coinInfo;
     coinInfo.setType(CoinType::Bitcoin);
     coinInfo.setNetwork(NetworkType::MainNet);
-    QByteArray expectedBytes = QByteArray::fromHex("A201000200");
-    QString expectedLegacyUR = "ur:crypto-coin-info/oeadaeaoaefggwfmbn";
-    QString expectedNewUR = "ur:coin-info/oeadaeaoaefggwfmbn";
+    auto expectedBytes = fromHex("A201000200");
+    auto expectedLegacyUR = std::string("ur:crypto-coin-info/oeadaeaoaefggwfmbn");
+    auto expectedNewUR = "ur:coin-info/oeadaeaoaefggwfmbn";
 
     ValidateCborResults(coinInfo, expectedBytes);
     coinInfo.setUseLegacyType(true);
@@ -31,9 +31,9 @@ void TestCoinInfo::EncodeOnlyEthereum(void)
 {
     CoinInfo coinInfo;
     coinInfo.setType(CoinType::Ethereum);
-    QByteArray expectedBytes = QByteArray::fromHex("A101183C");
-    QString expectedLegacyUR = "ur:crypto-coin-info/oyadcsfnksdadlmd";
-    QString expectedNewUR = "ur:coin-info/oyadcsfnksdadlmd";
+    auto expectedBytes = fromHex("A101183C");
+    auto expectedLegacyUR = std::string("ur:crypto-coin-info/oyadcsfnksdadlmd");
+    auto expectedNewUR = std::string("ur:coin-info/oyadcsfnksdadlmd");
 
     ValidateCborResults(coinInfo, expectedBytes);
     coinInfo.setUseLegacyType(true);
@@ -46,9 +46,9 @@ void TestCoinInfo::EncodeOnlyTestnet(void)
 {
     CoinInfo coinInfo;
     coinInfo.setNetwork(NetworkType::EthTestNetRopsten);
-    QByteArray expectedBytes = QByteArray::fromHex("A10201");
-    QString expectedLegacyUR = "ur:crypto-coin-info/oyaoadidsgrfgy";
-    QString expectedNewUR = "ur:coin-info/oyaoadidsgrfgy";
+    auto expectedBytes = fromHex("A10201");
+    auto expectedLegacyUR = std::string("ur:crypto-coin-info/oyaoadidsgrfgy");
+    auto expectedNewUR = std::string("ur:coin-info/oyaoadidsgrfgy");
 
     ValidateCborResults(coinInfo, expectedBytes);
     coinInfo.setUseLegacyType(true);
@@ -60,9 +60,9 @@ void TestCoinInfo::EncodeOnlyTestnet(void)
 void TestCoinInfo::EncodeEmpty(void)
 {
     CoinInfo coinInfo;
-    QByteArray expectedBytes = QByteArray::fromHex("");
-    QString expectedLegacyUR = "ur:crypto-coin-info/aeaeaeae"; // CBOR = '' and CRC32 = '00000000'
-    QString expectedNewUR = "ur:coin-info/aeaeaeae";
+    auto expectedBytes = fromHex("");
+    auto expectedLegacyUR = std::string("ur:crypto-coin-info/aeaeaeae"); // CBOR = '' and CRC32 = '00000000'
+    auto expectedNewUR = std::string("ur:coin-info/aeaeaeae");
 
     ValidateCborResults(coinInfo, expectedBytes);
     coinInfo.setUseLegacyType(true);
@@ -75,9 +75,9 @@ void TestCoinInfo::DecodeNotSupported(void)
 {
     CoinInfo coinInfo;
 
-    QString urToDecode = "ur:crypto-coin-info/oeadaeaoaefggwfmbn";
+    auto urToDecode = std::string("ur:crypto-coin-info/oeadaeaoaefggwfmbn");
     ValidateUrDecodingException(coinInfo, urToDecode, CborErrorUnimplementedValidation);
 
-    urToDecode = "ur:coin-info/oeadaeaoaefggwfmbn";
+    urToDecode = std::string("ur:coin-info/oeadaeaoaefggwfmbn");
     ValidateUrDecodingException(coinInfo, urToDecode, CborErrorUnimplementedValidation);
 }

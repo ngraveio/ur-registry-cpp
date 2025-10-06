@@ -10,4 +10,4 @@ test_ur_registry_SOURCES = main.cpp \
     Test_UrSignatures.cpp Test_CoinIdentity.cpp Test_SignRequest.cpp \
     Test_BatchSignRequest.cpp Test_Intent.cpp
 
-test_ur_registry_LDADD = $(top_builddir)/src/libur-registry.la -lcppunit -ldl
+test_ur_registry_LDADD = $(top_builddir)/src/libur-registry.la -lbc-ur -lwallylite -ltinycbor -lcppunit -ldl

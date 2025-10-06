@@ -100,8 +100,8 @@ void TestCoinIdentity::TestAllFields() {
     //          43                             # bytes(3)
     //             010203                      # "\x01\x02\x03"
 
-    QByteArray expectedBytes = QByteArray::fromHex("A3010802183C0383016474657374D9010743010203");
-    QString expectedUR = "ur:coin-identity/otadayaocsfnaxlsadiejyihjkjytaadatfxadaoaxreurrewl";
+    auto expectedBytes = fromHex("A3010802183C0383016474657374D9010743010203");
+    auto expectedUR = std::string("ur:coin-identity/otadayaocsfnaxlsadiejyihjkjytaadatfxadaoaxreurrewl");
 
     // Test encoding
     ValidateCborResults(identity, expectedBytes);
@@ -119,7 +119,7 @@ void TestCoinIdentity::TestAllFields() {
     
     // Test decoding
     CoinIdentity decoded;
-    CPPUNIT_ASSERT_NO_THROW(decoded.fromUr(expectedUR.toStdString()));
+    CPPUNIT_ASSERT_NO_THROW(decoded.fromUr(expectedUR));
     Compare(decoded, identity);
 
     // Verify map size
@@ -152,8 +152,8 @@ void TestCoinIdentity::TestMinimumFields() {
     //    06                                   # unsigned(6) Ed25519
     //    02                                   # unsigned(2) type
     //    18 94                                # unsigned(148) XLM
-    QByteArray expectedBytes = QByteArray::fromHex("A20106021894");
-    QString expectedUR = "ur:coin-identity/oeadamaocsmwluvtkefz";
+    auto expectedBytes = fromHex("A20106021894");
+    auto expectedUR = std::string("ur:coin-identity/oeadamaocsmwluvtkefz");
 
     // Test encoding
     ValidateCborResults(identity, expectedBytes);
@@ -167,7 +167,7 @@ void TestCoinIdentity::TestMinimumFields() {
 
     // Test decoding
     CoinIdentity decoded;
-    CPPUNIT_ASSERT_NO_THROW(decoded.fromUr(expectedUR.toStdString()));
+    CPPUNIT_ASSERT_NO_THROW(decoded.fromUr(expectedUR));
     Compare(decoded, identity);
 }
 
@@ -188,7 +188,7 @@ void TestCoinIdentity::TestInvalidType() {
     //    01                                   # unsigned(1) P256
     //    02                                   # unsigned(2) type
     //    1A 80000000                          # unsigned(0x80000000)
-    QString urError = "ur:coin-identity/oeadadaocylaaeaeaesffldpzc"; // Contains type = 0x80000000
+    auto urError = std::string("ur:coin-identity/oeadadaocylaaeaeaesffldpzc"); // Contains type = 0x80000000
     ValidateUrDecodingException(identity, urError, CborErrorImproperValue, "Type with high bit set failed");
 }
 
@@ -200,7 +200,7 @@ void TestCoinIdentity::TestInvalidCurve() {
     //    09                                   # unsigned(9) invalid curve value
     //    02                                   # unsigned(2) type
     //    00                                   # unsigned(0)
-    QString urError = "ur:coin-identity/oeadasaoaegannahls";
+    auto urError = std::string("ur:coin-identity/oeadasaoaegannahls");
     ValidateUrDecodingException(identity, urError, CborErrorImproperValue, "Invalid curve value failed");
 }
 
@@ -214,7 +214,7 @@ void TestCoinIdentity::TestMissingMandatoryFields() {
     //    81                                   # array(1)
     //       64                                # text(4)
     //          74657374                       # "test"
-    QString urError = "ur:coin-identity/oeaocsfnaxlyiejyihjkjyjpmwinkb";
+    auto urError = std::string("ur:coin-identity/oeaocsfnaxlyiejyihjkjyjpmwinkb");
     ValidateUrDecodingException(identity, urError, CborErrorTooFewItems, "Map missing the 'curve' mandatory field");
 
     // A2                                      # map(2)
@@ -224,7 +224,7 @@ void TestCoinIdentity::TestMissingMandatoryFields() {
     //    81                                   # array(1)
     //       64                                # text(4)
     //          74657374                       # "test"
-    urError = "ur:coin-identity/oeadadaxlyiejyihjkjyvekgbdft";
+    urError = std::string("ur:coin-identity/oeadadaxlyiejyihjkjyvekgbdft");
     ValidateUrDecodingException(identity, urError, CborErrorTooFewItems, "Map missing the 'type' mandatory field");
 }
 
@@ -238,7 +238,7 @@ void TestCoinIdentity::TestNotUniqueMapKeys() {
     //    00                                   # unsigned(0)
     //    01                                   # unsigned(1) duplicate curve
     //    01                                   # unsigned(1) P256
-    QString urError = "ur:coin-identity/otadadaoaeadadtaamdass";
+    auto urError = std::string("ur:coin-identity/otadadaoaeadadtaamdass");
     ValidateUrDecodingException(identity, urError, CborErrorMapKeysNotUnique, "Duplicate curve key failed");
 
     // A3                                      # map(3)
@@ -248,7 +248,7 @@ void TestCoinIdentity::TestNotUniqueMapKeys() {
     //    00                                   # unsigned(0)
     //    02                                   # unsigned(2) duplicate type
     //    00                                   # unsigned(0)
-    urError = "ur:coin-identity/otadadaoaeaoaelpdwfgme";
+    urError = std::string("ur:coin-identity/otadadaoaeaoaelpdwfgme");
     ValidateUrDecodingException(identity, urError, CborErrorMapKeysNotUnique, "Duplicate type key failed");
 
     // A3                                      # map(3)
@@ -260,7 +260,7 @@ void TestCoinIdentity::TestNotUniqueMapKeys() {
     //    03                                   # unsigned(3) duplicate subtype
     //    81                                   # array(1)
     //       01                                # unsigned(1)
-    urError = "ur:coin-identity/otadadaxlyadaxlyadqzlebkly";
+    urError = std::string("ur:coin-identity/otadadaxlyadaxlyadqzlebkly");
     ValidateUrDecodingException(identity, urError, CborErrorMapKeysNotUnique, "Duplicate subtype key failed");
 }
 
@@ -274,7 +274,7 @@ void TestCoinIdentity::TestInvalidSubtypes() {
     //    00                                   # unsigned(0)
     //    03                                   # unsigned(3) subtype
     //    80                                   # array(0) empty array
-    QString urError = "ur:coin-identity/otadadaoaeaxlajsmywkwt";
+    auto urError = std::string("ur:coin-identity/otadadaoaeaxlajsmywkwt");
     ValidateUrDecodingException(identity, urError, CborErrorImproperValue, "Empty subtype array failed");
 
     // A3                                      # map(3)
@@ -285,7 +285,7 @@ void TestCoinIdentity::TestInvalidSubtypes() {
     //    03                                   # unsigned(3) subtype
     //    81                                   # array(1)
     //       F4                                # primitive(20) boolean false - invalid type
-    urError = "ur:coin-identity/otadadaoaeaxlywksfahmdcl";
+    urError = std::string("ur:coin-identity/otadadaoaeaxlywksfahmdcl");
     ValidateUrDecodingException(identity, urError, CborErrorIllegalType, "Invalid subtype type failed");
 
     // A3                                      # map(3)
@@ -298,7 +298,7 @@ void TestCoinIdentity::TestInvalidSubtypes() {
     //       D9 0108                           # tag(264) wrong tag for hex string
     //          43                             # bytes(3)
     //             010203                      # "\x01\x02\x03"
-    urError = "ur:coin-identity/otadadaoaeaxlytaadayfxadaoaxryondmoe";
+    urError = std::string("ur:coin-identity/otadadaoaeaxlytaadayfxadaoaxryondmoe");
     ValidateUrDecodingException(identity, urError, CborErrorInappropriateTagForType, "Invalid hex string tag failed");
 }
 
@@ -314,8 +314,8 @@ void TestCoinIdentity::TestEncodingUaiExamples() {
     //   02 # unsigned(2)
     //   00 # unsigned(0)
     CPPUNIT_ASSERT_NO_THROW(coinid_uai.setCoinIdentity("uai://secp256k1.0"));
-    QByteArray expectedBytes = QByteArray::fromHex("A201080200");
-    QString expectedUR = "ur:coin-identity/oeadayaoaefdhhjlqz";
+    auto expectedBytes = fromHex("A201080200");
+    auto expectedUR = std::string("ur:coin-identity/oeadayaoaefdhhjlqz");
     ValidateCborResults(coinid_uai, expectedBytes);
     ValidateUrEncoding(coinid_uai, expectedUR);
 
@@ -335,8 +335,8 @@ void TestCoinIdentity::TestEncodingUaiExamples() {
     //   81    # array(1)
     //      01 # unsigned(1)
     CPPUNIT_ASSERT_NO_THROW(coinid_uai.setCoinIdentity("uai://secp256k1.60.1"));
-    expectedBytes = QByteArray::fromHex("A3010802183C038101");
-    expectedUR = "ur:coin-identity/otadayaocsfnaxlyadeecfytwd";
+    expectedBytes = fromHex("A3010802183C038101");
+    expectedUR = std::string("ur:coin-identity/otadayaocsfnaxlyadeecfytwd");
     ValidateCborResults(coinid_uai, expectedBytes);
     ValidateUrEncoding(coinid_uai, expectedUR);
 
@@ -368,8 +368,8 @@ void TestCoinIdentity::TestEncodingUaiExamples() {
     //   81    # array(1)
     //      18 89 # unsigned(137)
     CPPUNIT_ASSERT_NO_THROW(coinid_uai.setCoinIdentity("uai://secp256k1.60.137"));
-    expectedBytes = QByteArray::fromHex("A3010802183C03811889");
-    expectedUR = "ur:coin-identity/otadayaocsfnaxlycsldntlgjlmn";
+    expectedBytes = fromHex("A3010802183C03811889");
+    expectedUR = std::string("ur:coin-identity/otadayaocsfnaxlycsldntlgjlmn");
     ValidateCborResults(coinid_uai, expectedBytes);
     ValidateUrEncoding(coinid_uai, expectedUR);
 
@@ -386,8 +386,8 @@ void TestCoinIdentity::TestEncodingUaiExamples() {
     //    02      # unsigned(2)
     //    19 01F5 # unsigned(501)
     CPPUNIT_ASSERT_NO_THROW(coinid_uai.setCoinIdentity("uai://ed25519.501"));
-    expectedBytes = QByteArray::fromHex("A20106021901F5");
-    expectedUR = "ur:coin-identity/oeadamaocfadykiekohhny";
+    expectedBytes = fromHex("A20106021901F5");
+    expectedUR = std::string("ur:coin-identity/oeadamaocfadykiekohhny");
     ValidateCborResults(coinid_uai, expectedBytes);
     ValidateUrEncoding(coinid_uai, expectedUR);
 
@@ -404,8 +404,8 @@ void TestCoinIdentity::TestEncodingUaiExamples() {
     //   02 # unsigned(2)
     //   19 06C1 # unsigned(1729)
     CPPUNIT_ASSERT_NO_THROW(coinid_uai.setCoinIdentity("uai://ed25519.1729"));
-    expectedBytes = QByteArray::fromHex("A20106021906C1");
-    expectedUR = "ur:coin-identity/oeadamaocfamsebklsfmvs";
+    expectedBytes = fromHex("A20106021906C1");
+    expectedUR = std::string("ur:coin-identity/oeadamaocfamsebklsfmvs");
     ValidateCborResults(coinid_uai, expectedBytes);
     ValidateUrEncoding(coinid_uai, expectedUR);
 
@@ -416,8 +416,8 @@ void TestCoinIdentity::TestEncodingUaiExamples() {
     //   02 # unsigned(2)
     //   19 06C1 # unsigned(1729)
     CPPUNIT_ASSERT_NO_THROW(coinid_uai.setCoinIdentity("uai://secp256k1.1729"));
-    expectedBytes = QByteArray::fromHex("A20108021906C1");
-    expectedUR = "ur:coin-identity/oeadayaocfamsereqdlald";
+    expectedBytes = fromHex("A20108021906C1");
+    expectedUR = std::string("ur:coin-identity/oeadayaocfamsereqdlald");
     ValidateCborResults(coinid_uai, expectedBytes);
     ValidateUrEncoding(coinid_uai, expectedUR);
 
@@ -428,8 +428,8 @@ void TestCoinIdentity::TestEncodingUaiExamples() {
     //   02      # unsigned(2)
     //   19 0378 # unsigned(888)
     CPPUNIT_ASSERT_NO_THROW(coinid_uai.setCoinIdentity("uai://p256.888"));
-    expectedBytes = QByteArray::fromHex("A2010102190378");
-    expectedUR = "ur:coin-identity/oeadadaocfaxksktincamd";
+    expectedBytes = fromHex("A2010102190378");
+    expectedUR = std::string("ur:coin-identity/oeadadaocfaxksktincamd");
     ValidateCborResults(coinid_uai, expectedBytes);
     ValidateUrEncoding(coinid_uai, expectedUR);
 
@@ -440,8 +440,8 @@ void TestCoinIdentity::TestEncodingUaiExamples() {
     //    02      # unsigned(2)
     //    19 0162 # unsigned(354)
     CPPUNIT_ASSERT_NO_THROW(coinid_uai.setCoinIdentity("uai://x25519.354"));
-    expectedBytes = QByteArray::fromHex("A2010402190162");
-    expectedUR = "ur:coin-identity/oeadaaaocfadidjoutasca";
+    expectedBytes = fromHex("A2010402190162");
+    expectedUR = std::string("ur:coin-identity/oeadaaaocfadidjoutasca");
     ValidateCborResults(coinid_uai, expectedBytes);
     ValidateUrEncoding(coinid_uai, expectedUR);
     
@@ -452,8 +452,8 @@ void TestCoinIdentity::TestEncodingUaiExamples() {
     //    02      # unsigned(2)
     //    19 01FC # unsigned(508)
     CPPUNIT_ASSERT_NO_THROW(coinid_uai.setCoinIdentity("uai://ed25519.508:USDC-c76f1f"));
-    expectedBytes = QByteArray::fromHex("A20106021901FC");
-    expectedUR = "ur:coin-identity/oeadamaocfadztcapkvefm";
+    expectedBytes = fromHex("A20106021901FC");
+    expectedUR = std::string("ur:coin-identity/oeadamaocfadztcapkvefm");
     ValidateCborResults(coinid_uai, expectedBytes);
     ValidateUrEncoding(coinid_uai, expectedUR);
 }

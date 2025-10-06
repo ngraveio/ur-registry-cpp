@@ -1,76 +1,83 @@
 #pragma once
 
-#include <QByteArray>
-#include <QString>
+#include <vector>
+#include <string>
+#include <stdexcept>
 #include <cppunit/extensions/HelperMacros.h>
 
 #include "../src/registry_item.h"
 #include "../src/hdkey_bip32.h"
 
-inline std::vector<uint8_t> convertQByteArrayToVector(const QByteArray& byteArray)
-{
-    return std::vector<uint8_t>(byteArray.begin(), byteArray.end());
-}
-
-inline KeyData convertToStdArrayKeyData(const QByteArray& byteArray) {
-    if (byteArray.size() != KEY_DATA_SIZE) {
+inline KeyData convertToKeyData(const std::vector<uint8_t>& vec) {
+    if (vec.size() != KEY_DATA_SIZE) {
         throw std::invalid_argument("ByteArray size does not match KEY_DATA_SIZE.");
     }
 
     KeyData result;
-    std::copy(byteArray.begin(), byteArray.end(), result.begin());
+    std::copy(vec.begin(), vec.end(), result.begin());
     return result;
+}
+
+inline std::string bytesToHex(const std::vector<uint8_t>& bytes)
+{
+    static const char hex_chars[] = "0123456789abcdef";
+    std::string hex;
+    hex.reserve(bytes.size() * 2);
+    for (uint8_t b : bytes) {
+        hex.push_back(hex_chars[(b >> 4) & 0x0F]);
+        hex.push_back(hex_chars[b & 0x0F]);
+    }
+    return hex;
+}
+
+inline std::vector<uint8_t> fromHex(const std::string &hex) {
+    std::vector<uint8_t> bytes;
+    bytes.reserve(hex.size() / 2);
+
+    for (std::size_t i = 0; i < hex.size(); i += 2) {
+        auto byte = static_cast<uint8_t>(
+            std::stoul(hex.substr(i, 2), nullptr, 16)
+        );
+        bytes.push_back(byte);
+    }
+
+    return bytes;
 }
 
 /**
  * @brief Helper to compare and validate the CBOR data
- *
- * @tparam T should have as parent the abstract class RegistryItem
- * @param ur_type contains the UR class to test
- * @param expectedBytes contains the CBOR vector
  */
 template <typename T>
-void ValidateCborResults(T& ur_type, const QByteArray& expectedBytes)
+void ValidateCborResults(T& ur_type, const std::vector<uint8_t>& expectedBytes)
 {
     ur::ByteVector cborDataVector;
     CPPUNIT_ASSERT_NO_THROW(cborDataVector = ur_type.toCbor());
 
-    QByteArray cborData = QByteArray::fromRawData(reinterpret_cast<const char*>(cborDataVector.data()),
-                                                  static_cast<int>(cborDataVector.size()));
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "CBOR output does not match the expected value",
-        expectedBytes.toHex().toStdString(),
-        cborData.toHex().toStdString()
+        bytesToHex(expectedBytes),
+        bytesToHex(cborDataVector)
     );
 }
 
 /**
  * @brief Helper to compare and validate the UR type encoding
- *
- * @tparam T should have as parent the abstract class RegistryItem
- * @param ur_type contains the UR class to test
- * @param expectedUR contains the expected UR string
  */
 template <typename T>
-void ValidateUrEncoding(T& ur_type, const QString& expectedUR)
+void ValidateUrEncoding(T& ur_type, const std::string& expectedUR)
 {
     UrType urStr;
 
     CPPUNIT_ASSERT_NO_THROW(urStr = ur_type.toSinglePartUr());
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "UR does not match the expected value",
-        expectedUR.toStdString(),
+        expectedUR,
         urStr
     );
 }
 
 /**
  * @brief Helper to validate Cbor exception when encoding the UR type
- *
- * @tparam T should have as parent the abstract class RegistryItem
- * @param ur_type contains the UR to encode with an error
- * @param error_code contains the returned error code during the CborException
- * @param message adds an optional message if the assertion fails
  */
 template <typename T>
 void ValidateUrEncodingException(T& ur_type, const CborError error_code)
@@ -88,17 +95,17 @@ void ValidateUrEncodingException(T& ur_type, const CborError error_code)
 }
 
 template <typename T>
-void ValidateUrEncodingException(T& ur_type, const CborError error_code, const QString& message)
+void ValidateUrEncodingException(T& ur_type, const CborError error_code, const std::string& message)
 {
     CPPUNIT_ASSERT_THROW_MESSAGE(
-        message.toStdString(),
+        message,
         ur_type.toSinglePartUr(),
         CborException);
     try {
         ur_type.toSinglePartUr();
     } catch (const CborException& e) {
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "Error code different than expected for " + message.toStdString(),
+            "Error code different than expected for " + message,
             error_code,
             e.errorCode()
         );
@@ -107,19 +114,13 @@ void ValidateUrEncodingException(T& ur_type, const CborError error_code, const Q
 
 /**
  * @brief Helper to validate Cbor exception when decoding the UR type
- *
- * @tparam T should have as parent the abstract class RegistryItem
- * @param ur_type contains the results of the decoded UR type
- * @param urError contains the UR QString with an error
- * @param error_code contains the returned error code during the CborException
- * @param message adds an optional message if the assertion fails
  */
 template <typename T>
-void ValidateUrDecodingException(T& ur_type, const QString& urError, const CborError error_code)
+void ValidateUrDecodingException(T& ur_type, const std::string& urError, const CborError error_code)
 {
-    CPPUNIT_ASSERT_THROW(ur_type.fromUr(urError.toStdString()), CborException);
+    CPPUNIT_ASSERT_THROW(ur_type.fromUr(urError), CborException);
     try {
-        ur_type.fromUr(urError.toStdString());
+        ur_type.fromUr(urError);
     } catch (const CborException& e) {
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "Error code different than expected",
@@ -130,17 +131,17 @@ void ValidateUrDecodingException(T& ur_type, const QString& urError, const CborE
 }
 
 template <typename T>
-void ValidateUrDecodingException(T& ur_type, const QString& urError, const CborError error_code, const QString& message)
+void ValidateUrDecodingException(T& ur_type, const std::string& urError, const CborError error_code, const std::string& message)
 {
     CPPUNIT_ASSERT_THROW_MESSAGE(
-        message.toStdString(),
-        ur_type.fromUr(urError.toStdString()),
+        message,
+        ur_type.fromUr(urError),
         CborException);
     try {
-        ur_type.fromUr(urError.toStdString());
+        ur_type.fromUr(urError);
     } catch (const CborException& e) {
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "Error code different than expected for " + message.toStdString(),
+            "Error code different than expected for " + message,
             error_code,
             e.errorCode()
         );
