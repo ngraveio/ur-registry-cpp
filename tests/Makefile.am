@@ -1,7 +1,7 @@
 AM_CPPFLAGS = -I$(top_srcdir)/src
 
 check_PROGRAMS = test_ur_registry
-TESTS = $(check_PROGRAMS)
+TESTS = $(check_PROGRAMS) test_cppcheck.sh test_flawfinder.sh
 
 test_ur_registry_SOURCES = main.cpp \
     Test_EthSignRequest.cpp Test_HDKey.cpp Test_Keypath.cpp \
