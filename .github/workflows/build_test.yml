@@ -1,0 +1,46 @@
+name: Build and test
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  BUILD_DIR: ${{ github.workspace }}
+
+jobs:
+  build-test:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install library dependencies
+        uses: ./.github/actions/install-library-deps
+
+      - name: Build static library
+        run: |
+          cd ${{ env.BUILD_DIR }}
+          ./autogen.sh
+          ./configure --disable-shared --enable-static
+          make
+
+      - name: Build and run tests (allow failure)
+        id: run-tests
+        run: |
+          set +e
+          export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+          make check 
+          echo "exit_code=$?" >> $GITHUB_OUTPUT
+          set -e
+      
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test_ur_registry_logs
+          path: tests/*.log
+          retention-days: 7
+      
+      - name: Fail if tests failed
+        run: exit ${{ steps.run-tests.outputs.exit_code }}

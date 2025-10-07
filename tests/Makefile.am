@@ -1,4 +1,5 @@
 AM_CPPFLAGS = -I$(top_srcdir)/src
+AM_CXXFLAGS = -std=c++17
 
 check_PROGRAMS = test_ur_registry
 TESTS = $(check_PROGRAMS) test_cppcheck.sh test_flawfinder.sh
