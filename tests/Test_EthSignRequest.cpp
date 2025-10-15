@@ -12,13 +12,13 @@ void TestEthSignRequest::tearDown(void)
     
 }
 
-EthAddress convertToStdArrayAddress(const QByteArray& byteArray) {
-    if (byteArray.size() != ETH_ADDRESS_SIZE) {
-        throw std::invalid_argument("ByteArray size does not match ETH_ADDRESS_SIZE.");
+EthAddress convertToEthAddress(const std::vector<uint8_t>& vec) {
+    if (vec.size() != ETH_ADDRESS_SIZE) {
+        throw std::invalid_argument("Vector size does not match ETH_ADDRESS_SIZE.");
     }
 
     EthAddress result;
-    std::copy(byteArray.begin(), byteArray.end(), result.begin());
+    std::copy(vec.begin(), vec.end(), result.begin());
     return result;
 }
 
@@ -155,18 +155,18 @@ void TestEthSignRequest::DecodeSignRequestKeystoneTestCase(void)
 {
     EthSignRequest expected_ethsignrequest;
     std::string request_id = "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d";
-    QByteArray rlpSignatureData = QByteArray::fromHex("f849808609184e72a00082271094000000000000000000000000000000000000000080a47f7465737432000000000000000000000000000000000000000000000000000000600057808080");
+    auto rlpSignatureData = fromHex("f849808609184e72a00082271094000000000000000000000000000000000000000080a47f7465737432000000000000000000000000000000000000000000000000000000600057808080");
     expected_ethsignrequest.setRequestID(Uuid(request_id));
-    expected_ethsignrequest.setSignData(convertQByteArrayToVector(rlpSignatureData));
+    expected_ethsignrequest.setSignData(rlpSignatureData);
     expected_ethsignrequest.setChainId(1);
     expected_ethsignrequest.setDataType(DataType::EthTransactionData);
     expected_ethsignrequest.setOrigin("metamask");
     CPPUNIT_ASSERT_NO_THROW(expected_ethsignrequest.setDerivationPath("m/44'/1'/1'/0/1", 305419896));
 
-    QString urToDecode = "ur:eth-sign-request/oladtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaohdgryagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaaxadaaadahtaaddyoeadlecsdwykadykadykaewkadwkaocybgeehfksatisjnihjyhsjnhsjkjetlnndant";
+    auto urToDecode = std::string("ur:eth-sign-request/oladtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaohdgryagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaaxadaaadahtaaddyoeadlecsdwykadykadykaewkadwkaocybgeehfksatisjnihjyhsjnhsjkjetlnndant");
 
     EthSignRequest decoded_ethsignrequest;
-    CPPUNIT_ASSERT_NO_THROW(decoded_ethsignrequest.fromUr(urToDecode.toStdString()));
+    CPPUNIT_ASSERT_NO_THROW(decoded_ethsignrequest.fromUr(urToDecode));
     Compare(decoded_ethsignrequest, expected_ethsignrequest);
 }
 
@@ -187,20 +187,20 @@ void TestEthSignRequest::DecodeAllFields(void)
 {
     EthSignRequest expected_ethsignrequest;
     std::string request_id = "3ee99776-a273-4c73-a96f-80540fde57bc";
-    QByteArray rlpSignatureData = QByteArray::fromHex("02f86a82a4b1028083cdfe608301d13d94912ce59144191c1204e64559fe8253a0e49e654880b844a9059cbb000000000000000000000000371398af172609f57f0f13be4c1aaf48acceb59d0000000000000000000000000000000000000000000000001bc16d674ec80000c0");
-    QByteArray address = QByteArray::fromHex("4838B106FCe9647Bdf1E7877BF73cE8B0BAD5f97");
+    auto rlpSignatureData = fromHex("02f86a82a4b1028083cdfe608301d13d94912ce59144191c1204e64559fe8253a0e49e654880b844a9059cbb000000000000000000000000371398af172609f57f0f13be4c1aaf48acceb59d0000000000000000000000000000000000000000000000001bc16d674ec80000c0");
+    auto address = fromHex("4838B106FCe9647Bdf1E7877BF73cE8B0BAD5f97");
     expected_ethsignrequest.setRequestID(Uuid(request_id));
-    expected_ethsignrequest.setSignData(convertQByteArrayToVector(rlpSignatureData));
+    expected_ethsignrequest.setSignData(rlpSignatureData);
     expected_ethsignrequest.setChainId(250);
     expected_ethsignrequest.setDataType(DataType::EthRawBytes);
-    expected_ethsignrequest.setAddress(convertToStdArrayAddress(address));
+    expected_ethsignrequest.setAddress(convertToEthAddress(address));
     expected_ethsignrequest.setOrigin("NGRAVE LIQUID");
     CPPUNIT_ASSERT_NO_THROW(expected_ethsignrequest.setDerivationPath("m/44'/60'/0'/0/4", 108764539, 5));
 
-    QString urToDecode = "ur:eth-sign-request/osadtpdagdfmwlmskooejkgsjkptjllaghbsuehgrfaohdjnaoyaimlfoxpaaolalssnzehnlsadttfsmwmedwvwmefycfcebgaavafehkzelfgunbvennihfdlarofyptahnsrkaeaeaeaeaeaeaeaeaeaeaeaeembwmkpechdsasyklbbsbwrngscypefdpstorentaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecwsejnioglspaeaertaxaxaacszsahtaaddyotadlecsdwykcsfnykaeykaewkaawkaocyamkgntkgaxahamghfdetpaamztwliekgurckksktrsjktolubdpmhemsatjnglflgmfphffecxgsgagygogafyfmhhmyet";
+    auto urToDecode = std::string("ur:eth-sign-request/osadtpdagdfmwlmskooejkgsjkptjllaghbsuehgrfaohdjnaoyaimlfoxpaaolalssnzehnlsadttfsmwmedwvwmefycfcebgaavafehkzelfgunbvennihfdlarofyptahnsrkaeaeaeaeaeaeaeaeaeaeaeaeembwmkpechdsasyklbbsbwrngscypefdpstorentaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecwsejnioglspaeaertaxaxaacszsahtaaddyotadlecsdwykcsfnykaeykaewkaawkaocyamkgntkgaxahamghfdetpaamztwliekgurckksktrsjktolubdpmhemsatjnglflgmfphffecxgsgagygogafyfmhhmyet");
 
     EthSignRequest decoded_ethsignrequest;
-    CPPUNIT_ASSERT_NO_THROW(decoded_ethsignrequest.fromUr(urToDecode.toStdString()));
+    CPPUNIT_ASSERT_NO_THROW(decoded_ethsignrequest.fromUr(urToDecode));
     Compare(decoded_ethsignrequest, expected_ethsignrequest); 
 }
 
@@ -217,16 +217,16 @@ void TestEthSignRequest::DecodeAllFields(void)
 void TestEthSignRequest::DecodeMinimumFieldsWithRecentKeypathTag(void)
 {
     EthSignRequest expected_ethsignrequest;
-    QByteArray rlpSignatureData = QByteArray::fromHex("02eb83aa36a709843b9aca008502540be400825208940c54fccd2e384b4bb6f2e405bf5cbc15a017aafb8080c0");
-    expected_ethsignrequest.setSignData(convertQByteArrayToVector(rlpSignatureData));
+    auto rlpSignatureData = fromHex("02eb83aa36a709843b9aca008502540be400825208940c54fccd2e384b4bb6f2e405bf5cbc15a017aafb8080c0");
+    expected_ethsignrequest.setSignData(rlpSignatureData);
     expected_ethsignrequest.setChainId(43444);
     expected_ethsignrequest.setDataType(DataType::EthTypedData);
     CPPUNIT_ASSERT_NO_THROW(expected_ethsignrequest.setDerivationPath("m/44'/60'/0'/1/40"));
 
-    QString urToDecode = "ur:eth-sign-request/oxaohddpaowmlspkenosaslrfrnysgaelpaoghbdveaelfgmaymwbnghztsndmetgrgrrpwzveahrshhrfbznbchpkzolalartaxaoaacfptqzahtantjooyadlecsdwykcsfnykaeykadwkcsdewkylrygwti";
+    auto urToDecode = std::string("ur:eth-sign-request/oxaohddpaowmlspkenosaslrfrnysgaelpaoghbdveaelfgmaymwbnghztsndmetgrgrrpwzveahrshhrfbznbchpkzolalartaxaoaacfptqzahtantjooyadlecsdwykcsfnykaeykadwkcsdewkylrygwti");
 
     EthSignRequest decoded_ethsignrequest;
-    CPPUNIT_ASSERT_NO_THROW(decoded_ethsignrequest.fromUr(urToDecode.toStdString()));
+    CPPUNIT_ASSERT_NO_THROW(decoded_ethsignrequest.fromUr(urToDecode));
     Compare(decoded_ethsignrequest, expected_ethsignrequest); 
 }
 
@@ -247,20 +247,20 @@ void TestEthSignRequest::DecodeRandomOrderMapIndex(void)
 {
     EthSignRequest expected_ethsignrequest;
     std::string request_id = "3ee99776-a273-4c73-a96f-80540fde57bc";
-    QByteArray rlpSignatureData = QByteArray::fromHex("02eb83aa36a7098459682f0085151a53460e825208940c54fccd2e384b4bb6f2e405bf5cbc15a017aafb8080c0");
-    QByteArray address = QByteArray::fromHex("95222290DD7278Aa3Ddd389Cc1E1d165CC4BAfe5");
+    auto rlpSignatureData = fromHex("02eb83aa36a7098459682f0085151a53460e825208940c54fccd2e384b4bb6f2e405bf5cbc15a017aafb8080c0");
+    auto address = fromHex("95222290DD7278Aa3Ddd389Cc1E1d165CC4BAfe5");
     expected_ethsignrequest.setRequestID(Uuid(request_id));
-    expected_ethsignrequest.setSignData(convertQByteArrayToVector(rlpSignatureData));
+    expected_ethsignrequest.setSignData(rlpSignatureData);
     expected_ethsignrequest.setChainId(2);
     expected_ethsignrequest.setDataType(DataType::EthTypedTransaction);
-    expected_ethsignrequest.setAddress(convertToStdArrayAddress(address));
+    expected_ethsignrequest.setAddress(convertToEthAddress(address));
     expected_ethsignrequest.setOrigin("NGRAVE LIQUID");
     CPPUNIT_ASSERT_NO_THROW(expected_ethsignrequest.setDerivationPath("m/44'/10'/1'/<20';3>", 590023));
 
-    QString urToDecode = "ur:eth-sign-request/osatjnglflgmfphffecxgsgagygogafyaxaaaohddpaowmlspkenosaslrhkisdlaelpbzcygufgbalfgmaymwbnghztsndmetgrgrrpwzveahrshhrfbznbchpkzolalartamghmdcpcpmhutjpkspkfsutetnssevyttihsfgrpevwadtpdagdfmwlmskooejkgsjkptjllaghbsuehgrfahtaaddyoeadltcsdwykbkykadyklrbbykaxwkaocyaeasaestaaaoynkkwdws";
+    auto urToDecode = std::string("ur:eth-sign-request/osatjnglflgmfphffecxgsgagygogafyaxaaaohddpaowmlspkenosaslrhkisdlaelpbzcygufgbalfgmaymwbnghztsndmetgrgrrpwzveahrshhrfbznbchpkzolalartamghmdcpcpmhutjpkspkfsutetnssevyttihsfgrpevwadtpdagdfmwlmskooejkgsjkptjllaghbsuehgrfahtaaddyoeadltcsdwykbkykadyklrbbykaxwkaocyaeasaestaaaoynkkwdws");
 
     EthSignRequest decoded_ethsignrequest;
-    CPPUNIT_ASSERT_NO_THROW(decoded_ethsignrequest.fromUr(urToDecode.toStdString()));
+    CPPUNIT_ASSERT_NO_THROW(decoded_ethsignrequest.fromUr(urToDecode));
     Compare(decoded_ethsignrequest, expected_ethsignrequest); 
 }
 
@@ -277,19 +277,19 @@ void TestEthSignRequest::DecodeRandomOrderMapIndex(void)
 void TestEthSignRequest::DecodeMissingDataTypeWithDefaultValue(void)
 {
     EthSignRequest expected_ethsignrequest;
-    QByteArray rlpSignatureData = QByteArray::fromHex("02eb83aa36a709843b9aca008502540be400825208940c54fccd2e384b4bb6f2e405bf5cbc15a017aafb8080c0");
-    QByteArray address = QByteArray::fromHex("a377aa6822603Cc52e4e9ed6eaa045c46Ef6b3E2");
-    expected_ethsignrequest.setSignData(convertQByteArrayToVector(rlpSignatureData));
+    auto rlpSignatureData = fromHex("02eb83aa36a709843b9aca008502540be400825208940c54fccd2e384b4bb6f2e405bf5cbc15a017aafb8080c0");
+    auto address = fromHex("a377aa6822603Cc52e4e9ed6eaa045c46Ef6b3E2");
+    expected_ethsignrequest.setSignData(rlpSignatureData);
     expected_ethsignrequest.setChainId(43444);
     // Default data type value not specified in the CBOR payload
     expected_ethsignrequest.setDataType(DataType::EthTransactionData);
-    expected_ethsignrequest.setAddress(convertToStdArrayAddress(address));
+    expected_ethsignrequest.setAddress(convertToEthAddress(address));
     CPPUNIT_ASSERT_NO_THROW(expected_ethsignrequest.setDerivationPath("m/44'/60'/0'/1/40"));
 
-    QString urToDecode = "ur:eth-sign-request/oxaohddpaowmlspkenosaslrfrnysgaelpaoghbdveaelfgmaymwbnghztsndmetgrgrrpwzveahrshhrfbznbchpkzolalartaacfptqzahtaaddyoyadlecsdwykcsfnykaeykadwkcsdewkamghotktpkiscphnfnskdmglnntbwdnbfessjtynqdvoayhyrlat";
+    auto urToDecode = std::string("ur:eth-sign-request/oxaohddpaowmlspkenosaslrfrnysgaelpaoghbdveaelfgmaymwbnghztsndmetgrgrrpwzveahrshhrfbznbchpkzolalartaacfptqzahtaaddyoyadlecsdwykcsfnykaeykadwkcsdewkamghotktpkiscphnfnskdmglnntbwdnbfessjtynqdvoayhyrlat");
 
     EthSignRequest decoded_ethsignrequest;
-    CPPUNIT_ASSERT_NO_THROW(decoded_ethsignrequest.fromUr(urToDecode.toStdString()));
+    CPPUNIT_ASSERT_NO_THROW(decoded_ethsignrequest.fromUr(urToDecode));
     Compare(decoded_ethsignrequest, expected_ethsignrequest); 
 }
 
@@ -306,18 +306,18 @@ void TestEthSignRequest::DecodeMissingDataTypeWithDefaultValue(void)
 void TestEthSignRequest::DecodeMissingChainIdWithDefaultValue(void)
 {
     EthSignRequest expected_ethsignrequest;
-    QByteArray rlpSignatureData = QByteArray::fromHex("02eb83aa36a709843b9aca008502540be400825208940c54fccd2e384b4bb6f2e405bf5cbc15a017aafb8080c0");
-    expected_ethsignrequest.setSignData(convertQByteArrayToVector(rlpSignatureData));
+    auto rlpSignatureData = fromHex("02eb83aa36a709843b9aca008502540be400825208940c54fccd2e384b4bb6f2e405bf5cbc15a017aafb8080c0");
+    expected_ethsignrequest.setSignData(rlpSignatureData);
     // Default chain id value not specified in the CBOR payload
     expected_ethsignrequest.setChainId(1);
     expected_ethsignrequest.setDataType(DataType::EthTypedData);
     expected_ethsignrequest.setOrigin("missing chain id");
     CPPUNIT_ASSERT_NO_THROW(expected_ethsignrequest.setDerivationPath("m/44'/60'/0'/1/40"));
 
-    QString urToDecode = "ur:eth-sign-request/oxaohddpaowmlspkenosaslrfrnysgaelpaoghbdveaelfgmaymwbnghztsndmetgrgrrpwzveahrshhrfbznbchpkzolalartaxaoahtaaddyoyadlecsdwykcsfnykaeykadwkcsdewkatjojninjkjkinjtiocxiaishsinjtcxinieteaxlbfz";
+    auto urToDecode = std::string("ur:eth-sign-request/oxaohddpaowmlspkenosaslrfrnysgaelpaoghbdveaelfgmaymwbnghztsndmetgrgrrpwzveahrshhrfbznbchpkzolalartaxaoahtaaddyoyadlecsdwykcsfnykaeykadwkcsdewkatjojninjkjkinjtiocxiaishsinjtcxinieteaxlbfz");
 
     EthSignRequest decoded_ethsignrequest;
-    CPPUNIT_ASSERT_NO_THROW(decoded_ethsignrequest.fromUr(urToDecode.toStdString()));
+    CPPUNIT_ASSERT_NO_THROW(decoded_ethsignrequest.fromUr(urToDecode));
     Compare(decoded_ethsignrequest, expected_ethsignrequest); 
 }
 
@@ -344,10 +344,10 @@ void TestEthSignRequest::DecodeMissingChainIdWithDefaultValue(void)
 void TestEthSignRequest::DecodeMissingMandatoryFields(void)
 {
     EthSignRequest ethsignrequest;
-    QString urError = "ur:eth-sign-request/oxaxaoaacfptqzahtaaddyoyadlecsdwykcsfnykaeykadwkcsdewkatjsjninjkjkinjtiocxjkiniojtcxiehsjyhslpayvtte";
+    auto urError = std::string("ur:eth-sign-request/oxaxaoaacfptqzahtaaddyoyadlecsdwykcsfnykaeykadwkcsdewkatjsjninjkjkinjtiocxjkiniojtcxiehsjyhslpayvtte");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorTooFewItems, "1. Missing mandatory field failed");
 
-    urError = "ur:eth-sign-request/onadtpdagdfmwlmskooejkgsjkptjllaghbsuehgrfaohddpaowmlspkenosaslrfrnysgaelpaoghbdveaelfgmaymwbnghztsndmetgrgrrpwzveahrshhrfbznbchpkzolalartaxaoaacfptqzatktjninjkjkinjtiocxieihjpinkohsjyinjljtcxjohsjyistbweecrd";
+    urError = std::string("ur:eth-sign-request/onadtpdagdfmwlmskooejkgsjkptjllaghbsuehgrfaohddpaowmlspkenosaslrfrnysgaelpaoghbdveaelfgmaymwbnghztsndmetgrgrrpwzveahrshhrfbznbchpkzolalartaxaoaacfptqzatktjninjkjkinjtiocxieihjpinkohsjyinjljtcxjohsjyistbweecrd");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorTooFewItems, "2. Missing mandatory field failed");
 }
 
@@ -377,10 +377,10 @@ void TestEthSignRequest::DecodeMissingMandatoryFields(void)
 void TestEthSignRequest::DecodeIncorrectTags(void)
 {
     EthSignRequest ethsignrequest;
-    QString urError = "ur:eth-sign-request/oladtpfwgdfmwlmskooejkgsjkptjllaghbsuehgrfaohdjnaoyaimlfoxpaaolalssnzehnlsadttfsmwmedwvwmefycfcebgaavafehkzelfgunbvennihfdlarofyptahnsrkaeaeaeaeaeaeaeaeaeaeaeaeembwmkpechdsasyklbbsbwrngscypefdpstorentaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecwsejnioglspaeaertaxaxaacszsahtaaddyoyadlecsdwykcsfnykaeykaewkaawkatjpinjtiajljpjpihiajycxkpkpiniecxjyhsiohsprdkwp";
+    auto urError = std::string("ur:eth-sign-request/oladtpfwgdfmwlmskooejkgsjkptjllaghbsuehgrfaohdjnaoyaimlfoxpaaolalssnzehnlsadttfsmwmedwvwmefycfcebgaavafehkzelfgunbvennihfdlarofyptahnsrkaeaeaeaeaeaeaeaeaeaeaeaeembwmkpechdsasyklbbsbwrngscypefdpstorentaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecwsejnioglspaeaertaxaxaacszsahtaaddyoyadlecsdwykcsfnykaeykaewkaawkatjpinjtiajljpjpihiajycxkpkpiniecxjyhsiohsprdkwp");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorInappropriateTagForType, "1. Incorrect tag failed");
     
-    urError = "ur:eth-sign-request/oladtpdagdfmwlmskooejkgsjkptjllaghbsuehgrfaohdjnaoyaimlfoxpaaolalssnzehnlsadttfsmwmedwvwmefycfcebgaavafehkzelfgunbvennihfdlarofyptahnsrkaeaeaeaeaeaeaeaeaeaeaeaeembwmkpechdsasyklbbsbwrngscypefdpstorentaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecwsejnioglspaeaertaxaxaacszsahtaadehoyadlecsdwykcsfnykaeykaewkaawkatkpinjtiajljpjpihiajycxjeihkkjohsjyiscxjyhsiowshkbszm";
+    urError = std::string("ur:eth-sign-request/oladtpdagdfmwlmskooejkgsjkptjllaghbsuehgrfaohdjnaoyaimlfoxpaaolalssnzehnlsadttfsmwmedwvwmefycfcebgaavafehkzelfgunbvennihfdlarofyptahnsrkaeaeaeaeaeaeaeaeaeaeaeaeembwmkpechdsasyklbbsbwrngscypefdpstorentaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecwsejnioglspaeaertaxaxaacszsahtaadehoyadlecsdwykcsfnykaeykaewkaawkatkpinjtiajljpjpihiajycxjeihkkjohsjyiscxjyhsiowshkbszm");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorInappropriateTagForType, "2. Incorrect tag failed");
 }
 
@@ -466,25 +466,25 @@ void TestEthSignRequest::DecodeIncorrectTags(void)
 void TestEthSignRequest::DecodeNotUniqueMapKeys(void)
 {
     EthSignRequest ethsignrequest;
-    QString urError = "ur:eth-sign-request/osadtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaohdjnaoyaimlfoxpaaolalssnzehnlsadttfsmwmedwvwmefycfcebgaavafehkzelfgunbvennihfdlarofyptahnsrkaeaeaeaeaeaeaeaeaeaeaeaeembwmkpechdsasyklbbsbwrngscypefdpstorentaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecwsejnioglspaeaertadtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaxaxaacszsahtaaddyotadlecsdwykcsfnykaeykaewkaawkaocyamkgntkgaxahatkpfykpjojziniahsjyihiecxjpihjskpihjkjycxiniejoinykts";
+    auto urError = std::string("ur:eth-sign-request/osadtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaohdjnaoyaimlfoxpaaolalssnzehnlsadttfsmwmedwvwmefycfcebgaavafehkzelfgunbvennihfdlarofyptahnsrkaeaeaeaeaeaeaeaeaeaeaeaeembwmkpechdsasyklbbsbwrngscypefdpstorentaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecwsejnioglspaeaertadtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaxaxaacszsahtaaddyotadlecsdwykcsfnykaeykaewkaawkaocyamkgntkgaxahatkpfykpjojziniahsjyihiecxjpihjskpihjkjycxiniejoinykts");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorMapKeysNotUnique, "1. Map key not unique failed");
     
-    urError = "ur:eth-sign-request/osaohdgryagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaaxaxaacszsaohdgryagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaahtaaddyoyadlecsdwykcsfnykaeykaewkaawkamghfdetpaamztwliekgurckksktrsjktolubdpmhemsatjyfykpjojziniahsjyihiecxjkiniojtcxiehsjyhstebejoey";
+    urError = std::string("ur:eth-sign-request/osaohdgryagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaaxaxaacszsaohdgryagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaahtaaddyoyadlecsdwykcsfnykaeykaewkaawkamghfdetpaamztwliekgurckksktrsjktolubdpmhemsatjyfykpjojziniahsjyihiecxjkiniojtcxiehsjyhstebejoey");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorMapKeysNotUnique, "2. Map key not unique failed");
 
-    urError = "ur:eth-sign-request/osadtpdagdfmwlmskooejkgsjkptjllaghbsuehgrfaohdjnaoyaimlfoxpaaolalssnzehnlsadttfsmwmedwvwmefycfcebgaavafehkzelfgunbvennihfdlarofyptahnsrkaeaeaeaeaeaeaeaeaeaeaeaeembwmkpechdsasyklbbsbwrngscypefdpstorentaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecwsejnioglspaeaertaxaxaacszsahtaaddyoeadlecsdwykcsfnykaeykaewkaawkaocyamkgntkgatjyfykpjojziniahsjyihiecxiehsjyhscxjykkjoihaxaxiewswsrs";
+    urError = std::string("ur:eth-sign-request/osadtpdagdfmwlmskooejkgsjkptjllaghbsuehgrfaohdjnaoyaimlfoxpaaolalssnzehnlsadttfsmwmedwvwmefycfcebgaavafehkzelfgunbvennihfdlarofyptahnsrkaeaeaeaeaeaeaeaeaeaeaeaeembwmkpechdsasyklbbsbwrngscypefdpstorentaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecwsejnioglspaeaertaxaxaacszsahtaaddyoeadlecsdwykcsfnykaeykaewkaawkaocyamkgntkgatjyfykpjojziniahsjyihiecxiehsjyhscxjykkjoihaxaxiewswsrs");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorMapKeysNotUnique, "3. Map key not unique failed");
 
-    urError = "ur:eth-sign-request/olaohdjnaoyaimlfoxpaaolalssnzehnlsadttfsmwmedwvwmefycfcebgaavafehkzelfgunbvennihfdlarofyptahnsrkaeaeaeaeaeaeaeaeaeaeaeaeembwmkpechdsasyklbbsbwrngscypefdpstorentaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecwsejnioglspaeaertaxaxaaadaaadahtaaddyoyadlecsdwykcsfnykaeykaewkaawkatjkfykpjojziniahsjyihiecxiaishsinjtcxiniepeynpygw";
+    urError = std::string("ur:eth-sign-request/olaohdjnaoyaimlfoxpaaolalssnzehnlsadttfsmwmedwvwmefycfcebgaavafehkzelfgunbvennihfdlarofyptahnsrkaeaeaeaeaeaeaeaeaeaeaeaeembwmkpechdsasyklbbsbwrngscypefdpstorentaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecwsejnioglspaeaertaxaxaaadaaadahtaaddyoyadlecsdwykcsfnykaeykaewkaawkatjkfykpjojziniahsjyihiecxiaishsinjtcxiniepeynpygw");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorMapKeysNotUnique, "4. Map key not unique failed");
 
-    urError = "ur:eth-sign-request/osadtpdagdfmwlmskooejkgsjkptjllaghbsuehgrfaohdjnaoyaimlfoxpaaolalssnzehnlsadttfsmwmedwvwmefycfcebgaavafehkzelfgunbvennihfdlarofyptahnsrkaeaeaeaeaeaeaeaeaeaeaeaeembwmkpechdsasyklbbsbwrngscypefdpstorentaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecwsejnioglspaeaertaxaxaacszsahtaaddyotadlecsdwykcsfnykaeykaewkaawkaoaoaxahamghfdetpaamztwliekgurckksktrsjktolubdpmhemsahtaaddyotadlecsdwykcsfnykaeykaewkaawkaoaoaxahkoahfewe";
+    urError = std::string("ur:eth-sign-request/osadtpdagdfmwlmskooejkgsjkptjllaghbsuehgrfaohdjnaoyaimlfoxpaaolalssnzehnlsadttfsmwmedwvwmefycfcebgaavafehkzelfgunbvennihfdlarofyptahnsrkaeaeaeaeaeaeaeaeaeaeaeaeembwmkpechdsasyklbbsbwrngscypefdpstorentaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecwsejnioglspaeaertaxaxaacszsahtaaddyotadlecsdwykcsfnykaeykaewkaawkaoaoaxahamghfdetpaamztwliekgurckksktrsjktolubdpmhemsahtaaddyotadlecsdwykcsfnykaeykaewkaawkaoaoaxahkoahfewe");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorMapKeysNotUnique, "5. Map key not unique failed");
 
-    urError = "ur:eth-sign-request/osaohdjnaoyaimlfoxpaaolalssnzehnlsadttfsmwmedwvwmefycfcebgaavafehkzelfgunbvennihfdlarofyptahnsrkaeaeaeaeaeaeaeaeaeaeaeaeembwmkpechdsasyklbbsbwrngscypefdpstorentaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecwsejnioglspaeaertaxaxaacszsahtaaddyoeadlecsdwykcsfnykaeykaewkaawkaocyamkgntkgamghfdetpaamztwliekgurckksktrsjktolubdpmhemsatjpfykpjojziniahsjyihiecxhsieiejpihjkjkamkgntkgamghfdetpaamztwliekgurckksktrsjktolubdpmhemsmylfvdyk";
+    urError = std::string("ur:eth-sign-request/osaohdjnaoyaimlfoxpaaolalssnzehnlsadttfsmwmedwvwmefycfcebgaavafehkzelfgunbvennihfdlarofyptahnsrkaeaeaeaeaeaeaeaeaeaeaeaeembwmkpechdsasyklbbsbwrngscypefdpstorentaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecwsejnioglspaeaertaxaxaacszsahtaaddyoeadlecsdwykcsfnykaeykaewkaawkaocyamkgntkgamghfdetpaamztwliekgurckksktrsjktolubdpmhemsatjpfykpjojziniahsjyihiecxhsieiejpihjkjkamkgntkgamghfdetpaamztwliekgurckksktrsjktolubdpmhemsmylfvdyk");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorMapKeysNotUnique, "6. Map key not unique failed");
 
-    urError = "ur:eth-sign-request/osaohdjnaoyaimlfoxpaaolalssnzehnlsadttfsmwmedwvwmefycfcebgaavafehkzelfgunbvennihfdlarofyptahnsrkaeaeaeaeaeaeaeaeaeaeaeaeembwmkpechdsasyklbbsbwrngscypefdpstorentaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecwsejnioglspaeaertaxaxaacszsahtaaddyoeadlecsdwykcsfnykaeykaewkaawkaocyamkgntkgamghfdetpaamztwliekgurckksktrsjktolubdpmhemsatjsfykpjojziniahsjyihiecxjljpinioinjtatjsfykpjojziniahsjyihiecxjljpinioinjteegmlktk";
+    urError = std::string("ur:eth-sign-request/osaohdjnaoyaimlfoxpaaolalssnzehnlsadttfsmwmedwvwmefycfcebgaavafehkzelfgunbvennihfdlarofyptahnsrkaeaeaeaeaeaeaeaeaeaeaeaeembwmkpechdsasyklbbsbwrngscypefdpstorentaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecwsejnioglspaeaertaxaxaacszsahtaaddyoeadlecsdwykcsfnykaeykaewkaawkaocyamkgntkgamghfdetpaamztwliekgurckksktrsjktolubdpmhemsatjsfykpjojziniahsjyihiecxjljpinioinjtatjsfykpjojziniahsjyihiecxjljpinioinjteegmlktk");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorMapKeysNotUnique, "7. Map key not unique failed");
 }
 
@@ -515,10 +515,10 @@ void TestEthSignRequest::DecodeNotUniqueMapKeys(void)
 void TestEthSignRequest::DecodeIncorrectSize(void)
 {
     EthSignRequest ethsignrequest;
-    QString urError = "ur:eth-sign-request/oladtpdafeaeaslrhyftaohdjnaoyaimlfoxpaaolalssnzehnlsadttfsmwmedwvwmefycfcebgaavafehkzelfgunbvennihfdlarofyptahnsrkaeaeaeaeaeaeaeaeaeaeaeaeembwmkpechdsasyklbbsbwrngscypefdpstorentaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecwsejnioglspaeaertaxaxaacszsahtaaddyoyadlecsdwykcsfnykaeykaewkaawkatjkinjtiajljpjpihiajycxkpkpiniecxjkinknihplcedkrl";
+    auto urError = std::string("ur:eth-sign-request/oladtpdafeaeaslrhyftaohdjnaoyaimlfoxpaaolalssnzehnlsadttfsmwmedwvwmefycfcebgaavafehkzelfgunbvennihfdlarofyptahnsrkaeaeaeaeaeaeaeaeaeaeaeaeembwmkpechdsasyklbbsbwrngscypefdpstorentaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecwsejnioglspaeaertaxaxaacszsahtaaddyoyadlecsdwykcsfnykaeykaewkaawkatjkinjtiajljpjpihiajycxkpkpiniecxjkinknihplcedkrl");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorImproperValue, "1. Incorrect size failed");
     
-    urError = "ur:eth-sign-request/osadtpdagdfmwlmskooejkgsjkptjllaghbsuehgrfaohdjnaoyaimlfoxpaaolalssnzehnlsadttfsmwmedwvwmefycfcebgaavafehkzelfgunbvennihfdlarofyptahnsrkaeaeaeaeaeaeaeaeaeaeaeaeembwmkpechdsasyklbbsbwrngscypefdpstorentaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecwsejnioglspaeaertaxaxaacszsahtaaddyoyadlecsdwykcsfnykaeykaewkaawkamhdcsfdetpaamztwliekgurckksktrsjktolubdpmhemszmzmzmzmatkoinjtiajljpjpihiajycxhsieiejpihjkjkcxjkinknihstsoyagw";
+    urError = std::string("ur:eth-sign-request/osadtpdagdfmwlmskooejkgsjkptjllaghbsuehgrfaohdjnaoyaimlfoxpaaolalssnzehnlsadttfsmwmedwvwmefycfcebgaavafehkzelfgunbvennihfdlarofyptahnsrkaeaeaeaeaeaeaeaeaeaeaeaeembwmkpechdsasyklbbsbwrngscypefdpstorentaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecwsejnioglspaeaertaxaxaacszsahtaaddyoyadlecsdwykcsfnykaeykaewkaawkamhdcsfdetpaamztwliekgurckksktrsjktolubdpmhemszmzmzmzmatkoinjtiajljpjpihiajycxhsieiejpihjkjkcxjkinknihstsoyagw");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorImproperValue, "2. Incorrect size failed");
 }
 
@@ -531,78 +531,78 @@ void TestEthSignRequest::DecodeFuzzer(void)
     EthSignRequest ethsignrequest;
 
     /* Invalid types */
-    QString urError = "ur:eth-sign-request/oxadaeaoahaxamaaatzswfimgd";
+    auto urError = std::string("ur:eth-sign-request/oxadaeaoahaxamaaatzswfimgd");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorIllegalType, "1. Fuzzer failed");
 
     /* Not enough map keys */
-    urError = "ur:eth-sign-request/oyadaefmvturaa";
+    urError = std::string("ur:eth-sign-request/oyadaefmvturaa");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorImproperValue, "2. Fuzzer failed");
 
     /* Invalid map key */
-    urError = "ur:eth-sign-request/osadtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaohdgryagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaaxadaaadahtaaddyoeadlecsdwykadykadykaewkadwkaocybgeehfksatisjnihjyhsjnhsjkjebkjlinjtkohsjziniecxjnhsjocxjeihkkaomttamo";
+    urError = std::string("ur:eth-sign-request/osadtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaohdgryagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaaxadaaadahtaaddyoeadlecsdwykadykadykaewkadwkaocybgeehfksatisjnihjyhsjnhsjkjebkjlinjtkohsjziniecxjnhsjocxjeihkkaomttamo");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorUnknownType, "3. Fuzzer failed");
 
     /* Number of map key incorrectly defined in CBOR */
-    urError = "ur:eth-sign-request/onadtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaohdgryagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaaxadaaadahtaaddyoeadlecsdwykadykadykaewkadwkao";
+    urError = std::string("ur:eth-sign-request/onadtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaohdgryagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaaxadaaadahtaaddyoeadlecsdwykadykadykaewkadwkao");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorIO, "4. Fuzzer failed");
 
     /* Key index type corrupted */
-    urError = "ur:eth-sign-request/oladtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaohdgryagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaotadaaadahtaaddyoeadlecsdwykadykadykaewkadwkaocybgeehfksatisjnihjyhsjnhsjkjespgegtpt";
+    urError = std::string("ur:eth-sign-request/oladtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaohdgryagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaotadaaadahtaaddyoeadlecsdwykadykadykaewkadwkaocybgeehfksatisjnihjyhsjnhsjkjespgegtpt");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorIllegalType, "5. Fuzzer failed");
 
     /* Request id type corrupted */
-    urError = "ur:eth-sign-request/oladvsdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaohdgryagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaaxadaaadahtaaddyoeadlecsdwykadykadykaewkadwkaocybgeehfksatisjnihjyhsjnhsjkjebwpyylva";
+    urError = std::string("ur:eth-sign-request/oladvsdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaohdgryagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaaxadaaadahtaaddyoeadlecsdwykadykadykaewkadwkaocybgeehfksatisjnihjyhsjnhsjkjebwpyylva");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorIllegalType, "6. Fuzzer failed");
 
     /* Sign data byte size corrupted */
-    urError = "ur:eth-sign-request/oladtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaohdbsyagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaaxadaaadahtaaddyoeadlecsdwykadykadykaewkadwkaocybgeehfksatisjnihjyhsjnhsjkjepmrdftpe";
+    urError = std::string("ur:eth-sign-request/oladtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaohdbsyagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaaxadaaadahtaaddyoeadlecsdwykadykadykaewkadwkaocybgeehfksatisjnihjyhsjnhsjkjepmrdftpe");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorUnknownType, "7. Fuzzer failed");
 
     /* Sign data type corrupted */
-    urError = "ur:eth-sign-request/oladtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnpahdgryagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaaxadaaadahtaaddyoeadlecsdwykadykadykaewkadwkaocybgeehfksatisjnihjyhsjnhsjkjeehmygada";
+    urError = std::string("ur:eth-sign-request/oladtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnpahdgryagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaaxadaaadahtaaddyoeadlecsdwykadykadykaewkadwkaocybgeehfksatisjnihjyhsjnhsjkjeehmygada");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorIllegalType, "8. Fuzzer failed");
 
     /* Data type type corrupted */
-    urError = "ur:eth-sign-request/oladtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaohdgryagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaaxhnaaadahtaaddyoeadlecsdwykadykadykaewkadwkaocybgeehfksatisjnihjyhsjnhsjkjesamtzmgt";
+    urError = std::string("ur:eth-sign-request/oladtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaohdgryagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaaxhnaaadahtaaddyoeadlecsdwykadykadykaewkadwkaocybgeehfksatisjnihjyhsjnhsjkjesamtzmgt");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorIllegalType, "9. Fuzzer failed");
 
     /* Chain id type corrupted */
-    urError = "ur:eth-sign-request/oladtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaohdgryagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaaxadjoadahtaaddyoeadlecsdwykadykadykaewkadwkaocybgeehfksatisjnihjyhsjnhsjkjedsndhdhl";
+    urError = std::string("ur:eth-sign-request/oladtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaohdgryagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaaxadjoadahtaaddyoeadlecsdwykadykadykaewkadwkaocybgeehfksatisjnihjyhsjnhsjkjedsndhdhl");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorIllegalType, "10. Fuzzer failed");
 
     /* Derivation path type corrupted */
-    urError = "ur:eth-sign-request/oladtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaohdgryagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaaxadaaksahtaaddyoeadlecsdwykadykadykaewkadwkaocybgeehfksatisjnihjyhsjnhsjkjevetefdvt";
+    urError = std::string("ur:eth-sign-request/oladtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaohdgryagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaaxadaaksahtaaddyoeadlecsdwykadykadykaewkadwkaocybgeehfksatisjnihjyhsjnhsjkjevetefdvt");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorIllegalType, "11. Fuzzer failed");
 
     /* Address type corrupted */
-    urError = "ur:eth-sign-request/oladtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaohdgryagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaaxadaaadahpaaddyoeadlecsdwykadykadykaewkadwkaocybgeehfksatisjnihjyhsjnhsjkjeaegmosdn";
+    urError = std::string("ur:eth-sign-request/oladtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaohdgryagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaaxadaaadahpaaddyoeadlecsdwykadykadykaewkadwkaocybgeehfksatisjnihjyhsjnhsjkjeaegmosdn");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorIllegalType, "12. Fuzzer failed");
 
     /* Origin type corrupted */
-    urError = "ur:eth-sign-request/osadtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaohdgryagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaaxadaaadahtaaddyoeadlecsdwykadykadykaewkadwkaocybgeehfksameoaeaeaeaeaeaeaeaeaeaeaeatisjnihjyhsjnhsjkjeuegsehkn";
+    urError = std::string("ur:eth-sign-request/osadtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaohdgryagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaaxadaaadahtaaddyoeadlecsdwykadykadykaewkadwkaocybgeehfksameoaeaeaeaeaeaeaeaeaeaeaeatisjnihjyhsjnhsjkjeuegsehkn");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorIllegalType, "13. Fuzzer failed");
 
     /* Empty map: {} */
-    urError = "ur:eth-sign-request/nbaatygsih";
+    urError = std::string("ur:eth-sign-request/nbaatygsih");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorImproperValue, "14. Fuzzer failed");
 
     /* Empty content */
-    urError = "ur:eth-sign-request/";
+    urError = std::string("ur:eth-sign-request/");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorIO, "15. Fuzzer failed");
 
     /* Random string */
-    urError = "ur:eth-sign-request/osadtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaohdgryagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaaxadaaadahtaaddyoeadlecsdwykadykadykaewkadwkaocybgeehfksamgraeaeaeaeaeaeaeaeaeaeaeatisjnihjyhsjnhsjkjelkdtwpfhadded";
+    urError = std::string("ur:eth-sign-request/osadtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaohdgryagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaaxadaaadahtaaddyoeadlecsdwykadykadykaewkadwkaocybgeehfksamgraeaeaeaeaeaeaeaeaeaeaeatisjnihjyhsjnhsjkjelkdtwpfhadded");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorIO, "16. Fuzzer failed");
 
     /* Invalid UR with random min bytewords */
-    urError = "ur:eth-sign-request/frkigrpmndutdnbtkgfssblaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeae";
+    urError = std::string("ur:eth-sign-request/frkigrpmndutdnbtkgfssblaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeae");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorIO, "17. Fuzzer failed");
 
     /* Valid UR with random min bytewords */
-    urError = "ur:eth-sign-request/pezmtlioaeqzeyjssfaslpfghklgdyfn";
+    urError = std::string("ur:eth-sign-request/pezmtlioaeqzeyjssfaslpfghklgdyfn");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorImproperValue, "18. Fuzzer failed");
 
     /* Invalid CRC32 checksum in UR */
-    urError = "ur:eth-sign-request/oladtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaohdgryagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaaxadaaadahtaaddyoeadlecsdwykadykadykaewkadwkaocybgeehfksatisjnihjyhsjnhsjkjetlmhdant";
+    urError = std::string("ur:eth-sign-request/oladtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaohdgryagalalnascsgljpnbaelfdibemwaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaelaoxlbjyihjkjyeyaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaehnaehglalalaaxadaaadahtaaddyoeadlecsdwykadykadykaewkadwkaocybgeehfksatisjnihjyhsjnhsjkjetlmhdant");
     ValidateUrDecodingException(ethsignrequest, urError, CborErrorIO, "19. Fuzzer failed");
 }

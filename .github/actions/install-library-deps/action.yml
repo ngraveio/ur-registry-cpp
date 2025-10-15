@@ -1,0 +1,96 @@
+name: 'Install Library Dependencies'
+description: 'Install tinycbor, libwally-core-lite, bc-ur and cppunit'
+
+inputs:
+  build_dir:
+    required: true
+  shell:
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Install GCC 10
+      shell: bash
+      run: |
+        sudo apt update
+        sudo apt install -y gcc-10 g++-10
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100
+        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 100
+        gcc --version
+        g++ --version
+
+    - name: Install base dependencies
+      shell: bash
+      run: |
+        sudo apt install -y make git libcppunit-dev
+
+    - name: Install tinycbor
+      shell: bash
+      run: |
+        echo "[tinycbor] Installing tinycbor..."
+        git clone https://github.com/ngraveio/tinycbor.git
+        cd tinycbor
+        git checkout master-zero
+        make
+        sudo make install
+        echo "[tinycbor] Done"
+
+    - name: Install bc-ur-cpp
+      shell: bash
+      run: |
+        echo "[bc-ur-cpp] Installing bc-ur-cpp..."
+        git clone https://github.com/ngraveio/bc-ur-cpp.git
+        cd bc-ur-cpp
+        git checkout zero-main
+        ./configure
+        make
+        sudo make install
+        echo "[bc-ur-cpp] Done"
+
+    - name: Install libwally-core-lite
+      shell: bash
+      run: |
+        echo "[libwally-core-lite] Installing libwally-core-lite..."
+        git clone https://github.com/ngraveio/libwally-core-lite.git
+        cd libwally-core-lite
+        git checkout zero-main
+        ./tools/autogen.sh
+        ./configure
+        make
+        sudo make install
+        echo "[libwally-core-lite] Done"
+
+    - name: Install cppunit
+      shell: bash
+      run: |
+        echo "[cppunit] Installing cppunit 1.15.1..."
+        wget http://dev-www.libreoffice.org/src/cppunit-1.15.1.tar.gz
+        tar -xzf cppunit-1.15.1.tar.gz
+        mv cppunit-1.15.1 cppunit
+        cd cppunit
+        ./autogen.sh
+        ./configure
+        make
+        sudo make install
+        echo "[cppunit] Done"
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install flawfinder
+      shell: bash
+      run: |
+        python3 -m pip install --upgrade pip
+        pip3 install flawfinder
+
+    - name: Install cppcheck 2.7
+      shell: bash
+      run: |
+        wget https://github.com/danmar/cppcheck/archive/refs/tags/2.7.tar.gz
+        tar -xzf 2.7.tar.gz
+        cd cppcheck-2.7
+        make MATCHCOMPILER=yes FILESDIR=/usr/share/cppcheck CXXOPTS="-O2" CPPOPTS="-DNDEBUG"
+        sudo make install MATCHCOMPILER=yes FILESDIR=/usr/share/cppcheck CXXOPTS="-O2" CPPOPTS="-DNDEBUG"

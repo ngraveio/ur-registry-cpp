@@ -179,9 +179,9 @@ void TestKeypath::EncodeAndDecodeAllFieldsAndTypes(void)
     encode_keypath.setSourceFingerprint(123456789);
     encode_keypath.setDepth();
 
-    QByteArray expectedBytes = QByteArray::fromHex("A3018E01F502F4820304F4820506F580F480F58407F408F58409F500F4021A075BCD150308");
-    QString expectedLegacyUR = "ur:crypto-keypath/otadmnadykaowklfaxaawklfahamyklawklayklratwkayyklrasykaewkaocyathpsnbzaxayknjtvwty";
-    QString expectedNewUR = "ur:keypath/otadmnadykaowklfaxaawklfahamyklawklayklratwkayyklrasykaewkaocyathpsnbzaxayknjtvwty";
+    auto expectedBytes = fromHex("A3018E01F502F4820304F4820506F580F480F58407F408F58409F500F4021A075BCD150308");
+    auto expectedLegacyUR = std::string("ur:crypto-keypath/otadmnadykaowklfaxaawklfahamyklawklayklratwkayyklrasykaewkaocyathpsnbzaxayknjtvwty");
+    auto expectedNewUR = std::string("ur:keypath/otadmnadykaowklfaxaawklfahamyklawklayklratwkayyklrasykaewkaocyathpsnbzaxayknjtvwty");
 
     ValidateDerivationPath(encode_keypath, derivationPath);
     ValidateCborResults(encode_keypath, expectedBytes);
@@ -192,7 +192,7 @@ void TestKeypath::EncodeAndDecodeAllFieldsAndTypes(void)
 
     // Validate decoding
     Keypath decode_keypath;
-    CPPUNIT_ASSERT_NO_THROW(decode_keypath.fromUr(expectedLegacyUR.toStdString()));
+    CPPUNIT_ASSERT_NO_THROW(decode_keypath.fromUr(expectedLegacyUR));
     Compare(decode_keypath, encode_keypath);
 }
 
@@ -213,9 +213,9 @@ void TestKeypath::EncodeAndDecodeDerivationPathAndDepth(void)
 
     encode_keypath.setDepth();
 
-    QByteArray expectedBytes = QByteArray::fromHex("A20188182CF518C8F41832F482001864F40304");
-    QString expectedLegacyUR = "ur:crypto-keypath/oeadlocsdwykcsspwkcseywklfaecsiewkaxaarsonnbkk";
-    QString expectedNewUR = "ur:keypath/oeadlocsdwykcsspwkcseywklfaecsiewkaxaarsonnbkk";
+    auto expectedBytes = fromHex("A20188182CF518C8F41832F482001864F40304");
+    auto expectedLegacyUR = std::string("ur:crypto-keypath/oeadlocsdwykcsspwkcseywklfaecsiewkaxaarsonnbkk");
+    auto expectedNewUR = std::string("ur:keypath/oeadlocsdwykcsspwkcseywklfaecsiewkaxaarsonnbkk");
 
     ValidateDerivationPath(encode_keypath, derivationPath);
     ValidateCborResults(encode_keypath, expectedBytes);
@@ -226,7 +226,7 @@ void TestKeypath::EncodeAndDecodeDerivationPathAndDepth(void)
 
     // Validate decoding
     Keypath decode_keypath;
-    CPPUNIT_ASSERT_NO_THROW(decode_keypath.fromUr(expectedLegacyUR.toStdString()));
+    CPPUNIT_ASSERT_NO_THROW(decode_keypath.fromUr(expectedLegacyUR));
     Compare(decode_keypath, encode_keypath);
 }
 
@@ -246,9 +246,9 @@ void TestKeypath::EncodeAndDecodeDerivationPathAndFingerprint(void)
 
     encode_keypath.setSourceFingerprint(1);
 
-    QByteArray expectedBytes = QByteArray::fromHex("A2018784182CF5182CF51A00012AD4F400F480F40201");
-    QString expectedLegacyUR = "ur:crypto-keypath/oeadltlrcsdwykcsdwykcyaeaddrtywkaewklawkaoadnscsptbk";
-    QString expectedNewUR = "ur:keypath/oeadltlrcsdwykcsdwykcyaeaddrtywkaewklawkaoadnscsptbk";
+    auto expectedBytes = fromHex("A2018784182CF5182CF51A00012AD4F400F480F40201");
+    auto expectedLegacyUR = std::string("ur:crypto-keypath/oeadltlrcsdwykcsdwykcyaeaddrtywkaewklawkaoadnscsptbk");
+    auto expectedNewUR = std::string("ur:keypath/oeadltlrcsdwykcsdwykcyaeaddrtywkaewklawkaoadnscsptbk");
 
     ValidateDerivationPath(encode_keypath, derivationPath);
     ValidateCborResults(encode_keypath, expectedBytes);
@@ -259,7 +259,7 @@ void TestKeypath::EncodeAndDecodeDerivationPathAndFingerprint(void)
 
     // Validate decoding
     Keypath decode_keypath;
-    CPPUNIT_ASSERT_NO_THROW(decode_keypath.fromUr(expectedLegacyUR.toStdString()));
+    CPPUNIT_ASSERT_NO_THROW(decode_keypath.fromUr(expectedLegacyUR));
     Compare(decode_keypath, encode_keypath);
 }
 
@@ -281,9 +281,9 @@ void TestKeypath::EncodeAndDecodeEmptyDerivationPath(void)
     encode_keypath.setSourceFingerprint(912348765);
     encode_keypath.setDepth();
 
-    QByteArray expectedBytes = QByteArray::fromHex("A30180021A3661565D0300");
-    QString expectedLegacyUR = "ur:crypto-keypath/otadlaaocyenhshfhlaxaeuohtswft";
-    QString expectedNewUR = "ur:keypath/otadlaaocyenhshfhlaxaeuohtswft";
+    auto expectedBytes = fromHex("A30180021A3661565D0300");
+    auto expectedLegacyUR = std::string("ur:crypto-keypath/otadlaaocyenhshfhlaxaeuohtswft");
+    auto expectedNewUR = std::string("ur:keypath/otadlaaocyenhshfhlaxaeuohtswft");
 
     ValidateDerivationPath(encode_keypath, derivationPath);
     ValidateCborResults(encode_keypath, expectedBytes);
@@ -294,7 +294,7 @@ void TestKeypath::EncodeAndDecodeEmptyDerivationPath(void)
 
     // Validate decoding
     Keypath decode_keypath;
-    CPPUNIT_ASSERT_NO_THROW(decode_keypath.fromUr(expectedLegacyUR.toStdString()));
+    CPPUNIT_ASSERT_NO_THROW(decode_keypath.fromUr(expectedLegacyUR));
     Compare(decode_keypath, encode_keypath);
 }
 
@@ -311,9 +311,9 @@ void TestKeypath::EncodeAndDecodeOnlyDerivationPath(void)
     std::string derivationPath = "m/<64;64'>";
     CPPUNIT_ASSERT_NO_THROW(encode_keypath.setDerivationPath(derivationPath));
 
-    QByteArray expectedBytes = QByteArray::fromHex("A10181841840F41840F5");
-    QString expectedLegacyUR = "ur:crypto-keypath/oyadlylrcsfzwkcsfzykrtgeqzjt";
-    QString expectedNewUR = "ur:keypath/oyadlylrcsfzwkcsfzykrtgeqzjt";
+    auto expectedBytes = fromHex("A10181841840F41840F5");
+    auto expectedLegacyUR = std::string("ur:crypto-keypath/oyadlylrcsfzwkcsfzykrtgeqzjt");
+    auto expectedNewUR = std::string("ur:keypath/oyadlylrcsfzwkcsfzykrtgeqzjt");
 
     ValidateDerivationPath(encode_keypath, derivationPath);
     ValidateCborResults(encode_keypath, expectedBytes);
@@ -324,7 +324,7 @@ void TestKeypath::EncodeAndDecodeOnlyDerivationPath(void)
 
     // Validate decoding
     Keypath decode_keypath;
-    CPPUNIT_ASSERT_NO_THROW(decode_keypath.fromUr(expectedLegacyUR.toStdString()));
+    CPPUNIT_ASSERT_NO_THROW(decode_keypath.fromUr(expectedLegacyUR));
     Compare(decode_keypath, encode_keypath);
 }
 
@@ -352,9 +352,9 @@ void TestKeypath::EncodeAndDecodeKeypathComponents(void)
     encode_keypath.addKeyPathComponent(childPair);
 
     std::string expectedDerivationPath = "m/98'/[2,6]/[]'/<78200';0'>";
-    QByteArray expectedBytes = QByteArray::fromHex("A101871862F5820206F480F5841A00013178F500F5");
-    QString expectedLegacyUR = "ur:crypto-keypath/oyadltcsidyklfaoamwklayklrcyaeadehksykaeyknlbtuomn";
-    QString expectedNewUR = "ur:keypath/oyadltcsidyklfaoamwklayklrcyaeadehksykaeyknlbtuomn";
+    auto expectedBytes = fromHex("A101871862F5820206F480F5841A00013178F500F5");
+    auto expectedLegacyUR = std::string("ur:crypto-keypath/oyadltcsidyklfaoamwklayklrcyaeadehksykaeyknlbtuomn");
+    auto expectedNewUR = std::string("ur:keypath/oyadltcsidyklfaoamwklayklrcyaeadehksykaeyknlbtuomn");
 
     ValidateDerivationPath(encode_keypath, expectedDerivationPath);
     ValidateCborResults(encode_keypath, expectedBytes);
@@ -365,7 +365,7 @@ void TestKeypath::EncodeAndDecodeKeypathComponents(void)
 
     // Validate decoding
     Keypath decode_keypath;
-    CPPUNIT_ASSERT_NO_THROW(decode_keypath.fromUr(expectedLegacyUR.toStdString()));
+    CPPUNIT_ASSERT_NO_THROW(decode_keypath.fromUr(expectedLegacyUR));
     Compare(decode_keypath, encode_keypath);
 }
 
@@ -439,10 +439,10 @@ void TestKeypath::DecodeRandomOrderMapIndex(void)
     keypath.setSourceFingerprint(654378);
     keypath.setDepth();
 
-    QString urToDecode = "ur:keypath/otaocyaeasztdraxaaadloadykaowkcfaohdykcsfxyklnspbnkn";
+    auto urToDecode = std::string("ur:keypath/otaocyaeasztdraxaaadloadykaowkcfaohdykcsfxyklnspbnkn");
 
     Keypath decode_keypath;
-    CPPUNIT_ASSERT_NO_THROW(decode_keypath.fromUr(urToDecode.toStdString()));
+    CPPUNIT_ASSERT_NO_THROW(decode_keypath.fromUr(urToDecode));
     Compare(decode_keypath, keypath);
 }
 
@@ -453,7 +453,7 @@ void TestKeypath::DecodeRandomOrderMapIndex(void)
 void TestKeypath::DecodeIncorrectUrType(void)
 {
     Keypath keypath;
-    QString urError = "ur:unknown/otaocyaeasztdraxaaadloadykaowkcfaohdykcsfxyklnspbnkn";
+    auto urError = std::string("ur:unknown/otaocyaeasztdraxaaadloadykaowkcfaohdykcsfxyklnspbnkn");
 
     ValidateUrDecodingException(keypath, urError, CborErrorUnknownType);
 }
@@ -469,7 +469,7 @@ void TestKeypath::DecodeIncorrectUrType(void)
 void TestKeypath::DecodeUnknownMapIndex(void)
 {
     Keypath keypath;
-    QString urError = "ur:keypath/oeadlncsglyklfaoamwklaykayjnkpjtjejtjlktjtcxinjtieihksgyrdoyws";
+    auto urError = std::string("ur:keypath/oeadlncsglyklfaoamwklaykayjnkpjtjejtjlktjtcxinjtieihksgyrdoyws");
     
     ValidateUrDecodingException(keypath, urError, CborErrorUnknownType);
 }
@@ -485,7 +485,7 @@ void TestKeypath::DecodeUnknownMapIndex(void)
 void TestKeypath::DecodeExcludedValue0ForFingerprint(void)
 {
     Keypath keypath;
-    QString urError = "ur:keypath/oeadlncfctgaykaaykaewkaoaegrdavych";
+    auto urError = std::string("ur:keypath/oeadlncfctgaykaaykaewkaoaegrdavych");
 
     ValidateUrDecodingException(keypath, urError, CborErrorExcludedValue);
 }
@@ -500,7 +500,7 @@ void TestKeypath::DecodeExcludedValue0ForFingerprint(void)
 void TestKeypath::DecodeImproperValueForChildIndex(void)
 {
     Keypath keypath;
-    QString urError = "ur:keypath/oyadlrcfctgawkcylaaeaeeowktohttafx";
+    auto urError = std::string("ur:keypath/oyadlrcfctgawkcylaaeaeeowktohttafx");
 
     ValidateUrDecodingException(keypath, urError, CborErrorImproperValue);
 }
@@ -516,7 +516,7 @@ void TestKeypath::DecodeImproperValueForChildIndex(void)
 void TestKeypath::DecodeImproperValueWithoutChildComponents(void)
 {
     Keypath keypath;
-    QString urError = "ur:keypath/oeaocydwyndavtaxaebswlswva";
+    auto urError = std::string("ur:keypath/oeaocydwyndavtaxaebswlswva");
 
     ValidateUrDecodingException(keypath, urError, CborErrorTooFewItems);
 }
@@ -530,102 +530,102 @@ void TestKeypath::DecodeFuzzer(void)
     Keypath keypath;
 
     /* {1: [1]} */
-    QString urError = "ur:keypath/oyadlyadlatogmts";
+    auto urError = std::string("ur:keypath/oyadlyadlatogmts");
     ValidateUrDecodingException(keypath, urError, CborErrorIllegalType, "1. Fuzzer failed");
 
     /* {1: [[]]} */
-    urError = "ur:keypath/oyadlylacyjsvyhs";
+    urError = std::string("ur:keypath/oyadlylacyjsvyhs");
     ValidateUrDecodingException(keypath, urError, CborErrorIllegalType, "2. Fuzzer failed");
 
     /* {1: [[0]]} */
-    urError = "ur:keypath/oyadlylyaewnrpzevl";
+    urError = std::string("ur:keypath/oyadlylyaewnrpzevl");
     ValidateUrDecodingException(keypath, urError, CborErrorIllegalType, "3. Fuzzer failed");
 
     /* {1: [[643, true, 9]]} */
-    urError = "ur:keypath/oyadlylscfaolsykashpoxdygm";
+    urError = std::string("ur:keypath/oyadlylscfaolsykashpoxdygm");
     ValidateUrDecodingException(keypath, urError, CborErrorIllegalType, "4. Fuzzer failed");
 
     /* {1: [[4, 900]]} */
-    urError = "ur:keypath/oyadlylscfaolsykashpoxdygm";
+    urError = std::string("ur:keypath/oyadlylscfaolsykashpoxdygm");
     ValidateUrDecodingException(keypath, urError, CborErrorIllegalType, "5. Fuzzer failed");
 
     /* {1: [[4, 900]]} */
-    urError = "ur:keypath/oyadlylfaacfaxlrvabzbnbg";
+    urError = std::string("ur:keypath/oyadlylfaacfaxlrvabzbnbg");
     ValidateUrDecodingException(keypath, urError, CborErrorIllegalType, "6. Fuzzer failed");
 
     /* {1: [[87, 900, true, false]]} */
-    urError = "ur:keypath/oyadlylrcshgcfaxlrykwkcaehaedw";
+    urError = std::string("ur:keypath/oyadlylrcshgcfaxlrykwkcaehaedw");
     ValidateUrDecodingException(keypath, urError, CborErrorIllegalType, "7. Fuzzer failed");
 
     /* {1: [[7, 90000, true, false, 8765]]} */
-    urError = "ur:keypath/oyadlylpatcyaeadhemhykwkcfcpfsspvaghbn";
+    urError = std::string("ur:keypath/oyadlylpatcyaeadhemhykwkcfcpfsspvaghbn");
     ValidateUrDecodingException(keypath, urError, CborErrorIllegalType, "8. Fuzzer failed");
 
     /* {1: [[1, 2], false, true, 6, 56, false]} */
-    urError = "ur:keypath/oyadlnlfadaowkykamcsetwkecfxaode";
+    urError = std::string("ur:keypath/oyadlnlfadaowkykamcsetwkecfxaode");
     ValidateUrDecodingException(keypath, urError, CborErrorIllegalType, "9. Fuzzer failed");
 
     /* {1: [[1, "abc"], true]} */
-    urError = "ur:keypath/oyadlflfadiahsidiaykvoztbdfp";
+    urError = std::string("ur:keypath/oyadlflfadiahsidiaykvoztbdfp");
     ValidateUrDecodingException(keypath, urError, CborErrorIllegalType, "10. Fuzzer failed");
 
     /* {1: [[0, "incorrect", 7, false]]} */
-    urError = "ur:keypath/oyadlylraeininjtiajljpjpihiajyatwkstwnjsbe";
+    urError = std::string("ur:keypath/oyadlylraeininjtiajljpjpihiajyatwkstwnjsbe");
     ValidateUrDecodingException(keypath, urError, CborErrorIllegalType, "11. Fuzzer failed");
 
     /* {1: [[], "keypath"]} */
-    urError = "ur:keypath/oyadlflaiojeihkkjohsjyisaytasegm";
+    urError = std::string("ur:keypath/oyadlflaiojeihkkjohsjyisaytasegm");
     ValidateUrDecodingException(keypath, urError, CborErrorIllegalType, "12. Fuzzer failed");
 
     /* Fingerprint out of range: {1: [[], true], 2: 4294967298} */
-    urError = "ur:keypath/oeadlflaykaosagscxgwtohyfmdaaohsbeaeaeaebgenmhdr";
+    urError = std::string("ur:keypath/oeadlflaykaosagscxgwtohyfmdaaohsbeaeaeaebgenmhdr");
     ValidateUrDecodingException(keypath, urError, CborErrorIllegalType, "13. Fuzzer failed");
 
     /* Depth out of range: {2: 43256889, 1: [[7, 9], true], 3: 4900} */
-    urError = "ur:keypath/otaocyaomwbnesadlflfatasykaxcfbwdkfppmidmt";
+    urError = std::string("ur:keypath/otaocyaomwbnesadlflfatasykaxcfbwdkfppmidmt");
     ValidateUrDecodingException(keypath, urError, CborErrorImproperValue, "14. Fuzzer failed");
 
     /* {2: true, 1: [5, true], 3: 9} */
-    urError = "ur:keypath/otaoykadlfahykaxasnlcfcpry";
+    urError = std::string("ur:keypath/otaoykadlfahykaxasnlcfcpry");
     ValidateUrDecodingException(keypath, urError, CborErrorIllegalType, "15. Fuzzer failed");
 
     /* {2: 23, 1: [987, false], 3: false} */
-    urError = "ur:keypath/otaochadlfcfaxuywkaxwkpmjkrtqz";
+    urError = std::string("ur:keypath/otaochadlfcfaxuywkaxwkpmjkrtqz");
     ValidateUrDecodingException(keypath, urError, CborErrorIllegalType, "16. Fuzzer failed");
 
     /* {1: 6} */
-    urError = "ur:keypath/oyadamtslskneh";
+    urError = std::string("ur:keypath/oyadamtslskneh");
     ValidateUrDecodingException(keypath, urError, CborErrorIllegalType, "17. Fuzzer failed");
 
     /* {} */
-    urError = "ur:keypath/nbaatygsih";
+    urError = std::string("ur:keypath/nbaatygsih");
     ValidateUrDecodingException(keypath, urError, CborErrorImproperValue, "18. Fuzzer failed");
 
     /* Duplicated components: {1: [2, true], 1: [456, false]} */
-    urError = "ur:keypath/oeadlfaoykadlfcfadspwklrtosgos";
+    urError = std::string("ur:keypath/oeadlfaoykadlfcfadspwklrtosgos");
     ValidateUrDecodingException(keypath, urError, CborErrorMapKeysNotUnique, "19. Fuzzer failed");
 
     /* Duplicated fingerprint: {1: [0, false], 2: 600, 2: 1} */
-    urError = "ur:keypath/otadlfaewkaoadaocfaohdpkmkgubw";
+    urError = std::string("ur:keypath/otadlfaewkaoadaocfaohdpkmkgubw");
     ValidateUrDecodingException(keypath, urError, CborErrorMapKeysNotUnique, "20. Fuzzer failed");
 
     /* Duplicated depth: {1: [0, false], 3: 1, 3: 4} */
-    urError = "ur:keypath/otadlfaewkaxadaxaaimlaykhh";
+    urError = std::string("ur:keypath/otadlfaewkaxadaxaaimlaykhh");
     ValidateUrDecodingException(keypath, urError, CborErrorMapKeysNotUnique, "21. Fuzzer failed");
 
     /* Empty content */
-    urError = "ur:keypath/";
+    urError = std::string("ur:keypath/");
     ValidateUrDecodingException(keypath, urError, CborErrorIO, "22. Fuzzer failed");
 
     /* random string */
-    urError = "ur:keypath/randomstring";
+    urError = std::string("ur:keypath/randomstring");
     ValidateUrDecodingException(keypath, urError, CborErrorIO, "23. Fuzzer failed");
 
     /* random invalid min bytewords */
-    urError = "ur:keypath/rtotbw";
+    urError = std::string("ur:keypath/rtotbw");
     ValidateUrDecodingException(keypath, urError, CborErrorIO, "24. Fuzzer failed");
 
     /* random valid min bytewords of 0xFF324A568C65540009876B432E */
-    urError = "ur:keypath/zmeygehflkihghaeasltjefxdmrkbdnsrt";
+    urError = std::string("ur:keypath/zmeygehflkihghaeasltjefxdmrkbdnsrt");
     ValidateUrDecodingException(keypath, urError, CborErrorUnexpectedBreak, "25. Fuzzer failed");
 }

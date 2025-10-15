@@ -14,6 +14,11 @@ Runtime/Link:
 
 > Ensure headers and libs are installed (typically under `/usr/local/include` and `/usr/local/lib`).
 
+Development/Test:
+- **cppunit** 1.15.1
+- **cppcheck** 2.7 (for static analysis)
+- **flawfinder** (for security scanning)
+
 ## Build & Install
 
 ```sh
@@ -21,4 +26,18 @@ Runtime/Link:
 ./configure
 make
 sudo make install
+```
+
+## Run Tests & Static Analysis
+
+- Build and install the static library
+```sh
+./autogen.sh
+./configure --disable-shared --enable-static
+make
+```
+
+- To run both unit tests (cppunit) and static analysis (cppcheck and flawfinder), use:
+```
+make check
 ```

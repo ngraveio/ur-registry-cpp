@@ -28,4 +28,6 @@ stamp-h1
 m4/l*.m4
 ur-registry.pc
 test-driver
-test-suite.log
+*.log
+*.trs
+tests/test_ur_registry

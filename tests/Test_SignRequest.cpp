@@ -1,7 +1,6 @@
 #include <cppunit/TestCase.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <QDebug>
 #include <string>
 
 #include "Test_SignRequest.h"
@@ -23,8 +22,7 @@ void TestSignRequest::tearDown(void)
 void TestSignRequest::validSignRequestWithBytesStringAddress()
 {
     // sign-request with a coin-identity(eliptic-curve: Secp256k1, type: 60) and sign-data (in hex): 010203
-    SignRequest expectedSignRequest(CoinIdentity(EllipticCurve::Secp256k1, 60),
-                            convertQByteArrayToVector(QByteArray::fromHex("010203")));
+    SignRequest expectedSignRequest(CoinIdentity(EllipticCurve::Secp256k1, 60), fromHex("010203"));
 
     expectedSignRequest.setRequestID(Uuid("c8a23dbcb80148fda5acb6ffd7f39e92"));
     expectedSignRequest.setOrigin("liquidapp");
@@ -123,8 +121,7 @@ void TestSignRequest::validSignRequestWithBytesStringAddress()
 void TestSignRequest::validSignRequestWithTextStringAddress()
 {
     // sign-request with a coin-identity(eliptic-curve: Secp256k1, type: 60) and sign-data: f4f1f0
-    SignRequest expectedSignRequest(CoinIdentity(EllipticCurve::Secp256k1, 60),
-                            convertQByteArrayToVector(QByteArray::fromHex("f4f1f0")));
+    SignRequest expectedSignRequest(CoinIdentity(EllipticCurve::Secp256k1, 60), fromHex("f4f1f0"));
     expectedSignRequest.setAddress("0102030405");
     
     /* CBOR */
@@ -196,7 +193,7 @@ void TestSignRequest::signRequestDecoderFuzzingTests()
     SignRequest signRequest;
 
     /* Invalid UUID tag */
-    QString invalidUr = "ur:sign-request/osadtpdsgdspoefsrfroadfdzconpsrpzmtswfnnmoaotaoyrhoeadayaocsfnaxtantjooyadlylrcsfzwkcsfzykaafxadaoaxahinjzinjskpiniehsjojoamadatfeadaoaxaaahbtfrguia";
+    auto invalidUr = std::string("ur:sign-request/osadtpdsgdspoefsrfroadfdzconpsrpzmtswfnnmoaotaoyrhoeadayaocsfnaxtantjooyadlylrcsfzwkcsfzykaafxadaoaxahinjzinjskpiniehsjojoamadatfeadaoaxaaahbtfrguia");
     ValidateUrDecodingException(signRequest, invalidUr, CborErrorInappropriateTagForType, "1. Wrong UUID tag UR Fuzzer failed.");
     /* Wrong UUID type */
     invalidUr = "ur:sign-request/osadtpdakscxfxetfpeyeofyfwfxfwetdyeheeetfgfyfpecfpfxfwenfgfgfyemfgeoesfeeseyaotaoyrhoeadayaocsfnaxtantjooyadlylrcsfzwkcsfzykaafxadaoaxahinjzinjskpiniehsjojoamadatfeadaoaxaaahcegtcyks";

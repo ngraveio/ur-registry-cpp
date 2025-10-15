@@ -1,7 +1,8 @@
 AM_CPPFLAGS = -I$(top_srcdir)/src
+AM_CXXFLAGS = -std=c++17
 
 check_PROGRAMS = test_ur_registry
-TESTS = $(check_PROGRAMS)
+TESTS = $(check_PROGRAMS) test_cppcheck.sh test_flawfinder.sh
 
 test_ur_registry_SOURCES = main.cpp \
     Test_EthSignRequest.cpp Test_HDKey.cpp Test_Keypath.cpp \
@@ -10,4 +11,4 @@ test_ur_registry_SOURCES = main.cpp \
     Test_UrSignatures.cpp Test_CoinIdentity.cpp Test_SignRequest.cpp \
     Test_BatchSignRequest.cpp Test_Intent.cpp
 
-test_ur_registry_LDADD = $(top_builddir)/src/libur-registry.la -lcppunit -ldl
+test_ur_registry_LDADD = $(top_builddir)/src/libur-registry.la -lbc-ur -lwallylite -ltinycbor -lcppunit -ldl

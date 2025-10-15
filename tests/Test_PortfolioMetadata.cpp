@@ -40,9 +40,9 @@ void TestPortfolioMetadata::EncodeAllFields(void)
     //    66                                   # text(6)
     //       4E4752415645                      # "NGRAVE"
 
-    QByteArray expectedBytes = QByteArray::fromHex("A401500102030405060708090A0B0C0D0E0F100262656E0368312E372D322E72630466"
+    auto expectedBytes = fromHex("A401500102030405060708090A0B0C0D0E0F100262656E0368312E372D322E72630466"
                                                   "4E4752415645");
-    QString expectedUR = "ur:portfolio-metadata/oxadgdadaoaxaaahamatayasbkbdbnbtbabsbeaoidihjtaxisehdmemdpeydmjpiaaaiyglflgmfphffejkuejscf";
+    auto expectedUR = "ur:portfolio-metadata/oxadgdadaoaxaaahamatayasbkbdbnbtbabsbeaoidihjtaxisehdmemdpeydmjpiaaaiyglflgmfphffejkuejscf";
 
     ValidateCborResults(metadata, expectedBytes);
     ValidateUrEncoding(metadata, expectedUR);
@@ -58,8 +58,8 @@ void TestPortfolioMetadata::EncodeOnlySyncId(void)
     //    50                                   # bytes(16)
     //       0102030405060708090A0B0C0D0E0F10 # sync_id bytes
 
-    QByteArray expectedBytes = QByteArray::fromHex("A101500102030405060708090A0B0C0D0E0F10");
-    QString expectedUR = "ur:portfolio-metadata/oyadgdadaoaxaaahamatayasbkbdbnbtbabsbewnsniyrs";
+    auto expectedBytes = fromHex("A101500102030405060708090A0B0C0D0E0F10");
+    auto expectedUR = "ur:portfolio-metadata/oyadgdadaoaxaaahamatayasbkbdbnbtbabsbewnsniyrs";
 
     ValidateCborResults(metadata, expectedBytes);
     ValidateUrEncoding(metadata, expectedUR);
@@ -75,8 +75,8 @@ void TestPortfolioMetadata::EncodeOnlyLanguage(void)
     //    62                                   # text(2)
     //       6672                              # "fr"
 
-    QByteArray expectedBytes = QByteArray::fromHex("A102626672");
-    QString expectedUR = "ur:portfolio-metadata/oyaoidiyjpvdmugetk";
+    auto expectedBytes = fromHex("A102626672");
+    auto expectedUR = "ur:portfolio-metadata/oyaoidiyjpvdmugetk";
 
     ValidateCborResults(metadata, expectedBytes);
     ValidateUrEncoding(metadata, expectedUR);
@@ -92,8 +92,8 @@ void TestPortfolioMetadata::EncodeOnlyFwVersion(void)
     //    65                                   # text(5)
     //       312E302E30                        # "1.0.0"
 
-    QByteArray expectedBytes = QByteArray::fromHex("A10365312E302E30");
-    QString expectedUR = "ur:portfolio-metadata/oyaxihehdmdydmdyrsbtdtdk";
+    auto expectedBytes = fromHex("A10365312E302E30");
+    auto expectedUR = "ur:portfolio-metadata/oyaxihehdmdydmdyrsbtdtdk";
 
     ValidateCborResults(metadata, expectedBytes);
     ValidateUrEncoding(metadata, expectedUR);
@@ -109,8 +109,8 @@ void TestPortfolioMetadata::EncodeOnlyDevice(void)
     //    64                                   # text(4)
     //       5A45524F                          # "ZERO"
 
-    QByteArray expectedBytes = QByteArray::fromHex("A104645A45524F");
-    QString expectedUR = "ur:portfolio-metadata/oyaaiehtfegmgwemnshgah";
+    auto expectedBytes = fromHex("A104645A45524F");
+    auto expectedUR = "ur:portfolio-metadata/oyaaiehtfegmgwemnshgah";
 
     ValidateCborResults(metadata, expectedBytes);
     ValidateUrEncoding(metadata, expectedUR);
@@ -119,8 +119,8 @@ void TestPortfolioMetadata::EncodeOnlyDevice(void)
 void TestPortfolioMetadata::EncodeEmpty(void)
 {
     PortfolioMetadata metadata;
-    QByteArray expectedBytes = QByteArray::fromHex("");
-    QString expectedUR = "ur:portfolio-metadata/aeaeaeae"; // CBOR = '' and CRC32 = '00000000'
+    auto expectedBytes = fromHex("");
+    auto expectedUR = "ur:portfolio-metadata/aeaeaeae"; // CBOR = '' and CRC32 = '00000000'
 
     ValidateCborResults(metadata, expectedBytes);
     ValidateUrEncoding(metadata, expectedUR);
@@ -148,17 +148,17 @@ void TestPortfolioMetadata::InvalidLanguageCode(void)
     PortfolioMetadata metadata;
 
     // Test language code that's too long (should be 2 chars per ISO 639-1)
-    QString invalidLongCode = "eng";
-    QString invalidCharsCode = "1n";
+    auto invalidLongCode = "eng";
+    auto invalidCharsCode = "1n";
 
     // Test invalid language code with wrong length
     CPPUNIT_ASSERT_THROW_MESSAGE(
         "Should throw on language code that's too long",
-        metadata.setLanguage(invalidLongCode.toStdString()),
+        metadata.setLanguage(invalidLongCode),
         CborException
     );
     try {
-        metadata.setLanguage(invalidLongCode.toStdString());
+        metadata.setLanguage(invalidLongCode);
     } catch (const CborException& e) {
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "Error code different than expected",
@@ -170,11 +170,11 @@ void TestPortfolioMetadata::InvalidLanguageCode(void)
     // Test invalid language code with invalid characters
     CPPUNIT_ASSERT_THROW_MESSAGE(
         "Should throw on language code with invalid characters",
-        metadata.setLanguage(invalidCharsCode.toStdString()),
+        metadata.setLanguage(invalidCharsCode),
         CborException
     );
     try {
-        metadata.setLanguage(invalidCharsCode.toStdString());
+        metadata.setLanguage(invalidCharsCode);
     } catch (const CborException& e) {
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "Error code different than expected",
