@@ -31,3 +31,6 @@ test-driver
 *.log
 *.trs
 tests/test_ur_registry
+examples/.dirstamp
+examples/decode_ur_interactive
+examples/encode_ur_interactive
