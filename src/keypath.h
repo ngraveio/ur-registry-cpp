@@ -109,10 +109,10 @@ public:
 
     /**
      * @brief Get the Derivation Path object following the format
-     * m/1'/2/[3, 4]/[5, 6]'/[]/[]'/[7, 8']/[9', 0]
+     * m/1'/2/[3,4]/[5,6]'/[]/[]'/[7,8']/[9',0]
      * Where each component can be either 
      *  - a child index possibly hardened (e.g. 1' and 2)
-     *  - a child range with a range between two indexes possibly hardened (e.g. [3, 4] and [5, 6]')
+     *  - a child range with a range between two indexes possibly hardened (e.g. [3,4] and [5,6]')
      *  - a child wildcard possibly hardened (e.g. [] and []')
      *  - a child pair with an external and internal addresses, both addresses possibly hardened independently (e.g. [7, 8'] and [9', 0])
      * 

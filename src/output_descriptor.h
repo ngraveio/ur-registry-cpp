@@ -37,12 +37,12 @@
 class OutputDescriptor : public RegistryItem
 {
 public:
+    OutputDescriptor();
+    ~OutputDescriptor() override = default;
     explicit OutputDescriptor(const std::string &source, 
                      const std::vector<HDKey> &keys = {}, 
                      const std::optional<std::string> &name = std::nullopt, 
                      const std::optional<std::string> &note = std::nullopt);
-    
-    ~OutputDescriptor() override = default;
     
     enum class Key {
       SOURCE = 1,
