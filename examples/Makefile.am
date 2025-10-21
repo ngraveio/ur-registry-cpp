@@ -1,3 +1,5 @@
+AM_CXXFLAGS  = -std=c++17 -Wall -Wextra -Wpedantic -fvisibility=hidden
+
 bin_PROGRAMS = decode_ur_interactive encode_ur_interactive
 
 decode_ur_interactive_SOURCES = \
