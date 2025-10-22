@@ -17,7 +17,7 @@ Runtime/Link:
 Development/Test:
 - **cppunit** 1.15.1
 - **cppcheck** 2.7 (for static analysis)
-- **flawfinder** (for security scanning)
+- **flawfinder** 2.0.19 (for security scanning)
 
 ## Build & Install
 
@@ -132,3 +132,46 @@ Encoded UR: ur:sign-response/oeadtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaohdfptyw
 
 Enter UR type to encode or 'q' to quit: q
 ```
+
+## Contributing
+
+We welcome contributions to improve the UR Registry C++ library.
+
+**Guidelines**
+- Keep PRs focused and well-described
+- Include tests or examples when relevant
+- Don’t submit security issues publicly — see Responsible Disclosure
+
+### License
+
+This project is licensed under the MIT License. See the LICENSE.md file for details.
+
+### Credits
+
+| Name              | Github                                             | Email                                 | 
+| ----------------- | -------------------------------------------------- | ------------------------------------- | 
+| Mathieu Da Silva  | [@mdasilva4](https://github.com/mdasilva4)         | mathieu.dasilva@ngrave.io             | 
+| Adil Benabdallah  | [@adbena](https://github.com/adbena)               | adil.benabdallah@ngrave.io            |
+| Maher Sallam      | [@Maher4Ever](https://github.com/Maher4Ever)       | maher.sallam@ngrave.io                | 
+| Francois Gerrin   | [@fgerin-ngrave](https://github.com/fgerin-ngrave) | francois.gerin@ngrave.io              |
+| Tarik Krioua      | [@tkrioua](https://github.com/tkrioura)            | tarik.krioua@ngrave.io                |
+
+## Responsible Disclosure
+
+We are committed to keeping our software secure and safe to use for everyone. If you discover a security vulnerability or weakness, we kindly ask that you do not submit it as a public GitHub issue.
+
+Instead, please contact us privately at:
+
+```
+mathieu.dasilva@ngrave.io
+```
+
+To ensure confidentiality, please encrypt your message using our PGP key with the following fingerprint:
+
+```
+22B9 CAE0 B44B EAA0 0174 E4D4 6D9F EB76 A95F ED64
+```
+
+We will assess the reported issue and determine if it qualifies under the scope of our [bug bounty program](https://ngrave.io/en/bug-bounty-program).
+
+Thank you for acting responsibly and helping us protect our users.
