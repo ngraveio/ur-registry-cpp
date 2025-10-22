@@ -21,23 +21,26 @@ Development/Test:
 
 ## Build & Install
 
+- Build
+
 ```sh
 ./autogen.sh
 ./configure
 make
+```
+
+- Install
+
+```
 sudo make install
 ```
 
 ## Run Tests & Static Analysis
 
-- Build and install the static library
-```sh
-./autogen.sh
-./configure --disable-shared --enable-static
-make
-```
+- Build as specified in "Build & Install" instructions
 
-- To run both unit tests (cppunit) and static analysis (cppcheck and flawfinder), use:
+- Run both unit tests (cppunit) and static analysis (cppcheck and flawfinder)
+
 ```
 make check
 ```
@@ -50,21 +53,14 @@ Two interactive apps are provided to help explore and test the encoding and deco
 
 An interactive decoder that takes a full UR string (e.g. ur:eth-sign-request/...) as input and displays its decoded fields.
 
-- Build:
-
-```
-./autogen.sh
-./configure --disable-shared --enable-static
-make
-```
-
-- Run:
+- Build as specified in "Build & Install" instructions
+- Run
 
 ```
 ./examples/decode_ur_interactive
 ```
 
-- Usage:
+- Usage
    - Paste or type any valid UR string (e.g. from a QR code).
    - Type demo to run built-in decoding examples.
    - Type q to quit.
@@ -98,27 +94,20 @@ UR> q
 
 An interactive encoder that prompts you to enter data step-by-step to build and encode supported UR types.
 
-- Build:
-
-```
-./autogen.sh
-./configure --disable-shared --enable-static
-make
-```
-
+- Build as specified in "Build & Install" instructions
 - Run
 
 ```
 ./examples/encode_ur_interactive
 ```
 
-- Usage:
+- Usage
   - When prompted, type the UR type you want to encode (e.g. coin-identity, hdkey, portfolio, etc.).
   - Fill in the requested fields interactively.
   - The resulting UR string will be printed to the console.
   - Type q to quit.
 
-- Example:
+- Example
 
 ```
 ./examples/encode_ur_interactive

@@ -2,7 +2,7 @@ AM_CXXFLAGS  = -std=c++17 -Wall -Wextra -Wpedantic -fvisibility=hidden
 AM_CPPFLAGS  = -I$(top_srcdir)/src
 
 lib_LTLIBRARIES = libur-registry.la
-libur_registry_la_LDFLAGS = -version-info 0:0:0 -no-undefined
+libur_registry_la_LDFLAGS = -version-info 1:0:0 -static -no-undefined
 
 libur_registry_la_SOURCES = \
   batch_sign_request.cpp batch_sign_response.cpp \
