@@ -16,8 +16,8 @@ class TestBatchSignRequest : public CppUnit::TestFixture
 public:
     void setUp(void) {};
     void tearDown(void) {};
-    
+
     void testBatchSignRequestDecoding();
 
-    void Compare(const BatchSignRequest& decodedBatchSignRequest, const BatchSignRequest& expectedBatchSignRequest);
+    void Compare(const BatchSignRequest &decodedBatchSignRequest, const BatchSignRequest &expectedBatchSignRequest);
 };

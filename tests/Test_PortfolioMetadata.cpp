@@ -14,8 +14,7 @@ std::vector<uint8_t> TestPortfolioMetadata::createValidSyncId(void)
     // Create a 16-byte sync ID
     return std::vector<uint8_t>{
         0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
-        0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10
-    };
+        0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10};
 }
 
 void TestPortfolioMetadata::EncodeAllFields(void)
@@ -41,7 +40,7 @@ void TestPortfolioMetadata::EncodeAllFields(void)
     //       4E4752415645                      # "NGRAVE"
 
     auto expectedBytes = fromHex("A401500102030405060708090A0B0C0D0E0F100262656E0368312E372D322E72630466"
-                                                  "4E4752415645");
+                                 "4E4752415645");
     auto expectedUR = "ur:portfolio-metadata/oxadgdadaoaxaaahamatayasbkbdbnbtbabsbeaoidihjtaxisehdmemdpeydmjpiaaaiyglflgmfphffejkuejscf";
 
     ValidateCborResults(metadata, expectedBytes);
@@ -132,14 +131,16 @@ void TestPortfolioMetadata::InvalidSyncIdSize(void)
     std::vector<uint8_t> invalidSyncId{0x01, 0x02, 0x03}; // Only 3 bytes instead of 16
 
     CPPUNIT_ASSERT_THROW(metadata.setSyncId(invalidSyncId), CborException);
-    try {
+    try
+    {
         metadata.setSyncId(invalidSyncId);
-    } catch (const CborException& e) {
+    }
+    catch (const CborException &e)
+    {
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "Error code different than expected",
             CborErrorImproperValue,
-            e.errorCode()
-        );
+            e.errorCode());
     }
 }
 
@@ -155,32 +156,34 @@ void TestPortfolioMetadata::InvalidLanguageCode(void)
     CPPUNIT_ASSERT_THROW_MESSAGE(
         "Should throw on language code that's too long",
         metadata.setLanguage(invalidLongCode),
-        CborException
-    );
-    try {
+        CborException);
+    try
+    {
         metadata.setLanguage(invalidLongCode);
-    } catch (const CborException& e) {
+    }
+    catch (const CborException &e)
+    {
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "Error code different than expected",
             CborErrorImproperValue,
-            e.errorCode()
-        );
+            e.errorCode());
     }
 
     // Test invalid language code with invalid characters
     CPPUNIT_ASSERT_THROW_MESSAGE(
         "Should throw on language code with invalid characters",
         metadata.setLanguage(invalidCharsCode),
-        CborException
-    );
-    try {
+        CborException);
+    try
+    {
         metadata.setLanguage(invalidCharsCode);
-    } catch (const CborException& e) {
+    }
+    catch (const CborException &e)
+    {
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "Error code different than expected",
             CborErrorImproperValue,
-            e.errorCode()
-        );
+            e.errorCode());
     }
 }
 
@@ -191,16 +194,17 @@ void TestPortfolioMetadata::EmptyLanguageCode(void)
     CPPUNIT_ASSERT_THROW_MESSAGE(
         "Should throw on empty language code",
         metadata.setLanguage(""),
-        CborException
-    );
-    try {
+        CborException);
+    try
+    {
         metadata.setLanguage("");
-    } catch (const CborException& e) {
+    }
+    catch (const CborException &e)
+    {
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "Error code different than expected",
             CborErrorImproperValue,
-            e.errorCode()
-        );
+            e.errorCode());
     }
 }
 
@@ -211,16 +215,17 @@ void TestPortfolioMetadata::EmptyFwVersion(void)
     CPPUNIT_ASSERT_THROW_MESSAGE(
         "Should throw on empty firmware version",
         metadata.setFwVersion(""),
-        CborException
-    );
-    try {
+        CborException);
+    try
+    {
         metadata.setFwVersion("");
-    } catch (const CborException& e) {
+    }
+    catch (const CborException &e)
+    {
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "Error code different than expected",
             CborErrorImproperValue,
-            e.errorCode()
-        );
+            e.errorCode());
     }
 }
 
@@ -231,15 +236,16 @@ void TestPortfolioMetadata::EmptyDevice(void)
     CPPUNIT_ASSERT_THROW_MESSAGE(
         "Should throw on empty device name",
         metadata.setDevice(""),
-        CborException
-    );
-    try {
+        CborException);
+    try
+    {
         metadata.setDevice("");
-    } catch (const CborException& e) {
+    }
+    catch (const CborException &e)
+    {
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "Error code different than expected",
             CborErrorImproperValue,
-            e.errorCode()
-        );
+            e.errorCode());
     }
 }

@@ -27,27 +27,31 @@
  * language_code = string ; following [ISO 639-1] Code (e.g. "en" for English, "fr" for French, "nl" for Dutch and "es" for Spanish)
  */
 
-class PortfolioMetadata : public RegistryItem {
+class PortfolioMetadata : public RegistryItem
+{
 public:
     PortfolioMetadata();
     ~PortfolioMetadata() override = default;
-    explicit PortfolioMetadata(const std::vector<uint8_t>& sync_id,
-                             const std::string& language,
-                             const std::string& fw_version,
-                             const std::string& device);
+    explicit PortfolioMetadata(const std::vector<uint8_t> &sync_id,
+                               const std::string &language,
+                               const std::string &fw_version,
+                               const std::string &device);
 
-    enum class Key {
+    enum class Key
+    {
         SYNC_ID = 1,
         LANGUAGE,
         FW_VERSION,
         DEVICE
     };
 
-    size_t getMinMapLength() const override {
+    size_t getMinMapLength() const override
+    {
         return MIN_MAP_LENGTH;
     }
 
-    size_t getMaxMapLength() const override {
+    size_t getMaxMapLength() const override
+    {
         return MAX_MAP_LENGTH;
     }
 
@@ -56,14 +60,15 @@ public:
     std::optional<std::string> getFwVersion() const { return m_fw_version; }
     std::optional<std::string> getDevice() const { return m_device; }
 
-    void setSyncId(const std::vector<uint8_t>& sync_id);
-    void setLanguage(const std::string& language);
-    void setFwVersion(const std::string& fw_version);
-    void setDevice(const std::string& device);
+    void setSyncId(const std::vector<uint8_t> &sync_id);
+    void setLanguage(const std::string &language);
+    void setFwVersion(const std::string &fw_version);
+    void setDevice(const std::string &device);
 
     size_t getMapSize() const override;
-    void toMap(CborEncoder* parentEncoder) const override;
-    void fromMap(CborValue*) override {
+    void toMap(CborEncoder *parentEncoder) const override;
+    void fromMap(CborValue *) override
+    {
         throw CborException("Decoder not supported", CborErrorUnimplementedValidation);
     }
 

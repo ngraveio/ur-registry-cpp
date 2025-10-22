@@ -3,120 +3,114 @@
 
 void TestKeypath::setUp(void)
 {
-
 }
 
 void TestKeypath::tearDown(void)
 {
-
 }
 
-static void ValidateDerivationPathException(Keypath keypath, const std::string& derivationPath, const CborError error_code)
+static void ValidateDerivationPathException(Keypath keypath, const std::string &derivationPath, const CborError error_code)
 {
     CPPUNIT_ASSERT_THROW(keypath.setDerivationPath(derivationPath), CborException);
-    try {
+    try
+    {
         keypath.setDerivationPath(derivationPath);
-    } catch (const CborException& e) {
+    }
+    catch (const CborException &e)
+    {
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "Set Derivation Path should return an error",
-            error_code, 
-            e.errorCode()
-        );
+            error_code,
+            e.errorCode());
     }
 }
 
-void TestKeypath::Compare(const Keypath& ur_type, const Keypath& expected_ur_type)
+void TestKeypath::Compare(const Keypath &ur_type, const Keypath &expected_ur_type)
 {
     // Check for components
     std::vector<KeyPathComponent> decoded_components = ur_type.getKeyPathComponent();
     std::vector<KeyPathComponent> expected_components = expected_ur_type.getKeyPathComponent();
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        "Components empty mismatch", 
-        expected_components.empty(), 
-        decoded_components.empty()
-    );
-    if (!decoded_components.empty()) {
+        "Components empty mismatch",
+        expected_components.empty(),
+        decoded_components.empty());
+    if (!decoded_components.empty())
+    {
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "Components size mismatch",
             expected_components.size(),
-            decoded_components.size()
-        );
+            decoded_components.size());
 
-        for (size_t i = 0; i < decoded_components.size(); ++i) {
-            const KeyPathComponent& decoded = decoded_components[i];
-            const KeyPathComponent& expected = expected_components[i];
+        for (size_t i = 0; i < decoded_components.size(); ++i)
+        {
+            const KeyPathComponent &decoded = decoded_components[i];
+            const KeyPathComponent &expected = expected_components[i];
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE(
                 "Component type mismatch at index " + std::to_string(i),
                 static_cast<int>(expected.getType()),
-                static_cast<int>(decoded.getType())
-            );
+                static_cast<int>(decoded.getType()));
 
-            switch(decoded.getType()) {
-                case KeyPathComponent::Type::ChildIndex: {
-                    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-                        "Child index mismatch at index " + std::to_string(i),
-                        expected.getChildIndexValue(),
-                        decoded.getChildIndexValue()  
-                    );
-                    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-                        "Child hardened mismatch at index " + std::to_string(i),
-                        expected.getChildIndexIsHardened(),
-                        decoded.getChildIndexIsHardened()  
-                    );
-                    break;
-                }
-                case KeyPathComponent::Type::ChildRange: {
-                    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-                        "Child range low index mismatch at index " + std::to_string(i),
-                        expected.getLowIndexValue(),
-                        decoded.getLowIndexValue()  
-                    );
-                    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-                        "Child range high index mismatch at index " + std::to_string(i),
-                        expected.getHighIndexValue(),
-                        decoded.getHighIndexValue() 
-                    );
-                    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-                        "Child range hardened mismatch at index " + std::to_string(i),
-                        expected.getChildRangeIsHardened(),
-                        decoded.getChildRangeIsHardened()  
-                    );
-                    break;
-                }
-                case KeyPathComponent::Type::ChildWildcard: {
-                    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-                        "Child wildcard hardened mismatch at index " + std::to_string(i),
-                        expected.getChildWildcardIsHardened(),
-                        decoded.getChildWildcardIsHardened()
-                    );
-                    break;
-                }
-                case KeyPathComponent::Type::ChildPair: {
-                    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-                        "Child pair external index mismatch at index " + std::to_string(i),
-                        expected.getExternalAddressIndexValue(),  
-                        decoded.getExternalAddressIndexValue()  
-                    );
-                    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-                        "Child pair external hardened mismatch at index " + std::to_string(i),
-                        expected.getExternalIndexIsHardened(),  
-                        decoded.getExternalIndexIsHardened()  
-                    );
-                    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-                        "Child pair internal index mismatch at index " + std::to_string(i),
-                        expected.getInternalAddressIndexValue(),  
-                        decoded.getInternalAddressIndexValue()  
-                    );
-                    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-                        "Child pair internal hardened mismatch at index " + std::to_string(i),
-                        expected.getInternalIndexIsHardened(),  
-                        decoded.getInternalIndexIsHardened()  
-                    );
-                    break;
-                }
-                default:
-                    break;
+            switch (decoded.getType())
+            {
+            case KeyPathComponent::Type::ChildIndex:
+            {
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                    "Child index mismatch at index " + std::to_string(i),
+                    expected.getChildIndexValue(),
+                    decoded.getChildIndexValue());
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                    "Child hardened mismatch at index " + std::to_string(i),
+                    expected.getChildIndexIsHardened(),
+                    decoded.getChildIndexIsHardened());
+                break;
+            }
+            case KeyPathComponent::Type::ChildRange:
+            {
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                    "Child range low index mismatch at index " + std::to_string(i),
+                    expected.getLowIndexValue(),
+                    decoded.getLowIndexValue());
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                    "Child range high index mismatch at index " + std::to_string(i),
+                    expected.getHighIndexValue(),
+                    decoded.getHighIndexValue());
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                    "Child range hardened mismatch at index " + std::to_string(i),
+                    expected.getChildRangeIsHardened(),
+                    decoded.getChildRangeIsHardened());
+                break;
+            }
+            case KeyPathComponent::Type::ChildWildcard:
+            {
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                    "Child wildcard hardened mismatch at index " + std::to_string(i),
+                    expected.getChildWildcardIsHardened(),
+                    decoded.getChildWildcardIsHardened());
+                break;
+            }
+            case KeyPathComponent::Type::ChildPair:
+            {
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                    "Child pair external index mismatch at index " + std::to_string(i),
+                    expected.getExternalAddressIndexValue(),
+                    decoded.getExternalAddressIndexValue());
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                    "Child pair external hardened mismatch at index " + std::to_string(i),
+                    expected.getExternalIndexIsHardened(),
+                    decoded.getExternalIndexIsHardened());
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                    "Child pair internal index mismatch at index " + std::to_string(i),
+                    expected.getInternalAddressIndexValue(),
+                    decoded.getInternalAddressIndexValue());
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                    "Child pair internal hardened mismatch at index " + std::to_string(i),
+                    expected.getInternalIndexIsHardened(),
+                    decoded.getInternalIndexIsHardened());
+                break;
+            }
+            default:
+                break;
             }
         }
     };
@@ -124,40 +118,37 @@ void TestKeypath::Compare(const Keypath& ur_type, const Keypath& expected_ur_typ
     // Check for fingerprint (if present)
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Fingerprint presence mismatch",
-        expected_ur_type.getSourceFingerprint().has_value(), 
-        ur_type.getSourceFingerprint().has_value()
-    );
-    if (ur_type.getSourceFingerprint().has_value()){
+        expected_ur_type.getSourceFingerprint().has_value(),
+        ur_type.getSourceFingerprint().has_value());
+    if (ur_type.getSourceFingerprint().has_value())
+    {
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "Fingerprint value mismatch",
-            expected_ur_type.getSourceFingerprint().value(), 
-            ur_type.getSourceFingerprint().value()
-        );
+            expected_ur_type.getSourceFingerprint().value(),
+            ur_type.getSourceFingerprint().value());
     }
 
     // Check for depth (if present)
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Depth presence mismatch",
-        expected_ur_type.getDepth().has_value(), 
-        ur_type.getDepth().has_value()
-    );
-    if (ur_type.getDepth().has_value()){
+        expected_ur_type.getDepth().has_value(),
+        ur_type.getDepth().has_value());
+    if (ur_type.getDepth().has_value())
+    {
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "Depth value mismatch",
-            expected_ur_type.getDepth().value(), 
-            ur_type.getDepth().value()
-        );
+            expected_ur_type.getDepth().value(),
+            ur_type.getDepth().value());
     }
 }
 
-void ValidateDerivationPath(const Keypath& keypath, std::string derivationPath)
+void ValidateDerivationPath(const Keypath &keypath, std::string derivationPath)
 {
     std::string retDerivationPath = keypath.getDerivationPath();
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Returned derivation path is not the expected one",
-        derivationPath,  
-        retDerivationPath                     
-    );
+        derivationPath,
+        retDerivationPath);
 }
 
 /**
@@ -167,11 +158,11 @@ void ValidateDerivationPath(const Keypath& keypath, std::string derivationPath)
  *   2: 123456789,
  *   3: 8
  * }
- * 
+ *
  */
 void TestKeypath::EncodeAndDecodeAllFieldsAndTypes(void)
 {
-    // Validate encoding 
+    // Validate encoding
     Keypath encode_keypath;
     std::string derivationPath = "m/1'/2/[3,4]/[5,6]'/[]/[]'/<7;8'>/<9';0>";
     CPPUNIT_ASSERT_NO_THROW(encode_keypath.setDerivationPath(derivationPath));
@@ -196,14 +187,13 @@ void TestKeypath::EncodeAndDecodeAllFieldsAndTypes(void)
     Compare(decode_keypath, encode_keypath);
 }
 
-
 /**
  * @brief Test the encoding and decoding of this CDDL example
  * {
  *   1: [44, true, 200, false, 50, false, [0, 100], false],
  *   3: 4
  * }
- * 
+ *
  */
 void TestKeypath::EncodeAndDecodeDerivationPathAndDepth(void)
 {
@@ -236,7 +226,7 @@ void TestKeypath::EncodeAndDecodeDerivationPathAndDepth(void)
  *   1: [[44, true, 44, true], 76500, false, 0, false, [], false],
  *   2: 1
  * }
- * 
+ *
  */
 void TestKeypath::EncodeAndDecodeDerivationPathAndFingerprint(void)
 {
@@ -270,7 +260,7 @@ void TestKeypath::EncodeAndDecodeDerivationPathAndFingerprint(void)
  *   2: 912348765,
  *   3: 0
  * }
- * 
+ *
  */
 void TestKeypath::EncodeAndDecodeEmptyDerivationPath(void)
 {
@@ -303,7 +293,7 @@ void TestKeypath::EncodeAndDecodeEmptyDerivationPath(void)
  * {
  *   1: [[64, false, 64, true]]
  * }
- * 
+ *
  */
 void TestKeypath::EncodeAndDecodeOnlyDerivationPath(void)
 {
@@ -333,7 +323,7 @@ void TestKeypath::EncodeAndDecodeOnlyDerivationPath(void)
  * {
  *   1: [98, true, [2, 6], false, [], true, [78200, true, 0, true]]
  * }
- * 
+ *
  */
 void TestKeypath::EncodeAndDecodeKeypathComponents(void)
 {
@@ -371,7 +361,7 @@ void TestKeypath::EncodeAndDecodeKeypathComponents(void)
 
 /**
  * @brief Test returning an error when the derivation path is incorrect
- * 
+ *
  */
 void TestKeypath::EncodeIncorrectDerivationPath(void)
 {
@@ -382,7 +372,7 @@ void TestKeypath::EncodeIncorrectDerivationPath(void)
 
 /**
  * @brief Test returning an error when the fingerprint is defined as 0
- * 
+ *
  */
 void TestKeypath::EncodeIncorrectFingerprint(void)
 {
@@ -397,7 +387,7 @@ void TestKeypath::EncodeIncorrectFingerprint(void)
 
 /**
  * @brief Test returning an error when the child index is superior or equal than 0x80000000 (= 2147483648)
- * 
+ *
  */
 void TestKeypath::EncodeIncorrectChildIndex(void)
 {
@@ -410,7 +400,7 @@ void TestKeypath::EncodeIncorrectChildIndex(void)
 
 /**
  * @brief Test returning an error when the low index is superior than the high index
- * 
+ *
  */
 void TestKeypath::EncodeIncorrectChildRangeIndex(void)
 {
@@ -428,7 +418,7 @@ void TestKeypath::EncodeIncorrectChildRangeIndex(void)
  *   3: 4,
  *   1: [1, true, 2, false, 600, true, 67, true]
  * }
- * 
+ *
  */
 void TestKeypath::DecodeRandomOrderMapIndex(void)
 {
@@ -448,7 +438,7 @@ void TestKeypath::DecodeRandomOrderMapIndex(void)
 
 /**
  * @brief Test returning an error due to wrong UR type
- * 
+ *
  */
 void TestKeypath::DecodeIncorrectUrType(void)
 {
@@ -461,26 +451,26 @@ void TestKeypath::DecodeIncorrectUrType(void)
 /**
  * @brief Test returning an error when the map index is unknown
  * {
- *   1: [78, true, [2, 6], false, [], true], 
- *   8: "unknown index" 
+ *   1: [78, true, [2, 6], false, [], true],
+ *   8: "unknown index"
  * }
- * 
+ *
  */
 void TestKeypath::DecodeUnknownMapIndex(void)
 {
     Keypath keypath;
     auto urError = std::string("ur:keypath/oeadlncsglyklfaoamwklaykayjnkpjtjejtjlktjtcxinjtieihksgyrdoyws");
-    
+
     ValidateUrDecodingException(keypath, urError, CborErrorUnknownType);
 }
 
 /**
  * @brief Test returning an error when the fingerprint is equal to 0
  * {
- *   1: [8009, true, 4, true, 0, false], 
- *   2: 0 
+ *   1: [8009, true, 4, true, 0, false],
+ *   2: 0
  * }
- * 
+ *
  */
 void TestKeypath::DecodeExcludedValue0ForFingerprint(void)
 {
@@ -495,7 +485,7 @@ void TestKeypath::DecodeExcludedValue0ForFingerprint(void)
  * {
  *   1: [8009, false, 2147483699, false]
  * }
- * 
+ *
  */
 void TestKeypath::DecodeImproperValueForChildIndex(void)
 {
@@ -511,7 +501,7 @@ void TestKeypath::DecodeImproperValueForChildIndex(void)
  *   2: 754329056,
  *   3: 0
  * }
- * 
+ *
  */
 void TestKeypath::DecodeImproperValueWithoutChildComponents(void)
 {
@@ -522,8 +512,8 @@ void TestKeypath::DecodeImproperValueWithoutChildComponents(void)
 }
 
 /**
- * @brief Fuzzing of the decoder with several malformed keypath UR types 
- * 
+ * @brief Fuzzing of the decoder with several malformed keypath UR types
+ *
  */
 void TestKeypath::DecodeFuzzer(void)
 {

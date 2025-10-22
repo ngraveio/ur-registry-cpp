@@ -21,29 +21,36 @@ std::unordered_map<std::string, EncodeFn> ur_encoder_map = {
     {"portfolio-metadata", encodePortfolioMetadata},
     {"portfolio", encodePortfolio},
     {"sign-response", encodeSignResponse},
-    {"eth-signature", encodeEthSignature}
-};
+    {"eth-signature", encodeEthSignature}};
 
-int main() {
+int main()
+{
     std::string input;
 
-    while (true) {
+    while (true)
+    {
         std::cout << "Enter UR type to encode or 'q' to quit: ";
         std::getline(std::cin, input);
 
-        if (input == "q") break;
+        if (input == "q")
+            break;
         auto it = ur_encoder_map.find(input);
-        if (it != ur_encoder_map.end()) {
-            try {
+        if (it != ur_encoder_map.end())
+        {
+            try
+            {
                 URType result = it->second(); // call encoder
 
-                std::visit([](auto&& value) {
-                    std::cout << "Encoded UR: " << value.toSinglePartUr() << "\n";
-                }, result);
-            } catch (const std::exception& e) {
+                std::visit([](auto &&value)
+                           { std::cout << "Encoded UR: " << value.toSinglePartUr() << "\n"; }, result);
+            }
+            catch (const std::exception &e)
+            {
                 std::cerr << "Failed to encode UR type '" << input << "': " << e.what() << "\n";
             }
-        } else {
+        }
+        else
+        {
             std::cout << "Unsupported type\n";
         }
 

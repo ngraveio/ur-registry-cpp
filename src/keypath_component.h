@@ -6,7 +6,7 @@
 
 /**
  * @brief Implementation of path-component in keypath (CBOR tag #6.40304) UR type
- * 
+ *
  * Source: https://github.com/BlockchainCommons/Research/blob/master/papers/bcr-2020-007-hdkey.md
  * CDDL specification:
  * path-component = (
@@ -16,7 +16,7 @@
  *     child-pair-component        ; Used in output descriptors,
  *                                 ; see https://github.com/bitcoin/bitcoin/pull/22838
  * )
- * 
+ *
  * uint32 = uint .size 4
  * uint31 = uint32 .lt 0x80000000
  * child-index-component = (child-index, is-hardened)
@@ -26,37 +26,43 @@
  *     child-index-component,	; Child to use for external addresses, possibly hardened
  *     child-index-component	; Child to use for internal addresses, possibly hardened
  * ]
- * 
+ *
  * child-index = uint31
  * is-hardened = bool
  */
-class KeyPathComponent {
+class KeyPathComponent
+{
 public:
     KeyPathComponent();
 
-    enum class Type {
+    enum class Type
+    {
         ChildIndex,
         ChildRange,
         ChildWildcard,
         ChildPair
     };
 
-    struct ChildIndexComponent {
+    struct ChildIndexComponent
+    {
         uint32_t childIndex;
         bool isHardened;
     };
 
-    struct ChildRangeComponent {
+    struct ChildRangeComponent
+    {
         uint32_t lowIndex;
         uint32_t highIndex;
         bool isHardened;
     };
 
-    struct ChildWildcardComponent {
+    struct ChildWildcardComponent
+    {
         bool isHardened;
     };
 
-    struct ChildPairComponent {
+    struct ChildPairComponent
+    {
         uint32_t externalAddressIndex;
         bool externalAddressIsHardened;
         uint32_t internalAddressIndex;
@@ -65,7 +71,7 @@ public:
 
     /**
      * @brief Constructors for the different path component types
-     * 
+     *
      */
     KeyPathComponent(uint32_t childIndex, bool isHardened)
         : m_type(Type::ChildIndex), m_childIndexComponent({childIndex, isHardened}) {}
@@ -79,8 +85,8 @@ public:
     KeyPathComponent(uint32_t externalAddressIndex, bool externalAddressIsHardened, uint32_t internalAddressIndex, bool internalAddressIsHardened)
         : m_type(Type::ChildPair), m_childPairComponent({externalAddressIndex, externalAddressIsHardened, internalAddressIndex, internalAddressIsHardened}) {}
 
-    void toMap(CborEncoder* parentEncoder) const;
-    void fromMap(CborValue* map) ;
+    void toMap(CborEncoder *parentEncoder) const;
+    void fromMap(CborValue *map);
 
     Type getType() const { return m_type; }
     void setType(const Type type) { m_type = type; }
@@ -116,4 +122,3 @@ private:
     std::optional<ChildWildcardComponent> m_childWildcardComponent;
     std::optional<ChildPairComponent> m_childPairComponent;
 };
-

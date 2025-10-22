@@ -4,7 +4,6 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-
 class TestOutputDescriptor : public CppUnit::TestFixture
 {
     CPPUNIT_TEST_SUITE(TestOutputDescriptor);
@@ -23,5 +22,4 @@ protected:
     void testInvalidOutputDescriptors(void);
 
 private:
-
 };

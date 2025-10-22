@@ -13,20 +13,24 @@ const std::unordered_map<DescriptorFunction, std::string> OutputDescriptorFuncti
     {DescriptorFunction::SortedMultiA, "sortedmulti_a"},
     {DescriptorFunction::Addr, "addr"},
     {DescriptorFunction::Raw, "raw"},
-    {DescriptorFunction::Cosigner, "cosigner"}
-};
+    {DescriptorFunction::Cosigner, "cosigner"}};
 
-std::string OutputDescriptorFunction::getFunctionName(const DescriptorFunction& script) {
+std::string OutputDescriptorFunction::getFunctionName(const DescriptorFunction &script)
+{
     auto it = scriptNames.find(script);
-    if (it != scriptNames.end()) {
+    if (it != scriptNames.end())
+    {
         return it->second;
     }
     return "Unknown Function";
 };
 
-DescriptorFunction OutputDescriptorFunction::getFunctionType(const std::string& script) {
-    for (const auto& pair : scriptNames) {
-        if (pair.second == script) { // cppcheck-suppress useStlAlgorithm
+DescriptorFunction OutputDescriptorFunction::getFunctionType(const std::string &script)
+{
+    for (const auto &pair : scriptNames)
+    {
+        if (pair.second == script)
+        { // cppcheck-suppress useStlAlgorithm
             return pair.first;
         }
     }

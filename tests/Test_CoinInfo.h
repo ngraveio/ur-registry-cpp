@@ -28,6 +28,4 @@ protected:
     void DecodeNotSupported(void);
 
 private:
-
 };
-

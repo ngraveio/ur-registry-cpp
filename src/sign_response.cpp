@@ -1,27 +1,34 @@
 #include "sign_response.h"
 
-SignResponse::SignResponse() {
+SignResponse::SignResponse()
+{
     setRegistryType(SIGN_RESPONSE);
     clearSignature();
 }
 
-SignResponse::SignResponse(const std::optional<Uuid>& requestId, 
-                           const std::vector<uint8_t>& signature, 
-                           const std::optional<std::string>& origin,
-                           const std::optional<std::vector<uint8_t>>& publicKey)
-                           : SignatureBase::SignatureBase(requestId, signature, origin, publicKey) {
+SignResponse::SignResponse(const std::optional<Uuid> &requestId,
+                           const std::vector<uint8_t> &signature,
+                           const std::optional<std::string> &origin,
+                           const std::optional<std::vector<uint8_t>> &publicKey)
+    : SignatureBase::SignatureBase(requestId, signature, origin, publicKey)
+{
     setRegistryType(SIGN_RESPONSE);
 }
 
-size_t SignResponse::getMapSize() const {
+size_t SignResponse::getMapSize() const
+{
     size_t mapSize = MIN_MAP_LENGTH;
-    if (getRequestId().has_value()) ++mapSize;
-    if (getOrigin().has_value()) ++mapSize;
-    if (getPublickey().has_value()) ++mapSize;
+    if (getRequestId().has_value())
+        ++mapSize;
+    if (getOrigin().has_value())
+        ++mapSize;
+    if (getPublickey().has_value())
+        ++mapSize;
     return mapSize;
 }
 
-void SignResponse::toMap(CborEncoder* parentEncoder) const {
+void SignResponse::toMap(CborEncoder *parentEncoder) const
+{
     CborEncoder container;
     size_t mapSize = getMapSize();
 

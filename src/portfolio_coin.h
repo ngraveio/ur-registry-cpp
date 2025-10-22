@@ -34,29 +34,33 @@
  * master-fingerprint = 3
  */
 
-class PortfolioCoin : public RegistryItem {
+class PortfolioCoin : public RegistryItem
+{
 public:
     PortfolioCoin();
     ~PortfolioCoin() override = default;
-    explicit PortfolioCoin(const CoinIdentity& coin_id,
-                          const std::vector<DetailedAccount>& accounts,
-                          const std::optional<uint32_t>& master_fingerprint = std::nullopt);
+    explicit PortfolioCoin(const CoinIdentity &coin_id,
+                           const std::vector<DetailedAccount> &accounts,
+                           const std::optional<uint32_t> &master_fingerprint = std::nullopt);
 
-    PortfolioCoin(const std::string& uai, const std::string& key);
+    PortfolioCoin(const std::string &uai, const std::string &key);
 
     void clear();
 
-    enum class Key {
+    enum class Key
+    {
         COIN_ID = 1,
         ACCOUNTS,
         MASTER_FINGERPRINT
     };
 
-    size_t getMinMapLength() const override {
+    size_t getMinMapLength() const override
+    {
         return MIN_MAP_LENGTH;
     }
 
-    size_t getMaxMapLength() const override {
+    size_t getMaxMapLength() const override
+    {
         return MAX_MAP_LENGTH;
     }
 
@@ -64,17 +68,20 @@ public:
     std::vector<DetailedAccount> getAccounts() const { return m_accounts; }
     std::optional<uint32_t> getMasterFingerprint() const { return m_master_fingerprint; }
 
-    void setCoinId(const CoinIdentity& coin_id) { m_coin_id = coin_id; }
-    void setAccounts(const std::vector<DetailedAccount>& accounts) { m_accounts = accounts; }
-    void addAccount(const DetailedAccount& account) { m_accounts.push_back(account); };
-    std::vector<DetailedAccount>::const_iterator findAccount(const DetailedAccount& account) const { return std::find(m_accounts.begin(), m_accounts.end(), account); };
+    void setCoinId(const CoinIdentity &coin_id) { m_coin_id = coin_id; }
+    void setAccounts(const std::vector<DetailedAccount> &accounts) { m_accounts = accounts; }
+    void addAccount(const DetailedAccount &account) { m_accounts.push_back(account); };
+    std::vector<DetailedAccount>::const_iterator findAccount(const DetailedAccount &account) const { return std::find(m_accounts.begin(), m_accounts.end(), account); };
     void setMasterFingerprint(const uint32_t master_fingerprint) { m_master_fingerprint = master_fingerprint; }
 
-    bool operator == (const PortfolioCoin& coin) const {
+    bool operator==(const PortfolioCoin &coin) const
+    {
         // Verify first if the master fingerprint is identical
         auto coin_masterFingerprint = coin.getMasterFingerprint();
-        if (m_master_fingerprint.has_value() && coin_masterFingerprint.has_value()) {
-            if (*coin_masterFingerprint != *m_master_fingerprint) {
+        if (m_master_fingerprint.has_value() && coin_masterFingerprint.has_value())
+        {
+            if (*coin_masterFingerprint != *m_master_fingerprint)
+            {
                 return false;
             }
         }
@@ -82,29 +89,30 @@ public:
     };
 
     size_t getMapSize() const override;
-    void toMap(CborEncoder* parentEncoder) const override;
-    void fromMap(CborValue*) override {
+    void toMap(CborEncoder *parentEncoder) const override;
+    void fromMap(CborValue *) override
+    {
         throw CborException("Decoder not supported", CborErrorUnimplementedValidation);
     }
 
     /**
      * @brief Create a Portfolio Coin from the UAI and the public key
-     * 
+     *
      * @param uai is the Unique Asset ID format as defined in NBCR-2024-01
-     * @param key is the public key 
-     * 
+     * @param key is the public key
+     *
      * Source: https://github.com/ngraveio/Research/blob/main/papers/nbcr-2024-001-unique-asset-id.md
      */
-    void createPortfolioCoin(const std::string& uai, const std::string& key);
+    void createPortfolioCoin(const std::string &uai, const std::string &key);
 
     /**
      * @brief Add an account to the accounts array based on the UAI and the public key
-     * 
+     *
      * @param uai: - should indicate the same coin identity and the same master fingerprint (if specified)
      *             - can contain a new token to add to an existing account
-     * @param key specifies the key of the added account 
+     * @param key specifies the key of the added account
      */
-    void addAccount(const std::string& uai, const std::string& key);
+    void addAccount(const std::string &uai, const std::string &key);
 
 private:
     static constexpr size_t MIN_MAP_LENGTH = 2;

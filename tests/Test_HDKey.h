@@ -54,6 +54,4 @@ protected:
     void ExtractParentFingerprintFromInvalidKeys(void);
 
 private:
-
 };
-

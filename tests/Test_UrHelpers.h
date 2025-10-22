@@ -12,7 +12,7 @@
  * @brief Helper to compare and validate the CBOR data
  */
 template <typename T>
-void ValidateCborResults(T& ur_type, const std::vector<uint8_t>& expectedBytes)
+void ValidateCborResults(T &ur_type, const std::vector<uint8_t> &expectedBytes)
 {
     ur::ByteVector cborDataVector;
     CPPUNIT_ASSERT_NO_THROW(cborDataVector = ur_type.toCbor());
@@ -20,15 +20,14 @@ void ValidateCborResults(T& ur_type, const std::vector<uint8_t>& expectedBytes)
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "CBOR output does not match the expected value",
         bytesToHex(expectedBytes),
-        bytesToHex(cborDataVector)
-    );
+        bytesToHex(cborDataVector));
 }
 
 /**
  * @brief Helper to compare and validate the UR type encoding
  */
 template <typename T>
-void ValidateUrEncoding(T& ur_type, const std::string& expectedUR)
+void ValidateUrEncoding(T &ur_type, const std::string &expectedUR)
 {
     UrType urStr;
 
@@ -36,43 +35,46 @@ void ValidateUrEncoding(T& ur_type, const std::string& expectedUR)
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "UR does not match the expected value",
         expectedUR,
-        urStr
-    );
+        urStr);
 }
 
 /**
  * @brief Helper to validate Cbor exception when encoding the UR type
  */
 template <typename T>
-void ValidateUrEncodingException(T& ur_type, const CborError error_code)
+void ValidateUrEncodingException(T &ur_type, const CborError error_code)
 {
     CPPUNIT_ASSERT_THROW(ur_type.toSinglePartUr(), CborException);
-    try {
+    try
+    {
         ur_type.toSinglePartUr();
-    } catch (const CborException& e) {
+    }
+    catch (const CborException &e)
+    {
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "Error code different than expected",
             error_code,
-            e.errorCode()
-        );
+            e.errorCode());
     }
 }
 
 template <typename T>
-void ValidateUrEncodingException(T& ur_type, const CborError error_code, const std::string& message)
+void ValidateUrEncodingException(T &ur_type, const CborError error_code, const std::string &message)
 {
     CPPUNIT_ASSERT_THROW_MESSAGE(
         message,
         ur_type.toSinglePartUr(),
         CborException);
-    try {
+    try
+    {
         ur_type.toSinglePartUr();
-    } catch (const CborException& e) {
+    }
+    catch (const CborException &e)
+    {
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "Error code different than expected for " + message,
             error_code,
-            e.errorCode()
-        );
+            e.errorCode());
     }
 }
 
@@ -80,34 +82,38 @@ void ValidateUrEncodingException(T& ur_type, const CborError error_code, const s
  * @brief Helper to validate Cbor exception when decoding the UR type
  */
 template <typename T>
-void ValidateUrDecodingException(T& ur_type, const std::string& urError, const CborError error_code)
+void ValidateUrDecodingException(T &ur_type, const std::string &urError, const CborError error_code)
 {
     CPPUNIT_ASSERT_THROW(ur_type.fromUr(urError), CborException);
-    try {
+    try
+    {
         ur_type.fromUr(urError);
-    } catch (const CborException& e) {
+    }
+    catch (const CborException &e)
+    {
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "Error code different than expected",
             error_code,
-            e.errorCode()
-        );
+            e.errorCode());
     }
 }
 
 template <typename T>
-void ValidateUrDecodingException(T& ur_type, const std::string& urError, const CborError error_code, const std::string& message)
+void ValidateUrDecodingException(T &ur_type, const std::string &urError, const CborError error_code, const std::string &message)
 {
     CPPUNIT_ASSERT_THROW_MESSAGE(
         message,
         ur_type.fromUr(urError),
         CborException);
-    try {
+    try
+    {
         ur_type.fromUr(urError);
-    } catch (const CborException& e) {
+    }
+    catch (const CborException &e)
+    {
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "Error code different than expected for " + message,
             error_code,
-            e.errorCode()
-        );
+            e.errorCode());
     }
 }
