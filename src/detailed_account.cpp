@@ -22,7 +22,7 @@ DetailedAccount::DetailedAccount(const std::string& uai, const std::string& key)
 
 size_t DetailedAccount::getMapSize() const
 {
-    return (m_tokenids.empty() ? min_map_length : min_map_length + 1);
+    return (m_tokenids.empty() ? MIN_MAP_LENGTH : MIN_MAP_LENGTH + 1);
 }
 
 

@@ -13,7 +13,7 @@ void BatchSignResponse::toMap(CborEncoder* parentEncoder) const
     err = cbor_encoder_create_map(parentEncoder, &container, mapSize);
     checkCborError(err, "Failed to create map");
     
-    err = cbor_encode_uint(&container, Key::SIGN_RESPONSES);
+    err = cbor_encode_uint(&container, static_cast<uint8_t>(Key::SIGN_RESPONSES));
     checkCborError(err, "Failed to encode uint");
     
     CborEncoder arrayEncoder;

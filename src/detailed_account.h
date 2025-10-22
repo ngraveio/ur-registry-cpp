@@ -56,8 +56,8 @@ public:
       TOKENIDS,
     };
 
-    size_t getMinMapLength() const override {return min_map_length;}
-    size_t getMaxMapLength() const override {return max_map_length;}
+    size_t getMinMapLength() const override {return MIN_MAP_LENGTH;}
+    size_t getMaxMapLength() const override {return MAX_MAP_LENGTH;}
     size_t getMapSize() const override;
     
     void toMap(CborEncoder* parentEncoder) const override;
@@ -88,9 +88,9 @@ public:
     void setDetailedAccount(const std::string& uai, const std::string& key);
     
 private:
-    static constexpr size_t min_map_length = 1;
-    static constexpr size_t max_map_length = 2;
-    
+    static constexpr size_t MIN_MAP_LENGTH = 1;
+    static constexpr size_t MAX_MAP_LENGTH = 2;
+
     std::variant<std::monostate, HDKey, OutputDescriptor> m_account;
     std::vector<std::string> m_tokenids;
 };

@@ -62,9 +62,6 @@ public:
 
     void clear();
     
-    static constexpr size_t MIN_MAP_LENGTH = 2;
-    static constexpr size_t MAX_MAP_LENGTH = 3;
-    
     static const std::unordered_map<std::string, EllipticCurve> CurveMap;
 
     enum class Key {
@@ -122,6 +119,9 @@ public:
     void setCoinIdentity(const std::string& uai);
 
 private:
+    static constexpr size_t MIN_MAP_LENGTH = 2;
+    static constexpr size_t MAX_MAP_LENGTH = 3;
+
     EllipticCurve m_curve{EllipticCurve::P256};  // Default to P256
     uint32_t m_type{0};  // Default to Bitcoin (SLIP44 = 0)
     std::optional<std::vector<SubTypeExp>> m_subtypes;

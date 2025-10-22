@@ -25,7 +25,7 @@ void Intent::fromMap(CborValue *cborMap) {
         err = cbor_value_advance(&localDecoder);
         checkCborError(err, "Failed to advance");
         
-        switch (key) {
+        switch (static_cast<Key>(key)) {
         case Key::SUBTITUTE_FIELDS: {
             
             if (subtFieldsFound)

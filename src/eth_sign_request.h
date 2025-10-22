@@ -69,9 +69,6 @@ public:
     EthSignRequest();
     ~EthSignRequest() override = default;
 
-    static constexpr size_t MIN_MAP_LENGTH = 2;
-    static constexpr size_t MAX_MAP_LENGTH = 7;
-
     enum class Key {
         REQUEST_ID = 1,
         SIGN_DATA,
@@ -109,6 +106,9 @@ public:
     void clearAllItems();
 
 private:
+    static constexpr size_t MIN_MAP_LENGTH = 2;
+    static constexpr size_t MAX_MAP_LENGTH = 7;
+
     DataType m_data_type;
     uint32_t m_chain_id;
     std::optional<EthAddress> m_address;

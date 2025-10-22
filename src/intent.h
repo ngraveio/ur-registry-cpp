@@ -73,9 +73,6 @@ public:
         std::vector<Parameter> fields_array;
     };
     
-    static constexpr size_t MIN_MAP_LENGTH = 1;
-    static constexpr size_t MAX_MAP_LENGTH = 1;
-    
     enum EncodingType {
         INT = 1,
         HEX,
@@ -86,7 +83,7 @@ public:
         UTF8,
     };
     
-    enum Key {
+    enum class Key {
         SUBTITUTE_FIELDS = 1
     };
 
@@ -113,6 +110,8 @@ public:
     }
     
 private:
+    static constexpr size_t MIN_MAP_LENGTH = 1;
+    static constexpr size_t MAX_MAP_LENGTH = 1;
 
     SubstituteFieldsStruct m_substitute_fields;    
 };

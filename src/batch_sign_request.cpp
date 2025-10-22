@@ -20,7 +20,7 @@ void BatchSignRequest::fromMap(CborValue* map)
         err = cbor_value_advance(&container);
         checkCborError(err, "Failed to advance");
         
-        switch (key) {
+        switch (static_cast<Key>(key)) {
         case Key::SIGN_REQUESTS: {
             
             if (requestsFound)

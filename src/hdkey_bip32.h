@@ -38,8 +38,5 @@ public:
     static BIP32Deserializer::BIP32Key deserialize(const std::string& key);
 
     static KeyData hexStringToKeyData(const std::string& pubkey);
-
-private:
-
 };
 

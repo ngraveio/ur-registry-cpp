@@ -19,10 +19,6 @@ constexpr size_t MAX_CBOR_SIZE = 16384;
 
 /**
  * @brief Max fragment length to encode UR type
- * In the technical specifications, the fragment size is fixed at 90 characters per QR code.
- * - https://github.com/ngraveio/Research/blob/main/papers/nbcr-2023-002-multi-layer-sync.md
- * - https://github.com/ngraveio/Research/blob/main/papers/nbcr-2023-003-sign.md
- * Previously implementation with Metamask and Rabby, the fragment size was defined to 1000
  */
 constexpr size_t DEFAULT_UR_MAXFRAGMENT = 90;
 

@@ -32,7 +32,6 @@ void CosmosSignature::toMap(CborEncoder* parentEncoder) const {
     // the pubkey is optiona for the base/sign-response types but not for cosmos-signature
     const bool pubkeAdded = this->cbor_encode_public_key(&container, static_cast<uint8_t>(Key::PUBLIC_KEY));
     if(!pubkeAdded) {
-        // a goto is valid here but I didn't want to add it
         err = cbor_encoder_close_container(parentEncoder, &container);
         checkCborError(err, "Failed to close container");
 

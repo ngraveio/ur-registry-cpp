@@ -56,9 +56,6 @@ public:
     explicit CoinInfo(const CoinType type);
     explicit CoinInfo(const NetworkType network);
 
-    static constexpr size_t MIN_MAP_LENGTH = 0;
-    static constexpr size_t MAX_MAP_LENGTH = 2;
-
     enum class Key {
         TYPE = 1,
         NETWORK,
@@ -84,6 +81,9 @@ public:
     }
 
 private:
+    static constexpr size_t MIN_MAP_LENGTH = 0;
+    static constexpr size_t MAX_MAP_LENGTH = 2;
+
     std::optional<CoinType> m_type;
     std::optional<NetworkType> m_network;
 };

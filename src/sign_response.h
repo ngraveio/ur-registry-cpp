@@ -31,9 +31,6 @@ public:
     SignResponse();
     SignResponse(const std::optional<Uuid>& requestId, const std::vector<uint8_t>& signature, const std::optional<std::string>& origin = std::nullopt, const std::optional<std::vector<uint8_t>>& publicKey = std::nullopt);
 
-    static constexpr size_t MIN_MAP_LENGTH = 1;
-    static constexpr size_t MAX_MAP_LENGTH = 4;
-
     enum class Key {
       REQUEST_ID = 1,
       SIGNATURE,
@@ -54,4 +51,8 @@ public:
     void fromMap(CborValue*) override {
         throw CborException("Decoder not supported", CborErrorUnimplementedValidation);
     }
+
+private:
+    static constexpr size_t MIN_MAP_LENGTH = 1;
+    static constexpr size_t MAX_MAP_LENGTH = 4;
 };

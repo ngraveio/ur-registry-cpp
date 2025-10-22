@@ -44,11 +44,11 @@ public:
     };
 
     size_t getMinMapLength() const override {
-        return min_map_length;
+        return MIN_MAP_LENGTH;
     }
 
     size_t getMaxMapLength() const override {
-        return max_map_length;
+        return MAX_MAP_LENGTH;
     }
 
     std::optional<std::vector<uint8_t>> getSyncId() const { return m_sync_id; }
@@ -68,9 +68,9 @@ public:
     }
 
 private:
-    static constexpr size_t min_map_length = 0;
-    static constexpr size_t max_map_length = 4;
-    static constexpr size_t sync_id_size = 16;
+    static constexpr size_t MIN_MAP_LENGTH = 0;
+    static constexpr size_t MAX_MAP_LENGTH = 4;
+    static constexpr size_t SYNC_ID_SIZE = 16;
 
     std::optional<std::vector<uint8_t>> m_sync_id;
     std::optional<std::string> m_language;

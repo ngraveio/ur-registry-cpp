@@ -27,7 +27,7 @@ void PortfolioCoin::clear() {
 }
 
 size_t PortfolioCoin::getMapSize() const {
-    size_t size = min_map_length; // coin_id and accounts are mandatory
+    size_t size = MIN_MAP_LENGTH; // coin_id and accounts are mandatory
     if (m_master_fingerprint.has_value()) {
         size++;
     }

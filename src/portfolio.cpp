@@ -23,7 +23,7 @@ void Portfolio::clear() {
 }
 
 size_t Portfolio::getMapSize() const {
-    size_t size = min_map_length; // coins is mandatory
+    size_t size = MIN_MAP_LENGTH; // coins is mandatory
     if (m_metadata.has_value()) {
         size++;
     }

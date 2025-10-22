@@ -38,15 +38,12 @@ public:
         METADATA
     };
 
-    static constexpr size_t min_map_length = 1;
-    static constexpr size_t max_map_length = 2;
-
     size_t getMinMapLength() const override {
-        return min_map_length;
+        return MIN_MAP_LENGTH;
     }
 
     size_t getMaxMapLength() const override {
-        return max_map_length;
+        return MAX_MAP_LENGTH;
     }
 
     std::optional<PortfolioMetadata> getMetadata() const { return m_metadata; }
@@ -82,6 +79,9 @@ public:
     void addCoin(const std::string& uai, const std::string& key);
 
 private:
+    static constexpr size_t MIN_MAP_LENGTH = 1;
+    static constexpr size_t MAX_MAP_LENGTH = 2;
+
     std::vector<PortfolioCoin> m_coins;
     std::optional<PortfolioMetadata> m_metadata;
 };

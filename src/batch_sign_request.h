@@ -32,10 +32,8 @@ public:
 
     virtual ~BatchSignRequest() override = default;
     explicit BatchSignRequest(const std::vector<SignRequest>& sign_requests) : m_sign_requests(sign_requests) {};
-
-    static constexpr size_t MIN_MAP_LENGTH = 1, MAX_MAP_LENGTH = 1;
     
-    enum Key {
+    enum class Key {
         SIGN_REQUESTS = 1,
     };
 
@@ -59,5 +57,8 @@ public:
     void fromMap(CborValue* map) override;
     
 private:
+    static constexpr size_t MIN_MAP_LENGTH = 1;
+    static constexpr size_t MAX_MAP_LENGTH = 1;
+
     std::vector<SignRequest> m_sign_requests;
 };

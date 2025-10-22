@@ -52,15 +52,12 @@ public:
         MASTER_FINGERPRINT
     };
 
-    static constexpr size_t min_map_length = 2;
-    static constexpr size_t max_map_length = 3;
-
     size_t getMinMapLength() const override {
-        return min_map_length;
+        return MIN_MAP_LENGTH;
     }
 
     size_t getMaxMapLength() const override {
-        return max_map_length;
+        return MAX_MAP_LENGTH;
     }
 
     CoinIdentity getCoinId() const { return m_coin_id; }
@@ -110,6 +107,9 @@ public:
     void addAccount(const std::string& uai, const std::string& key);
 
 private:
+    static constexpr size_t MIN_MAP_LENGTH = 2;
+    static constexpr size_t MAX_MAP_LENGTH = 3;
+
     CoinIdentity m_coin_id;
     std::vector<DetailedAccount> m_accounts;
     std::optional<uint32_t> m_master_fingerprint;

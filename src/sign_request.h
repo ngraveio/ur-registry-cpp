@@ -53,9 +53,6 @@ public:
     
     ~SignRequest() override = default;
     
-    static constexpr size_t MIN_MAP_LENGTH = 1;
-    static constexpr size_t MAX_MAP_LENGTH = 8;
-    
     enum class Key {
         REQUEST_ID = 1,
         COIN_IDENTITY,
@@ -93,7 +90,10 @@ public:
     void clearAllItems();
     
    
-private:    
+private:
+    static constexpr size_t MIN_MAP_LENGTH = 1;
+    static constexpr size_t MAX_MAP_LENGTH = 8;
+
     CoinIdentity m_coin_identity;
     std::optional<uint> m_txtype;
     std::variant<std::monostate, std::string, std::vector<uint8_t>> m_address;

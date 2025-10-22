@@ -35,10 +35,6 @@ public:
     EthSignature();
     EthSignature(const Uuid& requestId, const std::vector<uint8_t>& signature, const std::optional<std::string>& origin = std::nullopt);
 
-    static constexpr size_t MIN_MAP_LENGTH = 2;
-    static constexpr size_t MAX_MAP_LENGTH = 3;
-    static constexpr size_t MIN_ETH_SIGNATURE_SIZE = 65;
-
     enum class Key {
         REQUEST_ID = 1,
         SIGNATURE,
@@ -58,4 +54,9 @@ public:
     void fromMap(CborValue*) override {
         throw CborException("Decoder not supported", CborErrorUnimplementedValidation);
     }
+
+private:
+    static constexpr size_t MIN_MAP_LENGTH = 2;
+    static constexpr size_t MAX_MAP_LENGTH = 3;
+    static constexpr size_t MIN_ETH_SIGNATURE_SIZE = 65;
 };

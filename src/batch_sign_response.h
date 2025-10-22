@@ -33,10 +33,7 @@ public:
 
     ~BatchSignResponse() override = default;
     
-    static constexpr size_t MIN_MAP_LENGTH = 1;
-    static constexpr size_t MAX_MAP_LENGTH = 1;
-    
-    enum Key {
+    enum class Key {
         SIGN_RESPONSES = 1
     };
     
@@ -62,5 +59,8 @@ public:
     };
 
 private:
+    static constexpr size_t MIN_MAP_LENGTH = 1;
+    static constexpr size_t MAX_MAP_LENGTH = 1;
+
     std::vector<SignResponse> m_signrespones;
 };

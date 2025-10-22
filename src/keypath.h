@@ -68,9 +68,6 @@ public:
     Keypath(const std::string& derivationPath, uint32_t sourceFingerprint);
     Keypath(const std::string& derivationPath, uint32_t sourceFingerprint, bool withDepth);
 
-    static constexpr size_t MIN_MAP_LENGTH = 1;
-    static constexpr size_t MAX_MAP_LENGTH = 10;
-
     enum class Key {
         COMPONENTS = 1,
         SOURCE_FINGERPRINT,
@@ -136,6 +133,9 @@ public:
     bool hasHardenedPath() const;
 
 private:
+    static constexpr size_t MIN_MAP_LENGTH = 1;
+    static constexpr size_t MAX_MAP_LENGTH = 10;
+
     std::vector<KeyPathComponent> m_components;
     std::optional<uint32_t> m_source_fingerprint;
     std::optional<uint8_t> m_depth;

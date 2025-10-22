@@ -18,7 +18,7 @@ PortfolioMetadata::PortfolioMetadata(const std::vector<uint8_t>& sync_id,
 }
 
 void PortfolioMetadata::setSyncId(const std::vector<uint8_t>& sync_id) {
-    if (sync_id.size() != sync_id_size) {
+    if (sync_id.size() != SYNC_ID_SIZE) {
         throw CborException("Invalid sync_id size", CborErrorImproperValue);
     }
     m_sync_id = sync_id;

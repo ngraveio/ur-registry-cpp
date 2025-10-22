@@ -75,9 +75,6 @@ public:
     HDKey();
     ~HDKey() override = default;
 
-    static constexpr size_t MIN_MAP_LENGTH = 1;
-    static constexpr size_t MAX_MAP_LENGTH = 10;
-
     enum class Key {
       IS_MASTER = 1,
       IS_PRIVATE,
@@ -163,6 +160,9 @@ public:
     void setUseInfo(const NetworkType network) { m_useInfo = CoinInfo(network); };
 
 private:
+    static constexpr size_t MIN_MAP_LENGTH = 1;
+    static constexpr size_t MAX_MAP_LENGTH = 10;
+
     std::optional<bool> m_ismaster;
     std::optional<bool> m_isprivate;
     KeyData m_keyData;
