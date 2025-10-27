@@ -8,7 +8,6 @@ void displayIntent(const Intent& req) {
     std::cout << "  Prefix          : " << subst.prefix_str << "\n";
     std::cout << "  Fields          : [";
 
-
     for (size_t i = 0; i < subst.fields_array.size(); i++) {
         const auto& [key, value] = subst.fields_array[i];
         std::cout << "(" << key << ", " << value << ")";
