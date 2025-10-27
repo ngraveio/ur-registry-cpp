@@ -121,9 +121,6 @@ void Intent::fromMap(CborValue *cborMap) {
                 err = cbor_value_get_int(&paramTuple, &tmpParam.second);
                 checkCborError(err, "Failed to get int");
                 
-                std::cout << std::endl << "tmpParam.first: " << tmpParam.first << std::endl;
-                std::cout << std::endl << "tmpParam.second: " << tmpParam.second << std::endl;
-                
                 m_substitute_fields.fields_array.emplace_back(std::move(tmpParam));
                 
                 err = cbor_value_advance(&paramTuple);

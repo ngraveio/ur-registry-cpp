@@ -40,7 +40,7 @@ inline const RegistryType KEYPATH("keypath", 40304);
 inline const RegistryType CRYPTO_COIN_INFO("crypto-coin-info", 305); // Legacy version
 inline const RegistryType COIN_INFO("coin-info", 40305);
 inline const RegistryType CRYPTO_ECKEY("crypto-eckey", 306);
-inline const RegistryType CRYPTO_OUTPUT("crypto-output", 308); // Legacy vrsion
+inline const RegistryType CRYPTO_OUTPUT("crypto-output", 308); // Legacy version
 inline const RegistryType OUTPUT_DESCRIPTOR("output-descriptor", 40308);
 inline const RegistryType CRYPTO_PSBT("crypto-psbt", 310);
 inline const RegistryType CRYPTO_ACCOUNT("crypto-account", 311);

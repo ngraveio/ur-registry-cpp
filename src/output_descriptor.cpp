@@ -3,14 +3,20 @@
 #include <regex>
 #include <charconv>
 
-OutputDescriptor::OutputDescriptor(const std::string &source,
-                                   const std::vector<HDKey> &keys,
-                                   const std::optional<std::string> &name,
-                                   const std::optional<std::string> &note) 
-    : m_source(source), m_keys(keys), m_name(name), m_note(note) {
+OutputDescriptor::OutputDescriptor() {
     setRegistryType(OUTPUT_DESCRIPTOR);
     setLegacyRegistryType(CRYPTO_OUTPUT);
     setUseLegacyType(false);
+}
+
+OutputDescriptor::OutputDescriptor(const std::string &source,
+                                   const std::vector<HDKey> &keys,
+                                   const std::optional<std::string> &name,
+                                   const std::optional<std::string> &note) : OutputDescriptor::OutputDescriptor() {
+    setSource(source); 
+    setKeys(keys);
+    setName(name);
+    setNote(note);
 }
 
 size_t OutputDescriptor::getMapSize() const

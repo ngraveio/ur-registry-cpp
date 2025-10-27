@@ -1,5 +1,3 @@
-#include "hdkey_bip32.h"
-
 #include "hdkey.h"
 
 HDKey::HDKey(){

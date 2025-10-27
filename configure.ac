@@ -15,6 +15,7 @@ AC_CONFIG_FILES([
   Makefile
   src/Makefile
   tests/Makefile
+  examples/Makefile
   ur-registry.pc
 ])
 AC_OUTPUT

@@ -11,16 +11,6 @@ void TestHDKey::tearDown(void)
     
 }
 
-ChainCode convertToChainCode(const std::vector<uint8_t>& vec) {
-    if (vec.size() != CHAIN_CODE_SIZE) {
-        throw std::invalid_argument("Vector size does not match CHAIN_CODE_SIZE.");
-    }
-
-    ChainCode result;
-    std::copy(vec.begin(), vec.end(), result.begin());
-    return result;
-}
-
 /**
  * @brief Test the encoding of the test vector 1 of BCR-2020-007-hdkey paper
  * Source: https://github.com/BlockchainCommons/Research/blob/master/papers/bcr-2020-007-hdkey.md
