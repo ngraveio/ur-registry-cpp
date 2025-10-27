@@ -1,6 +1,7 @@
 #include "encode_ur_types.h"
 
-CoinIdentity encodeCoinIdentity() {
+CoinIdentity encodeCoinIdentity()
+{
     CoinIdentity req;
 
     std::string input("");
@@ -12,7 +13,8 @@ CoinIdentity encodeCoinIdentity() {
     return req;
 }
 
-Keypath encodeKeypath() {
+Keypath encodeKeypath()
+{
     Keypath req;
 
     std::string input("");
@@ -24,19 +26,24 @@ Keypath encodeKeypath() {
 
     std::cout << "Source fingerprint (uint32):\n";
     std::getline(std::cin, input);
-    if (!input.empty()) {
+    if (!input.empty())
+    {
         std::istringstream iss(input);
-        if (iss >> value) {
+        if (iss >> value)
+        {
             req.setSourceFingerprint(value);
-        } else {
+        }
+        else
+        {
             std::cerr << "Invalid input. Skipping setting fingerprint.\n";
         }
-    } 
+    }
 
     return req;
 }
 
-CoinInfo encodeCoinInfo() {
+CoinInfo encodeCoinInfo()
+{
     CoinInfo req;
     std::string input("");
     uint8_t value(0);
@@ -44,23 +51,31 @@ CoinInfo encodeCoinInfo() {
     // Prompt for BIP44 Coin Type (optional)
     std::cout << "BIP44 (e.g. 0 for BTC or 60 for ETH, or press Enter to skip): ";
     std::getline(std::cin, input);
-    if (!input.empty()) {
+    if (!input.empty())
+    {
         std::istringstream iss(input);
-        if (iss >> value) {
+        if (iss >> value)
+        {
             req.setType(static_cast<CoinType>(value));
-        } else {
+        }
+        else
+        {
             std::cerr << "Invalid input. Skipping setting BIP44 type.\n";
         }
-    } 
+    }
 
     // Prompt for Network Type (optional)
     std::cout << "Network (e.g. 0 for Mainnet, 1 for BTC Testnet, or press Enter to skip): ";
     std::getline(std::cin, input);
-    if (!input.empty()) {
+    if (!input.empty())
+    {
         std::istringstream iss(input);
-        if (iss >> value) {
+        if (iss >> value)
+        {
             req.setNetwork(static_cast<NetworkType>(value));
-        } else {
+        }
+        else
+        {
             std::cerr << "Invalid input. Skipping setting network.\n";
         }
     }
@@ -68,7 +83,8 @@ CoinInfo encodeCoinInfo() {
     return req;
 }
 
-HDKey encodeHDKey() {
+HDKey encodeHDKey()
+{
     HDKey req;
 
     std::string input("");
@@ -91,16 +107,19 @@ HDKey encodeHDKey() {
 
     std::cout << "Name (any string, leave empty to skip):\n";
     std::getline(std::cin, input);
-    if (!input.empty()) req.setName(input);
+    if (!input.empty())
+        req.setName(input);
 
     std::cout << "Note (any string, leave empty to skip):\n";
     std::getline(std::cin, input);
-    if (!input.empty()) req.setNote(input);
+    if (!input.empty())
+        req.setNote(input);
 
     return req;
 }
 
-OutputDescriptor encodeOutputDescriptor() {
+OutputDescriptor encodeOutputDescriptor()
+{
     OutputDescriptor req;
 
     std::string input("");
@@ -116,33 +135,43 @@ OutputDescriptor encodeOutputDescriptor() {
     return req;
 }
 
-DetailedAccount encodeDetailedAccount() {
+DetailedAccount encodeDetailedAccount()
+{
     DetailedAccount req;
 
     std::string input("");
     std::cout << "Select main account type (hdkey/output-descriptor):\n";
     std::getline(std::cin, input);
 
-    if (input == "hdkey") {
+    if (input == "hdkey")
+    {
         HDKey hdkey = encodeHDKey();
         req.setAccount(hdkey);
-    } else if (input == "output-descriptor") {
+    }
+    else if (input == "output-descriptor")
+    {
         OutputDescriptor desc = encodeOutputDescriptor();
         req.setAccount(desc);
-    } else {
+    }
+    else
+    {
         std::cerr << "Invalid selection. Must be 'hdkey' or 'output-descriptor'.\n";
         return req;
     }
 
     uint16_t i(0);
-    while (true) {
+    while (true)
+    {
         std::string tokenId("");
         std::cout << "Add token ID n" << i << " (any string, press Enter to finish):\n";
         std::getline(std::cin, tokenId);
 
-        if (tokenId.empty()) {
+        if (tokenId.empty())
+        {
             break;
-        } else {
+        }
+        else
+        {
             req.addTokenId(tokenId);
             i++;
         }
@@ -150,7 +179,8 @@ DetailedAccount encodeDetailedAccount() {
     return req;
 }
 
-PortfolioCoin encodePortfolioCoin() {
+PortfolioCoin encodePortfolioCoin()
+{
     PortfolioCoin req;
 
     std::string input("");
@@ -161,28 +191,38 @@ PortfolioCoin encodePortfolioCoin() {
 
     std::cout << "Master fingerprint (uint32):\n";
     std::getline(std::cin, input);
-    if (!input.empty()) {
+    if (!input.empty())
+    {
         std::istringstream iss(input);
-        if (iss >> value) {
+        if (iss >> value)
+        {
             req.setMasterFingerprint(value);
-        } else {
+        }
+        else
+        {
             std::cerr << "Invalid input. Skipping setting fingerprint.\n";
         }
-    } 
+    }
 
     uint16_t i(0);
-    while (true) {
+    while (true)
+    {
         std::string selection("");
         std::cout << "Add account n" << i << " (press 'y' to add or Enter to finish):\n";
         std::getline(std::cin, selection);
-        if (selection == "y") {
-            
+        if (selection == "y")
+        {
+
             DetailedAccount account = encodeDetailedAccount();
             req.addAccount(account);
             i++;
-        } else if (selection.empty()) {
+        }
+        else if (selection.empty())
+        {
             break;
-        } else {
+        }
+        else
+        {
             std::cout << "Unrecognized selection, press 'y' to add or enter to finish";
         }
     }
@@ -190,31 +230,37 @@ PortfolioCoin encodePortfolioCoin() {
     return req;
 }
 
-PortfolioMetadata encodePortfolioMetadata() {
+PortfolioMetadata encodePortfolioMetadata()
+{
     PortfolioMetadata req;
 
     std::string input("");
 
     std::cout << "Sync ID (16 bytes in hex without 0x prefix, e.g. 1234567890abcdef1234567890abcdef, leave empty to skip):\n";
     std::getline(std::cin, input);
-    if (!input.empty()) req.setSyncId(fromHex(input));
+    if (!input.empty())
+        req.setSyncId(fromHex(input));
 
     std::cout << "Language (e.g. en, leave empty to skip):\n";
     std::getline(std::cin, input);
-    if (!input.empty()) req.setLanguage(input);
+    if (!input.empty())
+        req.setLanguage(input);
 
     std::cout << "Firmware version (e.g. 1.0.0, leave empty to skip):\n";
     std::getline(std::cin, input);
-    if (!input.empty()) req.setFwVersion(input);
+    if (!input.empty())
+        req.setFwVersion(input);
 
     std::cout << "Device name (e.g. NGRAVE ZERO, leave empty to skip):\n";
     std::getline(std::cin, input);
-    if (!input.empty()) req.setDevice(input);
+    if (!input.empty())
+        req.setDevice(input);
 
     return req;
 }
 
-Portfolio encodePortfolio() {
+Portfolio encodePortfolio()
+{
     Portfolio req;
 
     std::cout << "Metadata: ";
@@ -222,17 +268,23 @@ Portfolio encodePortfolio() {
     req.setMetadata(metadata);
 
     uint16_t i(0);
-    while (true) {
+    while (true)
+    {
         std::string selection("");
         std::cout << "Add coin n" << i << " (press 'y' to add or Enter to finish):\n";
         std::getline(std::cin, selection);
-        if (selection == "y") {
+        if (selection == "y")
+        {
             PortfolioCoin coin = encodePortfolioCoin();
             req.addCoin(coin);
             i++;
-        } else if (selection.empty()) {
+        }
+        else if (selection.empty())
+        {
             break;
-        } else {
+        }
+        else
+        {
             std::cout << "Unrecognized selection, press 'y' to add or enter to finish";
         }
     }
@@ -240,14 +292,16 @@ Portfolio encodePortfolio() {
     return req;
 }
 
-template<typename T>
-T encodeGenericSignature() {
+template <typename T>
+T encodeGenericSignature()
+{
     T req;
 
     std::string input("");
     std::cout << "Enter Request ID (UUID format, e.g. 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d, leave empty to skip):\n";
     std::getline(std::cin, input);
-    if (!input.empty()) {
+    if (!input.empty())
+    {
         Uuid uuid(input);
         req.setRequestID(uuid);
     }
@@ -258,23 +312,26 @@ T encodeGenericSignature() {
 
     std::cout << "Enter origin (any string, leave empty to skip): ";
     std::getline(std::cin, input);
-    if (!input.empty()) req.setOrigin(input);
-    
+    if (!input.empty())
+        req.setOrigin(input);
+
     return req;
 }
 
-SignResponse encodeSignResponse() {
+SignResponse encodeSignResponse()
+{
     SignResponse req = encodeGenericSignature<SignResponse>();
 
     std::string input("");
     std::cout << "Enter public key (hex without 0x prefix, leave empty to skip): ";
     std::getline(std::cin, input);
-    if (!input.empty()) req.setPublickey(fromHex(input));
+    if (!input.empty())
+        req.setPublickey(fromHex(input));
 
     return req;
 }
 
-EthSignature encodeEthSignature() {
+EthSignature encodeEthSignature()
+{
     return encodeGenericSignature<EthSignature>();
 }
-

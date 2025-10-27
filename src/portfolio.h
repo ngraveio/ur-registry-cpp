@@ -23,65 +23,70 @@
  * metadata = 2
  */
 
-class Portfolio : public RegistryItem {
+class Portfolio : public RegistryItem
+{
 public:
     Portfolio();
     ~Portfolio() override = default;
-    explicit Portfolio(const std::vector<PortfolioCoin>& coins,
-                      const std::optional<PortfolioMetadata>& metadata = std::nullopt);
-    Portfolio(const std::string& uai, const std::string& key);
+    explicit Portfolio(const std::vector<PortfolioCoin> &coins,
+                       const std::optional<PortfolioMetadata> &metadata = std::nullopt);
+    Portfolio(const std::string &uai, const std::string &key);
 
     void clear();
 
-    enum class Key {
+    enum class Key
+    {
         COINS = 1,
         METADATA
     };
 
-    static constexpr size_t min_map_length = 1;
-    static constexpr size_t max_map_length = 2;
-
-    size_t getMinMapLength() const override {
-        return min_map_length;
+    size_t getMinMapLength() const override
+    {
+        return MIN_MAP_LENGTH;
     }
 
-    size_t getMaxMapLength() const override {
-        return max_map_length;
+    size_t getMaxMapLength() const override
+    {
+        return MAX_MAP_LENGTH;
     }
 
     std::optional<PortfolioMetadata> getMetadata() const { return m_metadata; }
-    void setMetadata(const PortfolioMetadata& metadata) { m_metadata = metadata; }
+    void setMetadata(const PortfolioMetadata &metadata) { m_metadata = metadata; }
 
     std::vector<PortfolioCoin> getCoins() const { return m_coins; }
-    void setCoins(const std::vector<PortfolioCoin>& coins) { m_coins = coins; }
-    void addCoin(const PortfolioCoin& coin) { m_coins.push_back(coin); }
-    std::vector<PortfolioCoin>::const_iterator findCoin(const PortfolioCoin& coin) const { return std::find(m_coins.begin(), m_coins.end(), coin); };
+    void setCoins(const std::vector<PortfolioCoin> &coins) { m_coins = coins; }
+    void addCoin(const PortfolioCoin &coin) { m_coins.push_back(coin); }
+    std::vector<PortfolioCoin>::const_iterator findCoin(const PortfolioCoin &coin) const { return std::find(m_coins.begin(), m_coins.end(), coin); };
 
     size_t getMapSize() const override;
-    void toMap(CborEncoder* parentEncoder) const override;
-    void fromMap(CborValue*) override {
+    void toMap(CborEncoder *parentEncoder) const override;
+    void fromMap(CborValue *) override
+    {
         throw CborException("Decoder not supported", CborErrorUnimplementedValidation);
     }
 
     /**
      * @brief Create a Portfolio from the UAI and the public key
-     * 
+     *
      * @param uai is the Unique Asset ID format as defined in NBCR-2024-01
-     * @param key is the public key 
-     * 
+     * @param key is the public key
+     *
      * Source: https://github.com/ngraveio/Research/blob/main/papers/nbcr-2024-001-unique-asset-id.md
      */
-    void createPortfolio(const std::string& uai, const std::string& key);
+    void createPortfolio(const std::string &uai, const std::string &key);
 
     /**
      * @brief Add a coin to the Portfolio coin array
-     * 
+     *
      * @param uai is the Unique Asset ID format
-     * @param key is the public key 
+     * @param key is the public key
      */
-    void addCoin(const std::string& uai, const std::string& key);
+    void addCoin(const std::string &uai, const std::string &key);
 
 private:
+    static constexpr size_t MIN_MAP_LENGTH = 1;
+    static constexpr size_t MAX_MAP_LENGTH = 2;
+
     std::vector<PortfolioCoin> m_coins;
     std::optional<PortfolioMetadata> m_metadata;
 };

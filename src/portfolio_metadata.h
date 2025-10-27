@@ -27,28 +27,32 @@
  * language_code = string ; following [ISO 639-1] Code (e.g. "en" for English, "fr" for French, "nl" for Dutch and "es" for Spanish)
  */
 
-class PortfolioMetadata : public RegistryItem {
+class PortfolioMetadata : public RegistryItem
+{
 public:
     PortfolioMetadata();
     ~PortfolioMetadata() override = default;
-    explicit PortfolioMetadata(const std::vector<uint8_t>& sync_id,
-                             const std::string& language,
-                             const std::string& fw_version,
-                             const std::string& device);
+    explicit PortfolioMetadata(const std::vector<uint8_t> &sync_id,
+                               const std::string &language,
+                               const std::string &fw_version,
+                               const std::string &device);
 
-    enum class Key {
+    enum class Key
+    {
         SYNC_ID = 1,
         LANGUAGE,
         FW_VERSION,
         DEVICE
     };
 
-    size_t getMinMapLength() const override {
-        return min_map_length;
+    size_t getMinMapLength() const override
+    {
+        return MIN_MAP_LENGTH;
     }
 
-    size_t getMaxMapLength() const override {
-        return max_map_length;
+    size_t getMaxMapLength() const override
+    {
+        return MAX_MAP_LENGTH;
     }
 
     std::optional<std::vector<uint8_t>> getSyncId() const { return m_sync_id; }
@@ -56,21 +60,22 @@ public:
     std::optional<std::string> getFwVersion() const { return m_fw_version; }
     std::optional<std::string> getDevice() const { return m_device; }
 
-    void setSyncId(const std::vector<uint8_t>& sync_id);
-    void setLanguage(const std::string& language);
-    void setFwVersion(const std::string& fw_version);
-    void setDevice(const std::string& device);
+    void setSyncId(const std::vector<uint8_t> &sync_id);
+    void setLanguage(const std::string &language);
+    void setFwVersion(const std::string &fw_version);
+    void setDevice(const std::string &device);
 
     size_t getMapSize() const override;
-    void toMap(CborEncoder* parentEncoder) const override;
-    void fromMap(CborValue*) override {
+    void toMap(CborEncoder *parentEncoder) const override;
+    void fromMap(CborValue *) override
+    {
         throw CborException("Decoder not supported", CborErrorUnimplementedValidation);
     }
 
 private:
-    static constexpr size_t min_map_length = 0;
-    static constexpr size_t max_map_length = 4;
-    static constexpr size_t sync_id_size = 16;
+    static constexpr size_t MIN_MAP_LENGTH = 0;
+    static constexpr size_t MAX_MAP_LENGTH = 4;
+    static constexpr size_t SYNC_ID_SIZE = 16;
 
     std::optional<std::vector<uint8_t>> m_sync_id;
     std::optional<std::string> m_language;

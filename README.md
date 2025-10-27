@@ -17,27 +17,30 @@ Runtime/Link:
 Development/Test:
 - **cppunit** 1.15.1
 - **cppcheck** 2.7 (for static analysis)
-- **flawfinder** (for security scanning)
+- **flawfinder** 2.0.19 (for security scanning)
 
 ## Build & Install
+
+- Build
 
 ```sh
 ./autogen.sh
 ./configure
 make
+```
+
+- Install
+
+```
 sudo make install
 ```
 
 ## Run Tests & Static Analysis
 
-- Build and install the static library
-```sh
-./autogen.sh
-./configure --disable-shared --enable-static
-make
-```
+- Build as specified in "Build & Install" instructions
 
-- To run both unit tests (cppunit) and static analysis (cppcheck and flawfinder), use:
+- Run both unit tests (cppunit) and static analysis (cppcheck and flawfinder)
+
 ```
 make check
 ```
@@ -50,21 +53,14 @@ Two interactive apps are provided to help explore and test the encoding and deco
 
 An interactive decoder that takes a full UR string (e.g. ur:eth-sign-request/...) as input and displays its decoded fields.
 
-- Build:
-
-```
-./autogen.sh
-./configure --disable-shared --enable-static
-make
-```
-
-- Run:
+- Build as specified in "Build & Install" instructions
+- Run
 
 ```
 ./examples/decode_ur_interactive
 ```
 
-- Usage:
+- Usage
    - Paste or type any valid UR string (e.g. from a QR code).
    - Type demo to run built-in decoding examples.
    - Type q to quit.
@@ -98,27 +94,20 @@ UR> q
 
 An interactive encoder that prompts you to enter data step-by-step to build and encode supported UR types.
 
-- Build:
-
-```
-./autogen.sh
-./configure --disable-shared --enable-static
-make
-```
-
+- Build as specified in "Build & Install" instructions
 - Run
 
 ```
 ./examples/encode_ur_interactive
 ```
 
-- Usage:
+- Usage
   - When prompted, type the UR type you want to encode (e.g. coin-identity, hdkey, portfolio, etc.).
   - Fill in the requested fields interactively.
   - The resulting UR string will be printed to the console.
   - Type q to quit.
 
-- Example:
+- Example
 
 ```
 ./examples/encode_ur_interactive
@@ -132,3 +121,46 @@ Encoded UR: ur:sign-response/oeadtpdagdndcawmgtfrkigrpmndutdnbtkgfssbjnaohdfptyw
 
 Enter UR type to encode or 'q' to quit: q
 ```
+
+## Contributing
+
+We welcome contributions to improve the UR Registry C++ library.
+
+**Guidelines**
+- Keep PRs focused and well-described
+- Include tests or examples when relevant
+- Don’t submit security issues publicly — see Responsible Disclosure
+
+### License
+
+This project is licensed under the MIT License. See the LICENSE.md file for details.
+
+### Credits
+
+| Name              | Github                                             | Email                                 | 
+| ----------------- | -------------------------------------------------- | ------------------------------------- | 
+| Mathieu Da Silva  | [@mdasilva4](https://github.com/mdasilva4)         | mathieu.dasilva@ngrave.io             | 
+| Adil Benabdallah  | [@adbena](https://github.com/adbena)               | adil.benabdallah@ngrave.io            |
+| Maher Sallam      | [@Maher4Ever](https://github.com/Maher4Ever)       | maher.sallam@ngrave.io                | 
+| Francois Gerrin   | [@fgerin-ngrave](https://github.com/fgerin-ngrave) | francois.gerin@ngrave.io              |
+| Tarik Krioua      | [@tkrioua](https://github.com/tkrioura)            | tarik.krioua@ngrave.io                |
+
+## Responsible Disclosure
+
+We are committed to keeping our software secure and safe to use for everyone. If you discover a security vulnerability or weakness, we kindly ask that you do not submit it as a public GitHub issue.
+
+Instead, please contact us privately at:
+
+```
+mathieu.dasilva@ngrave.io
+```
+
+To ensure confidentiality, please encrypt your message using our PGP key with the following fingerprint:
+
+```
+22B9 CAE0 B44B EAA0 0174 E4D4 6D9F EB76 A95F ED64
+```
+
+We will assess the reported issue and determine if it qualifies under the scope of our [bug bounty program](https://ngrave.io/en/bug-bounty-program).
+
+Thank you for acting responsibly and helping us protect our users.

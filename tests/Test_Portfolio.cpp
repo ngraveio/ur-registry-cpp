@@ -3,21 +3,24 @@
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestPortfolio);
 
-void TestPortfolio::setUp() {
+void TestPortfolio::setUp()
+{
 }
 
-void TestPortfolio::tearDown() {
+void TestPortfolio::tearDown()
+{
 }
 
-std::vector<uint8_t> TestPortfolio::createSyncId() {
+std::vector<uint8_t> TestPortfolio::createSyncId()
+{
     // Create a 16-byte sync ID
     return std::vector<uint8_t>{
         0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
-        0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10
-    };
+        0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10};
 }
 
-PortfolioMetadata TestPortfolio::createMetadata() {
+PortfolioMetadata TestPortfolio::createMetadata()
+{
     PortfolioMetadata metadata;
     metadata.setSyncId(createSyncId());
     metadata.setLanguage("en");
@@ -26,7 +29,8 @@ PortfolioMetadata TestPortfolio::createMetadata() {
     return metadata;
 }
 
-PortfolioCoin TestPortfolio::createBitcoinCoin() {
+PortfolioCoin TestPortfolio::createBitcoinCoin()
+{
     // Create a Bitcoin coin identity (Secp256k1, BIP-0044 index 0)
     CoinIdentity coinId(EllipticCurve::Secp256k1, 0);
 
@@ -46,7 +50,8 @@ PortfolioCoin TestPortfolio::createBitcoinCoin() {
     return PortfolioCoin(coinId, accounts);
 }
 
-PortfolioCoin TestPortfolio::createEthereumCoin() {
+PortfolioCoin TestPortfolio::createEthereumCoin()
+{
     // Create an Ethereum coin identity (Secp256k1, BIP-0044 index 60)
     CoinIdentity coinId(EllipticCurve::Secp256k1, 60);
 
@@ -66,7 +71,8 @@ PortfolioCoin TestPortfolio::createEthereumCoin() {
     return PortfolioCoin(coinId, accounts);
 }
 
-void TestPortfolio::EncodeWithCoinsOnly() {
+void TestPortfolio::EncodeWithCoinsOnly()
+{
     // Create a Portfolio with a single coin and no metadata
     PortfolioCoin bitcoinCoin = createBitcoinCoin();
     std::vector<PortfolioCoin> coins = {bitcoinCoin};
@@ -139,7 +145,8 @@ void TestPortfolio::EncodeWithCoinsOnly() {
     CPPUNIT_ASSERT(!portfolio.getMetadata().has_value());
 }
 
-void TestPortfolio::EncodeWithCoinsAndMetadata() {
+void TestPortfolio::EncodeWithCoinsAndMetadata()
+{
     // Create a Portfolio with a single coin and metadata
     PortfolioCoin bitcoinCoin = createBitcoinCoin();
     std::vector<PortfolioCoin> coins = {bitcoinCoin};
@@ -219,7 +226,7 @@ void TestPortfolio::EncodeWithCoinsAndMetadata() {
     //             4E4752415645                # "NGRAVE"
 
     auto expectedCbor = fromHex("A20181D9A1BBA201D9A1B9A2010802000281D9A1BAA101D99D6FA7035821025A463BAB5B8A5AC35783B044E42F25523B385C2A9C490E9F311051322D9CF72D0458200F0551A946320B97221324550AAE42B2235358C42FAA6A7686C9064E9A0E2CF505D99D71A1010006D99D70A10186182CF500F500F5081A12345678096F426974636F696E204163636F756E740A775072696D61727920426974636F696E204163636F756E7402D9A1BCA401500102030405060708090A0B0C0D0E0F100262656E0368312E372D322E72630466"
-                                                  "4E4752415645");
+                                "4E4752415645");
     auto expectedUR = std::string("ur:portfolio/oeadlytaoyrkoeadtaoyrhoeadayaoaeaolytaoyrdoyadtantjlosaxhdclaohtfgfrpyhplehtsrhglspffyvedldagmfrethhdrnsgabaneehbegyeydpnsyldpaahdcxbsahgyptfgeybdmscpbwdkgobkplfwprcnguhdssdlpkimkolnsoamglnybadwykahtantjsoyadaeamtantjooyadlncsdwykaeykaeykaycybgeehfksasjlfwinjyiajlinjtcxfpiaiajlkpjtjybkktgdjpinjnhsjpkkcxfwinjyiajlinjtcxfpiaiajlkpjtjyaotaoyrfoxadgdadaoaxaaahamatayasbkbdbnbtbabsbeaoidihjtaxisehdmemdpeydmjpiaaaiyglflgmfphffesntoceke");
 
     ValidateCborResults(portfolio, expectedCbor);
@@ -232,7 +239,8 @@ void TestPortfolio::EncodeWithCoinsAndMetadata() {
     CPPUNIT_ASSERT(portfolio.getMetadata().value().getDevice() == "NGRAVE");
 }
 
-void TestPortfolio::EncodeWithMultipleCoins() {
+void TestPortfolio::EncodeWithMultipleCoins()
+{
     // Create a Portfolio with multiple coins
     PortfolioCoin bitcoinCoin = createBitcoinCoin();
     PortfolioCoin ethereumCoin = createEthereumCoin();
@@ -352,7 +360,8 @@ void TestPortfolio::EncodeWithMultipleCoins() {
     CPPUNIT_ASSERT(!portfolio.getMetadata().has_value());
 }
 
-void TestPortfolio::EncodeEmpty() {
+void TestPortfolio::EncodeEmpty()
+{
     // Create an empty Portfolio and then add coins
     Portfolio portfolio;
 
@@ -447,14 +456,15 @@ void TestPortfolio::EncodeEmpty() {
     //             4E4752415645                # "NGRAVE"
 
     auto expectedCbor = fromHex("A20181D9A1BBA201D9A1B9A2010802000281D9A1BAA101D99D6FA7035821025A463BAB5B8A5AC35783B044E42F25523B385C2A9C490E9F311051322D9CF72D0458200F0551A946320B97221324550AAE42B2235358C42FAA6A7686C9064E9A0E2CF505D99D71A1010006D99D70A10186182CF500F500F5081A12345678096F426974636F696E204163636F756E740A775072696D61727920426974636F696E204163636F756E7402D9A1BCA401500102030405060708090A0B0C0D0E0F100262656E0368312E372D322E72630466"
-                                                  "4E4752415645");
+                                "4E4752415645");
     auto expectedUR = std::string("ur:portfolio/oeadlytaoyrkoeadtaoyrhoeadayaoaeaolytaoyrdoyadtantjlosaxhdclaohtfgfrpyhplehtsrhglspffyvedldagmfrethhdrnsgabaneehbegyeydpnsyldpaahdcxbsahgyptfgeybdmscpbwdkgobkplfwprcnguhdssdlpkimkolnsoamglnybadwykahtantjsoyadaeamtantjooyadlncsdwykaeykaeykaycybgeehfksasjlfwinjyiajlinjtcxfpiaiajlkpjtjybkktgdjpinjnhsjpkkcxfwinjyiajlinjtcxfpiaiajlkpjtjyaotaoyrfoxadgdadaoaxaaahamatayasbkbdbnbtbabsbeaoidihjtaxisehdmemdpeydmjpiaaaiyglflgmfphffesntoceke");
 
     ValidateCborResults(portfolio, expectedCbor);
     ValidateUrEncoding(portfolio, expectedUR);
 }
 
-void TestPortfolio::EncodeUaiToPortfolio(){
+void TestPortfolio::EncodeUaiToPortfolio()
+{
     Portfolio portfolio;
     // Create initial portfolio with POL coin
     CPPUNIT_ASSERT_NO_THROW(portfolio.createPortfolio("uai://secp256k1.60.137/44'/60'/0'/0/[0,1]?master_fingerprint=123456789", "xpub6CVDAP5Ae2wxTNoDXtFqBiwyWU13ejtf16LJXbwMXMmW8i8HdDpWdaC75ss8c1oAmsFFvHXvmJi5MCU1nJZUkvJ3ZsHkCzHRwczDheGWrp3"));
@@ -474,20 +484,20 @@ void TestPortfolio::EncodeUaiToPortfolio(){
     CPPUNIT_ASSERT_NO_THROW(portfolio.addCoin("uai://secp256k1.60.137:0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6/44'/60'/0'", "xpub6CVDAP5Ae2wxTNoDXtFqBiwyWU13ejtf16LJXbwMXMmW8i8HdDpWdaC75ss8c1oAmsFFvHXvmJi5MCU1nJZUkvJ3ZsHkCzHRwczDheGWrp3"));
 
     // Validate UAI encoding
-    // {1: [41403({1: 41401({1: 8, 2: 60, 3: [137]}), 
-    //             2: [41402({1: 40303({3: h'032503D7DCA4FF0594F0404D56188542A18D8E0784443134C716178BC1819C3DD4', 4: h'1719EA8CADCA1BBC71BF8511AC3A487286B4D34A860007B8FD498F2732EB8991', 6: 40304({1: [44, true, 60, true, 0, true]}), 7: 40304({1: [0, false, [0, 1], false]}), 8: 1906394030}), 
-    //                        2: ["0x7ceb23fd6bc0add59e62ac25578270cff1b9f619", "0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6"]})], 
-    //             3: 123456789}), 
-    //      41403({1: 41401({1: 8, 2: 0}), 
-    //             2: [41402({1: 40308({1: "wpkh(@0)", 2: [40303({3: h'032CD40B55A07B5B591B6CA10602619F181759065113A69A2573DD4ADA6B90DB32', 4: h'DF914FC2F5223B0C4A8B2B140BA1858160D3FDE02CF829A054CEC922F77FA0D1', 6: 40304({1: [84, true, 0, true, 0, true]}), 8: 3365065644})]})}), 
-    //                 41402({1: 40308({1: "pkh(@0)", 2: [40303({3: h'03D3EEAC2252BA2F99AC8D1261BEFC3DA34EBB7DC545A5FF444939C0C8F1ED3FEF', 4: h'3E96E998197419852921A8533E1673C01C6B0058A8CA8D25751A1CA4A3D1019C', 8: 4035450625})]})})], 
-    //             3: 123456789}), 
-    //      41403({1: 41401({1: 6, 2: 501}), 
-    //             2: [41402({1: 40303({3: h'004137C16B966ABAC1DF4CB893AF421EA0BE61A52266AA7B3AA993900F7139640F', 6: 40304({1: [44, true, 508, true, 0, true, 0, true, 0, true]})})}), 
-    //                 41402({1: 40303({3: h'00954768223BB94015350462BADA20DAEED7E25C4777F997B56C027746E4F8AC67', 6: 40304({1: [44, true, 508, true, 0, true, 0, true, 1, true]})}), 
-    //                        2: ["Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB"]})]}), 
-    //      41403({1: 41401({1: 8, 2: 60, 3: [137]}), 
-    //             2: [41402({1: 40303({3: h'03C95BDE557F5E9B971E57DC0EA83D5FEF45AED46379558DEEB18D1D7E4AE8FBDD', 4: h'8B2E94720DDAFE556DE20F50E584BBE1011ED5676B647515A369234330EF7CD0', 6: 40304({1: [44, true, 60, true, 0, true]}), 7: 40304({1: [0, false, [], false]}), 8: 2311616109})})], 
+    // {1: [41403({1: 41401({1: 8, 2: 60, 3: [137]}),
+    //             2: [41402({1: 40303({3: h'032503D7DCA4FF0594F0404D56188542A18D8E0784443134C716178BC1819C3DD4', 4: h'1719EA8CADCA1BBC71BF8511AC3A487286B4D34A860007B8FD498F2732EB8991', 6: 40304({1: [44, true, 60, true, 0, true]}), 7: 40304({1: [0, false, [0, 1], false]}), 8: 1906394030}),
+    //                        2: ["0x7ceb23fd6bc0add59e62ac25578270cff1b9f619", "0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6"]})],
+    //             3: 123456789}),
+    //      41403({1: 41401({1: 8, 2: 0}),
+    //             2: [41402({1: 40308({1: "wpkh(@0)", 2: [40303({3: h'032CD40B55A07B5B591B6CA10602619F181759065113A69A2573DD4ADA6B90DB32', 4: h'DF914FC2F5223B0C4A8B2B140BA1858160D3FDE02CF829A054CEC922F77FA0D1', 6: 40304({1: [84, true, 0, true, 0, true]}), 8: 3365065644})]})}),
+    //                 41402({1: 40308({1: "pkh(@0)", 2: [40303({3: h'03D3EEAC2252BA2F99AC8D1261BEFC3DA34EBB7DC545A5FF444939C0C8F1ED3FEF', 4: h'3E96E998197419852921A8533E1673C01C6B0058A8CA8D25751A1CA4A3D1019C', 8: 4035450625})]})})],
+    //             3: 123456789}),
+    //      41403({1: 41401({1: 6, 2: 501}),
+    //             2: [41402({1: 40303({3: h'004137C16B966ABAC1DF4CB893AF421EA0BE61A52266AA7B3AA993900F7139640F', 6: 40304({1: [44, true, 508, true, 0, true, 0, true, 0, true]})})}),
+    //                 41402({1: 40303({3: h'00954768223BB94015350462BADA20DAEED7E25C4777F997B56C027746E4F8AC67', 6: 40304({1: [44, true, 508, true, 0, true, 0, true, 1, true]})}),
+    //                        2: ["Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB"]})]}),
+    //      41403({1: 41401({1: 8, 2: 60, 3: [137]}),
+    //             2: [41402({1: 40303({3: h'03C95BDE557F5E9B971E57DC0EA83D5FEF45AED46379558DEEB18D1D7E4AE8FBDD', 4: h'8B2E94720DDAFE556DE20F50E584BBE1011ED5676B647515A369234330EF7CD0', 6: 40304({1: [44, true, 60, true, 0, true]}), 7: 40304({1: [0, false, [], false]}), 8: 2311616109})})],
     //             3: 444444444})]
     // }
     auto expectedCbor = fromHex("A10184D9A1BBA301D9A1B9A3010802183C038118890281D9A1BAA201D99D6FA5035821032503D7DCA4FF0594F0404D56188542A18D8E0784443134C716178BC1819C3DD40458201719EA8CADCA1BBC71BF8511AC3A487286B4D34A860007B8FD498F2732EB899106D99D70A10186182CF5183CF500F507D99D70A1018400F4820001F4081A71A143AE0282782A307837636562323366643662633061646435396536326163323535373832373063666631623966363139782A307831626664363730333762343263663733616366323034373036376264346632633437643962666436031A075BCD15D9A1BBA301D9A1B9A2010802000282D9A1BAA101D99D74A2016877706B68284030290281D99D6FA4035821032CD40B55A07B5B591B6CA10602619F181759065113A69A2573DD4ADA6B90DB32045820DF914FC2F5223B0C4A8B2B140BA1858160D3FDE02CF829A054CEC922F77FA0D106D99D70A101861854F500F500F5081AC892D3ACD9A1BAA101D99D74A20167706B68284030290281D99D6FA303582103D3EEAC2252BA2F99AC8D1261BEFC3DA34EBB7DC545A5FF444939C0C8F1ED3FEF0458203E96E998197419852921A8533E1673C01C6B0058A8CA8D25751A1CA4A3D1019C081AF0881701031A075BCD15D9A1BBA201D9A1B9A20106021901F50282D9A1BAA101D99D6FA2035821004137C16B966ABAC1DF4CB893AF421EA0BE61A52266AA7B3AA993900F7139640F06D99D70A1018A182CF51901FCF500F500F500F5D9A1BAA201D99D6FA203582100954768223BB94015350462BADA20DAEED7E25C4777F997B56C027746E4F8AC6706D99D70A1018A182CF51901FCF500F500F501F50281782C457339764D46727A614345526D4A667246344832465944344B436F4E6B5931314D6343653842656E774E5942D9A1BBA301D9A1B9A3010802183C038118890281D9A1BAA101D99D6FA503582103C95BDE557F5E9B971E57DC0EA83D5FEF45AED46379558DEEB18D1D7E4AE8FBDD0458208B2E94720DDAFE556DE20F50E584BBE1011ED5676B647515A369234330EF7CD006D99D70A10186182CF5183CF500F507D99D70A1018400F480F4081A89C8766D031A1A7DAF1C");

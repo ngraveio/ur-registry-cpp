@@ -4,7 +4,8 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include "../src/coin_identity.h"
 
-class TestCoinIdentity : public CPPUNIT_NS::TestFixture {
+class TestCoinIdentity : public CPPUNIT_NS::TestFixture
+{
     CPPUNIT_TEST_SUITE(TestCoinIdentity);
     CPPUNIT_TEST(TestAllFields);
     CPPUNIT_TEST(TestMinimumFields);
@@ -20,7 +21,7 @@ class TestCoinIdentity : public CPPUNIT_NS::TestFixture {
 public:
     void setUp();
     void tearDown();
-    static void Compare(const CoinIdentity& decoded, const CoinIdentity& expected);
+    static void Compare(const CoinIdentity &decoded, const CoinIdentity &expected);
 
 protected:
     void TestAllFields();

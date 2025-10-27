@@ -31,42 +31,40 @@
 #include "Test_BatchSignRequest.h"
 #include "Test_Intent.h"
 
-
 using namespace CppUnit;
 using namespace std;
 
+CPPUNIT_TEST_SUITE_REGISTRATION(TestDetailedAccount);
+CPPUNIT_TEST_SUITE_REGISTRATION(TestOutputDescriptor);
+CPPUNIT_TEST_SUITE_REGISTRATION(TestCoinInfo);
+CPPUNIT_TEST_SUITE_REGISTRATION(TestKeypath);
+CPPUNIT_TEST_SUITE_REGISTRATION(TestHDKey);
+CPPUNIT_TEST_SUITE_REGISTRATION(TestPortfolioMetadata);
+CPPUNIT_TEST_SUITE_REGISTRATION(TestPortfolioCoin);
+CPPUNIT_TEST_SUITE_REGISTRATION(TestPortfolio);
+CPPUNIT_TEST_SUITE_REGISTRATION(TestUrSignatures);
+CPPUNIT_TEST_SUITE_REGISTRATION(TestCoinIdentity);
+CPPUNIT_TEST_SUITE_REGISTRATION(TestSignRequest);
+CPPUNIT_TEST_SUITE_REGISTRATION(TestBatchSignRequest);
+CPPUNIT_TEST_SUITE_REGISTRATION(TestIntent);
 
-CPPUNIT_TEST_SUITE_REGISTRATION( TestDetailedAccount );
-CPPUNIT_TEST_SUITE_REGISTRATION( TestOutputDescriptor );
-CPPUNIT_TEST_SUITE_REGISTRATION( TestCoinInfo );
-CPPUNIT_TEST_SUITE_REGISTRATION( TestKeypath );
-CPPUNIT_TEST_SUITE_REGISTRATION( TestHDKey );
-CPPUNIT_TEST_SUITE_REGISTRATION( TestPortfolioMetadata );
-CPPUNIT_TEST_SUITE_REGISTRATION( TestPortfolioCoin );
-CPPUNIT_TEST_SUITE_REGISTRATION( TestPortfolio );
-CPPUNIT_TEST_SUITE_REGISTRATION( TestUrSignatures );
-CPPUNIT_TEST_SUITE_REGISTRATION( TestCoinIdentity );
-CPPUNIT_TEST_SUITE_REGISTRATION( TestSignRequest );
-CPPUNIT_TEST_SUITE_REGISTRATION( TestBatchSignRequest );
-CPPUNIT_TEST_SUITE_REGISTRATION( TestIntent );
-
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     // informs test-listener about testresults
     CPPUNIT_NS::TestResult testresult;
 
     // register listener for collecting the test-results
     CPPUNIT_NS::TestResultCollector collectedresults;
-    testresult.addListener (&collectedresults);
+    testresult.addListener(&collectedresults);
 
     // register listener for per-test progress output
     CPPUNIT_NS::BriefTestProgressListener progress;
-    testresult.addListener (&progress);
+    testresult.addListener(&progress);
 
     // insert test-suite at test-runner by registry
     CPPUNIT_NS::TestRunner testrunner;
 
-    testrunner.addTest (CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest ());
+    testrunner.addTest(CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest());
     testrunner.run(testresult);
 
     // return 0 if tests were successful

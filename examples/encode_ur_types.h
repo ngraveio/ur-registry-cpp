@@ -12,7 +12,7 @@
 #include "../src/sign_response.h"
 #include "../src/eth_signature.h"
 
-#include "../common/utils.h"  
+#include "../common/utils.h"
 
 CoinIdentity encodeCoinIdentity();
 Keypath encodeKeypath();

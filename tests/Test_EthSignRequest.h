@@ -26,7 +26,7 @@ class TestEthSignRequest : public CppUnit::TestFixture
 public:
     void setUp(void);
     void tearDown(void);
-    static void Compare(const EthSignRequest& ur_type, const EthSignRequest& expected_ur_type);
+    static void Compare(const EthSignRequest &ur_type, const EthSignRequest &expected_ur_type);
 
 protected:
     void DecodeSignRequestKeystoneTestCase(void);
@@ -42,5 +42,4 @@ protected:
     void DecodeFuzzer(void);
 
 private:
-
 };

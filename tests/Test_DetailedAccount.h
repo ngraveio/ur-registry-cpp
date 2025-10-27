@@ -1,10 +1,8 @@
 #pragma once
 
-
 #include <cppunit/TestCase.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-
 
 class TestDetailedAccount : public CppUnit::TestFixture
 {
@@ -25,20 +23,20 @@ class TestDetailedAccount : public CppUnit::TestFixture
     CPPUNIT_TEST(UaiExampleBtcZpubNativeSegwit);
     CPPUNIT_TEST(InvalidPubKey);
     CPPUNIT_TEST(InvalidUai);
-    
+
     CPPUNIT_TEST_SUITE_END();
 
 public:
     void setUp();
     void tearDown();
 
-protected:    
+protected:
     /* detailed-account with a hdkey account and tokenids list */
     void testDetailedAccountWithHDKey();
     /* detailed-account with an output-descriptor account and tokenids array list */
-    void testDetailedAccountWithOutputDesc();    
+    void testDetailedAccountWithOutputDesc();
     /* invalid detailed-account with uninitialized account field */
-    void testDetailedAccountWithUninitAccount();    
+    void testDetailedAccountWithUninitAccount();
     /* invalid detailed-account with legacy flag */
     void testDetailedAccountWithLegacyFlag();
 
@@ -55,5 +53,4 @@ protected:
     void InvalidUai();
 
 private:
-
 };

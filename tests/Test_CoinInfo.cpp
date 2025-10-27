@@ -3,12 +3,10 @@
 
 void TestCoinInfo::setUp(void)
 {
-
 }
 
 void TestCoinInfo::tearDown(void)
 {
-
 }
 
 void TestCoinInfo::EncodeBtcMainnet(void)

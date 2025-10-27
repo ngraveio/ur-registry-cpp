@@ -31,7 +31,7 @@ class TestKeypath : public CppUnit::TestFixture
 public:
     void setUp(void);
     void tearDown(void);
-    static void Compare(const Keypath& ur_type, const Keypath& expected_ur_type);
+    static void Compare(const Keypath &ur_type, const Keypath &expected_ur_type);
 
 protected:
     void EncodeAndDecodeAllFieldsAndTypes(void);
@@ -53,6 +53,4 @@ protected:
     void DecodeFuzzer(void);
 
 private:
-
 };
-

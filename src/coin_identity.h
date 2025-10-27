@@ -6,7 +6,6 @@
 
 #include "registry_item.h"
 
-
 /**
  * @brief Implementation of the coin-identity (CBOR tag #6.41401) UR type
  *
@@ -38,7 +37,8 @@
  * sub_type_exp = uint32 / str / hex_string
  */
 
-enum class EllipticCurve : uint8_t {
+enum class EllipticCurve : uint8_t
+{
     P256 = 1,
     P384 = 2,
     P521 = 3,
@@ -52,60 +52,66 @@ enum class EllipticCurve : uint8_t {
 // Forward declaration for variant type
 class SubTypeExp;
 
-class CoinIdentity : public RegistryItem {
+class CoinIdentity : public RegistryItem
+{
 public:
-    CoinIdentity();  // Default constructor needed for decoding
+    CoinIdentity(); // Default constructor needed for decoding
     virtual ~CoinIdentity() override = default;
     explicit CoinIdentity(EllipticCurve curve, uint32_t type);
-    CoinIdentity(EllipticCurve curve, uint32_t type, const std::vector<SubTypeExp>& subtypes);
-    explicit CoinIdentity(const std::string& uai);
+    CoinIdentity(EllipticCurve curve, uint32_t type, const std::vector<SubTypeExp> &subtypes);
+    explicit CoinIdentity(const std::string &uai);
 
     void clear();
-    
-    static constexpr size_t MIN_MAP_LENGTH = 2;
-    static constexpr size_t MAX_MAP_LENGTH = 3;
-    
+
     static const std::unordered_map<std::string, EllipticCurve> CurveMap;
 
-    enum class Key {
+    enum class Key
+    {
         CURVE = 1,
         TYPE,
         SUBTYPE
     };
 
-    size_t getMinMapLength() const override {
+    size_t getMinMapLength() const override
+    {
         return MIN_MAP_LENGTH;
     }
 
-    size_t getMaxMapLength() const override {
+    size_t getMaxMapLength() const override
+    {
         return MAX_MAP_LENGTH;
     }
 
     EllipticCurve getCurve() const { return m_curve; }
     uint32_t getType() const { return m_type; }
-    const std::optional<std::vector<SubTypeExp>>& getSubTypes() const { return m_subtypes; }
+    const std::optional<std::vector<SubTypeExp>> &getSubTypes() const { return m_subtypes; }
 
     void setCurve(EllipticCurve curve) { m_curve = curve; }
     void setType(uint32_t type);
-    void setSubTypes(const std::vector<SubTypeExp>& subtypes) { m_subtypes = subtypes; }
+    void setSubTypes(const std::vector<SubTypeExp> &subtypes) { m_subtypes = subtypes; }
 
     size_t getMapSize() const override;
-    void toMap(CborEncoder* parentEncoder) const override;
-    void fromMap(CborValue* map) override;
-    
+    void toMap(CborEncoder *parentEncoder) const override;
+    void fromMap(CborValue *map) override;
+
     std::string toUaiStr() const;
 
-    bool operator == (const CoinIdentity& coin_id) const {
-        if (m_curve != coin_id.getCurve() || m_type != coin_id.getType()){
+    bool operator==(const CoinIdentity &coin_id) const
+    {
+        if (m_curve != coin_id.getCurve() || m_type != coin_id.getType())
+        {
             return false;
         }
-        if (m_subtypes.has_value() != coin_id.getSubTypes().has_value()) {
+        if (m_subtypes.has_value() != coin_id.getSubTypes().has_value())
+        {
             return false;
         }
-        if (m_subtypes.has_value()) {
+        if (m_subtypes.has_value())
+        {
             std::vector<SubTypeExp> subtypes = *m_subtypes;
             std::vector<SubTypeExp> subtypes_coinid = *coin_id.getSubTypes();
-            if (subtypes != subtypes_coinid) {
+            if (subtypes != subtypes_coinid)
+            {
                 return false;
             }
         }
@@ -113,24 +119,29 @@ public:
     };
 
     /**
-     * @brief Encode UAI string (curve, type and subtypes) to coin identity 
-     * 
+     * @brief Encode UAI string (curve, type and subtypes) to coin identity
+     *
      * @param uai is the Unique Asset ID format as defined in NBCR-2024-01
-     * 
+     *
      * Source: https://github.com/ngraveio/Research/blob/main/papers/nbcr-2024-001-unique-asset-id.md
      */
-    void setCoinIdentity(const std::string& uai);
+    void setCoinIdentity(const std::string &uai);
 
 private:
-    EllipticCurve m_curve{EllipticCurve::P256};  // Default to P256
-    uint32_t m_type{0};  // Default to Bitcoin (SLIP44 = 0)
+    static constexpr size_t MIN_MAP_LENGTH = 2;
+    static constexpr size_t MAX_MAP_LENGTH = 3;
+
+    EllipticCurve m_curve{EllipticCurve::P256}; // Default to P256
+    uint32_t m_type{0};                         // Default to Bitcoin (SLIP44 = 0)
     std::optional<std::vector<SubTypeExp>> m_subtypes;
 };
 
 // Variant type for subtype expressions
-class SubTypeExp {
+class SubTypeExp
+{
 public:
-    enum class Type {
+    enum class Type
+    {
         UINT32,
         STRING,
         HEX_STRING
@@ -138,41 +149,50 @@ public:
 
     // Constructors for different types
     explicit SubTypeExp(uint32_t value) : m_type(Type::UINT32), m_uint32_value(value) {}
-    explicit SubTypeExp(const std::string& value) : m_type(Type::STRING), m_string_value(value) {}
-    explicit SubTypeExp(const std::vector<uint8_t>& value) : m_type(Type::HEX_STRING), m_hex_value(value) {}
+    explicit SubTypeExp(const std::string &value) : m_type(Type::STRING), m_string_value(value) {}
+    explicit SubTypeExp(const std::vector<uint8_t> &value) : m_type(Type::HEX_STRING), m_hex_value(value) {}
 
     Type getType() const { return m_type; }
     uint32_t getUint32Value() const { return m_uint32_value; }
-    const std::string& getStringValue() const { return m_string_value; }
-    const std::vector<uint8_t>& getHexValue() const { return m_hex_value; }
+    const std::string &getStringValue() const { return m_string_value; }
+    const std::vector<uint8_t> &getHexValue() const { return m_hex_value; }
 
-    bool operator == (const SubTypeExp& subtype) const {
-        if (m_type != subtype.getType()) {
+    bool operator==(const SubTypeExp &subtype) const
+    {
+        if (m_type != subtype.getType())
+        {
             return false;
         }
-        switch (m_type) {
-            case Type::UINT32: {
-                if (m_uint32_value == subtype.getUint32Value()) {
-                    return true;
-                }
-                break;
+        switch (m_type)
+        {
+        case Type::UINT32:
+        {
+            if (m_uint32_value == subtype.getUint32Value())
+            {
+                return true;
             }
-            case Type::STRING: {
-                if (m_string_value == subtype.getStringValue()) {
-                    return true;
-                }
-                break;
+            break;
+        }
+        case Type::STRING:
+        {
+            if (m_string_value == subtype.getStringValue())
+            {
+                return true;
             }
-            case Type::HEX_STRING: {
-                if (m_hex_value == subtype.getHexValue()) {
-                    return true;
-                }
-                break;
+            break;
+        }
+        case Type::HEX_STRING:
+        {
+            if (m_hex_value == subtype.getHexValue())
+            {
+                return true;
             }
+            break;
+        }
         }
         return false;
     };
-        
+
 private:
     Type m_type;
     uint32_t m_uint32_value{0};

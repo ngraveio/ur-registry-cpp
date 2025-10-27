@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <cppunit/TestCase.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -18,9 +17,9 @@ class TestIntent : public CppUnit::TestFixture
 public:
     void setUp(void) {}
     void tearDown(void) {}
-    
+
     void testValidIntent();
     void testIntentWrongParamTupleLength();
 
-    static void Compare(const Intent& decodedIntent, const Intent& expectedIntent);    
+    static void Compare(const Intent &decodedIntent, const Intent &expectedIntent);
 };

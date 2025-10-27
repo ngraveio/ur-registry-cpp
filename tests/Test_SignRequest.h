@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <cppunit/TestCase.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -19,12 +18,11 @@ class TestSignRequest : public CppUnit::TestFixture
 public:
     void setUp(void);
     void tearDown(void);
-    
+
     void validSignRequestWithBytesStringAddress();
     void validSignRequestWithTextStringAddress();
     void signRequestMissingMandatoryFields();
     void signRequestDecoderFuzzingTests();
 
-    static void Compare(const SignRequest& decodedSignRequest, const SignRequest& expectedSignRequest);
-    
+    static void Compare(const SignRequest &decodedSignRequest, const SignRequest &expectedSignRequest);
 };

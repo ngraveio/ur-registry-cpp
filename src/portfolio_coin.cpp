@@ -2,39 +2,47 @@
 #include "cbor_exception.h"
 #include "uai.h"
 
-PortfolioCoin::PortfolioCoin() {
+PortfolioCoin::PortfolioCoin()
+{
     setRegistryType(PORTFOLIO_COIN);
 }
 
-PortfolioCoin::PortfolioCoin(const CoinIdentity& coin_id,
-                           const std::vector<DetailedAccount>& accounts,
-                           const std::optional<uint32_t>& master_fingerprint) : PortfolioCoin::PortfolioCoin() {
+PortfolioCoin::PortfolioCoin(const CoinIdentity &coin_id,
+                             const std::vector<DetailedAccount> &accounts,
+                             const std::optional<uint32_t> &master_fingerprint) : PortfolioCoin::PortfolioCoin()
+{
     setCoinId(coin_id);
     setAccounts(accounts);
-    if (master_fingerprint.has_value()) {
+    if (master_fingerprint.has_value())
+    {
         setMasterFingerprint(master_fingerprint.value());
     }
 }
 
-PortfolioCoin::PortfolioCoin(const std::string& uai, const std::string& key) : PortfolioCoin::PortfolioCoin() {
+PortfolioCoin::PortfolioCoin(const std::string &uai, const std::string &key) : PortfolioCoin::PortfolioCoin()
+{
     createPortfolioCoin(uai, key);
 }
 
-void PortfolioCoin::clear() {
+void PortfolioCoin::clear()
+{
     m_coin_id.clear();
     m_accounts.clear();
     m_master_fingerprint = std::nullopt;
 }
 
-size_t PortfolioCoin::getMapSize() const {
-    size_t size = min_map_length; // coin_id and accounts are mandatory
-    if (m_master_fingerprint.has_value()) {
+size_t PortfolioCoin::getMapSize() const
+{
+    size_t size = MIN_MAP_LENGTH; // coin_id and accounts are mandatory
+    if (m_master_fingerprint.has_value())
+    {
         size++;
     }
     return size;
 }
 
-void PortfolioCoin::toMap(CborEncoder* parentEncoder) const {
+void PortfolioCoin::toMap(CborEncoder *parentEncoder) const
+{
     CborEncoder mapEncoder;
     size_t size = getMapSize();
     CborError err = cbor_encoder_create_map(parentEncoder, &mapEncoder, size);
@@ -61,7 +69,8 @@ void PortfolioCoin::toMap(CborEncoder* parentEncoder) const {
     checkCborError(err, "Failed to create accounts array");
 
     // Encode each detailed account
-    for (const auto& account : m_accounts) {
+    for (const auto &account : m_accounts)
+    {
         // Tag each detailed account with its registry type
         err = cbor_encode_tag(&accountsArray, DETAILED_ACCOUNT.tag());
         checkCborError(err, "Failed to encode detailed account tag");
@@ -74,7 +83,8 @@ void PortfolioCoin::toMap(CborEncoder* parentEncoder) const {
     checkCborError(err, "Failed to close accounts array");
 
     // Encode master_fingerprint if present
-    if (m_master_fingerprint.has_value()) {
+    if (m_master_fingerprint.has_value())
+    {
         err = cbor_encode_uint(&mapEncoder, static_cast<uint8_t>(Key::MASTER_FINGERPRINT));
         checkCborError(err, "Failed to encode master_fingerprint key");
         err = cbor_encode_uint(&mapEncoder, m_master_fingerprint.value());
@@ -85,7 +95,8 @@ void PortfolioCoin::toMap(CborEncoder* parentEncoder) const {
     checkCborError(err, "Failed to close container");
 }
 
-void PortfolioCoin::createPortfolioCoin(const std::string& uai, const std::string& key) {
+void PortfolioCoin::createPortfolioCoin(const std::string &uai, const std::string &key)
+{
     clear();
     CoinIdentity coin_id(uai);
     setCoinId(coin_id);
@@ -93,43 +104,56 @@ void PortfolioCoin::createPortfolioCoin(const std::string& uai, const std::strin
     addAccount(account);
     UniqueAssetId UaiObject(uai);
     auto masterFingerprint = UaiObject.getMasterFingerprintValue();
-    if (masterFingerprint != 0) setMasterFingerprint(masterFingerprint);
+    if (masterFingerprint != 0)
+        setMasterFingerprint(masterFingerprint);
 }
 
-void PortfolioCoin::addAccount(const std::string& uai, const std::string& key) {
+void PortfolioCoin::addAccount(const std::string &uai, const std::string &key)
+{
     UniqueAssetId UaiObject(uai);
-    
+
     auto masterFingerprint = UaiObject.getMasterFingerprintValue();
-    if (masterFingerprint != 0) {
-        if (!m_master_fingerprint.has_value()) {
+    if (masterFingerprint != 0)
+    {
+        if (!m_master_fingerprint.has_value())
+        {
             setMasterFingerprint(masterFingerprint);
-        } else {
-            if (masterFingerprint != m_master_fingerprint){
+        }
+        else
+        {
+            if (masterFingerprint != m_master_fingerprint)
+            {
                 throw CborException("Master Fingerprint differs to add a new account to this portfolio coin", CborErrorImproperValue);
             }
         }
     }
 
     CoinIdentity uai_coin(uai);
-    if (!(uai_coin == m_coin_id)){
+    if (!(uai_coin == m_coin_id))
+    {
         throw CborException("Coin identity differs to add a new account to this portfolio coin", CborErrorImproperValue);
     }
 
     DetailedAccount uai_account(uai, key);
     auto it_account = findAccount(uai_account);
 
-    if (it_account != m_accounts.end()) {
+    if (it_account != m_accounts.end())
+    {
         auto found_account = *it_account;
-        if (UaiObject.isToken()) {
+        if (UaiObject.isToken())
+        {
             // Add token ID if not already added
             auto uai_token = UaiObject.getTokenId();
-            if (!found_account.isTokenAdded(uai_token)) {
+            if (!found_account.isTokenAdded(uai_token))
+            {
                 found_account.addTokenId(uai_token);
                 std::replace(m_accounts.begin(), m_accounts.end(), *it_account, found_account);
             }
         }
         // Nothing to add
-    } else {
+    }
+    else
+    {
         addAccount(uai_account);
     }
 }

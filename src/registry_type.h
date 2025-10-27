@@ -5,19 +5,20 @@
 
 typedef std::string UrType;
 
-class RegistryType {
+class RegistryType
+{
 
 public:
     RegistryType() = default;
     ~RegistryType() {};
-    RegistryType(const UrType& type, CborTag tag): m_type(type), m_tag(tag) {};
+    RegistryType(const UrType &type, CborTag tag) : m_type(type), m_tag(tag) {};
 
-    UrType type() const {return m_type;}
-    CborTag tag() const {return m_tag;}
+    UrType type() const { return m_type; }
+    CborTag tag() const { return m_tag; }
 
 private:
-    UrType           m_type;
-    CborTag          m_tag;
+    UrType m_type;
+    CborTag m_tag;
 };
 
 /**
@@ -76,4 +77,3 @@ inline const RegistryType SIGN_REQUEST("sign-request", 41411);
 inline const RegistryType INTENT("intent", 41415);
 inline const RegistryType BATCH_SIGN_REQUEST("batch-sign-request", 41413);
 inline const RegistryType BATCH_SIGN_RESPONE("batch-sign-response", 41414);
-

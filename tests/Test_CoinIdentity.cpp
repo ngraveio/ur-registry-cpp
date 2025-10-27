@@ -3,87 +3,86 @@
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestCoinIdentity);
 
-void TestCoinIdentity::setUp() {
+void TestCoinIdentity::setUp()
+{
 }
 
-void TestCoinIdentity::tearDown() {
+void TestCoinIdentity::tearDown()
+{
 }
 
-void TestCoinIdentity::Compare(const CoinIdentity& decoded, const CoinIdentity& expected) {
+void TestCoinIdentity::Compare(const CoinIdentity &decoded, const CoinIdentity &expected)
+{
     // Compare curve
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Curve mismatch",
         static_cast<uint8_t>(expected.getCurve()),
-        static_cast<uint8_t>(decoded.getCurve())
-    );
+        static_cast<uint8_t>(decoded.getCurve()));
 
     // Compare type
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Type mismatch",
         expected.getType(),
-        decoded.getType()
-    );
+        decoded.getType());
 
     // Compare subtypes
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Subtype presence mismatch",
         expected.getSubTypes().has_value(),
-        decoded.getSubTypes().has_value()
-    );
+        decoded.getSubTypes().has_value());
 
-    if (decoded.getSubTypes().has_value()) {
-        const auto& decoded_subtypes = decoded.getSubTypes().value();
-        const auto& expected_subtypes = expected.getSubTypes().value();
+    if (decoded.getSubTypes().has_value())
+    {
+        const auto &decoded_subtypes = decoded.getSubTypes().value();
+        const auto &expected_subtypes = expected.getSubTypes().value();
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "Subtype count mismatch",
             expected_subtypes.size(),
-            decoded_subtypes.size()
-        );
+            decoded_subtypes.size());
 
-        for (size_t i = 0; i < decoded_subtypes.size(); i++) {
+        for (size_t i = 0; i < decoded_subtypes.size(); i++)
+        {
             CPPUNIT_ASSERT_EQUAL_MESSAGE(
                 "Subtype type mismatch at index " + std::to_string(i),
                 static_cast<int>(expected_subtypes[i].getType()),
-                static_cast<int>(decoded_subtypes[i].getType())
-            );
+                static_cast<int>(decoded_subtypes[i].getType()));
 
-            switch (decoded_subtypes[i].getType()) {
-                case SubTypeExp::Type::UINT32:
-                    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-                        "Uint32 subtype value mismatch at index " + std::to_string(i),
-                        expected_subtypes[i].getUint32Value(),
-                        decoded_subtypes[i].getUint32Value()
-                    );
-                    break;
-                case SubTypeExp::Type::STRING:
-                    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-                        "String subtype value mismatch at index " + std::to_string(i),
-                        expected_subtypes[i].getStringValue(),
-                        decoded_subtypes[i].getStringValue()
-                    );
-                    break;
-                case SubTypeExp::Type::HEX_STRING:
-                    CPPUNIT_ASSERT_MESSAGE(
-                        "Hex string subtype value mismatch at index " + std::to_string(i),
-                        expected_subtypes[i].getHexValue() == decoded_subtypes[i].getHexValue()
-                    );
-                    break;
+            switch (decoded_subtypes[i].getType())
+            {
+            case SubTypeExp::Type::UINT32:
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                    "Uint32 subtype value mismatch at index " + std::to_string(i),
+                    expected_subtypes[i].getUint32Value(),
+                    decoded_subtypes[i].getUint32Value());
+                break;
+            case SubTypeExp::Type::STRING:
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                    "String subtype value mismatch at index " + std::to_string(i),
+                    expected_subtypes[i].getStringValue(),
+                    decoded_subtypes[i].getStringValue());
+                break;
+            case SubTypeExp::Type::HEX_STRING:
+                CPPUNIT_ASSERT_MESSAGE(
+                    "Hex string subtype value mismatch at index " + std::to_string(i),
+                    expected_subtypes[i].getHexValue() == decoded_subtypes[i].getHexValue());
+                break;
             }
         }
     }
 }
 
-void TestCoinIdentity::TestAllFields() {
+void TestCoinIdentity::TestAllFields()
+{
     // Create a CoinIdentity with all fields
-    CoinIdentity identity(EllipticCurve::Secp256k1, 60);  // 60 is ETH in SLIP44
+    CoinIdentity identity(EllipticCurve::Secp256k1, 60); // 60 is ETH in SLIP44
 
     // Add subtypes of different types
     std::vector<SubTypeExp> subtypes;
-    subtypes.emplace_back(static_cast<uint32_t>(1));  // uint32
-    subtypes.emplace_back(std::string("test"));  // string
+    subtypes.emplace_back(static_cast<uint32_t>(1)); // uint32
+    subtypes.emplace_back(std::string("test"));      // string
     std::vector<uint8_t> hexData{0x01, 0x02, 0x03};
-    subtypes.emplace_back(hexData);  // hex string
+    subtypes.emplace_back(hexData); // hex string
     identity.setSubTypes(subtypes);
 
     // A3                                      # map(3)
@@ -113,21 +112,20 @@ void TestCoinIdentity::TestAllFields() {
     ValidateCborResults(coinid_uai, expectedBytes);
     ValidateUrEncoding(coinid_uai, expectedUR);
 
-    
     // Test toUaiStr()
     CPPUNIT_ASSERT(coinid_uai.toUaiStr() == "uai://secp256k1.60.1.test.0x010203");
-    
+
     // Test decoding
     CoinIdentity decoded;
     CPPUNIT_ASSERT_NO_THROW(decoded.fromUr(expectedUR));
     Compare(decoded, identity);
 
     // Verify map size
-    CPPUNIT_ASSERT_EQUAL(size_t(3), identity.getMapSize());  // curve, type, and subtypes
+    CPPUNIT_ASSERT_EQUAL(size_t(3), identity.getMapSize()); // curve, type, and subtypes
 
     // Verify subtypes
     CPPUNIT_ASSERT(identity.getSubTypes().has_value());
-    const auto& storedSubtypes = identity.getSubTypes().value();
+    const auto &storedSubtypes = identity.getSubTypes().value();
     CPPUNIT_ASSERT_EQUAL(size_t(3), storedSubtypes.size());
 
     // Check first subtype (uint32)
@@ -143,9 +141,10 @@ void TestCoinIdentity::TestAllFields() {
     CPPUNIT_ASSERT(hexData == storedSubtypes[2].getHexValue());
 }
 
-void TestCoinIdentity::TestMinimumFields() {
+void TestCoinIdentity::TestMinimumFields()
+{
     // Create a CoinIdentity with only mandatory fields
-    CoinIdentity identity(EllipticCurve::Ed25519, 148);  // 148 is XLM in SLIP44
+    CoinIdentity identity(EllipticCurve::Ed25519, 148); // 148 is XLM in SLIP44
 
     // A2                                      # map(2)
     //    01                                   # unsigned(1) curve
@@ -171,7 +170,8 @@ void TestCoinIdentity::TestMinimumFields() {
     Compare(decoded, identity);
 }
 
-void TestCoinIdentity::TestInvalidType() {
+void TestCoinIdentity::TestInvalidType()
+{
     // Create a CoinIdentity
     CoinIdentity identity(EllipticCurve::P256, 0);
 
@@ -179,8 +179,7 @@ void TestCoinIdentity::TestInvalidType() {
     CPPUNIT_ASSERT_THROW_MESSAGE(
         "Should throw on type with high bit set",
         identity.setType(0x80000000),
-        CborException
-    );
+        CborException);
 
     // Test decoding type with high bit set
     // A2                                      # map(2)
@@ -192,7 +191,8 @@ void TestCoinIdentity::TestInvalidType() {
     ValidateUrDecodingException(identity, urError, CborErrorImproperValue, "Type with high bit set failed");
 }
 
-void TestCoinIdentity::TestInvalidCurve() {
+void TestCoinIdentity::TestInvalidCurve()
+{
     CoinIdentity identity;
 
     // A2                                      # map(2)
@@ -204,7 +204,8 @@ void TestCoinIdentity::TestInvalidCurve() {
     ValidateUrDecodingException(identity, urError, CborErrorImproperValue, "Invalid curve value failed");
 }
 
-void TestCoinIdentity::TestMissingMandatoryFields() {
+void TestCoinIdentity::TestMissingMandatoryFields()
+{
     CoinIdentity identity;
 
     // A2                                      # map(2)
@@ -228,7 +229,8 @@ void TestCoinIdentity::TestMissingMandatoryFields() {
     ValidateUrDecodingException(identity, urError, CborErrorTooFewItems, "Map missing the 'type' mandatory field");
 }
 
-void TestCoinIdentity::TestNotUniqueMapKeys() {
+void TestCoinIdentity::TestNotUniqueMapKeys()
+{
     CoinIdentity identity;
 
     // A3                                      # map(3)
@@ -264,7 +266,8 @@ void TestCoinIdentity::TestNotUniqueMapKeys() {
     ValidateUrDecodingException(identity, urError, CborErrorMapKeysNotUnique, "Duplicate subtype key failed");
 }
 
-void TestCoinIdentity::TestInvalidSubtypes() {
+void TestCoinIdentity::TestInvalidSubtypes()
+{
     CoinIdentity identity;
 
     // A3                                      # map(3)
@@ -302,7 +305,8 @@ void TestCoinIdentity::TestInvalidSubtypes() {
     ValidateUrDecodingException(identity, urError, CborErrorInappropriateTagForType, "Invalid hex string tag failed");
 }
 
-void TestCoinIdentity::TestEncodingUaiExamples() {
+void TestCoinIdentity::TestEncodingUaiExamples()
+{
     // UAI examples from NBCR-2024-001
     // Ref: https://github.com/ngraveio/Research/blob/main/papers/nbcr-2024-001-unique-asset-id.md
     CoinIdentity coinid_uai;
@@ -444,7 +448,7 @@ void TestCoinIdentity::TestEncodingUaiExamples() {
     expectedUR = std::string("ur:coin-identity/oeadaaaocfadidjoutasca");
     ValidateCborResults(coinid_uai, expectedBytes);
     ValidateUrEncoding(coinid_uai, expectedUR);
-    
+
     // USDC on MultiversX
     // A2         # map(2)
     //    01      # unsigned(1)
@@ -458,75 +462,66 @@ void TestCoinIdentity::TestEncodingUaiExamples() {
     ValidateUrEncoding(coinid_uai, expectedUR);
 }
 
-void TestCoinIdentity::TestInvalidUaiStrings() {
+void TestCoinIdentity::TestInvalidUaiStrings()
+{
     CoinIdentity invalid_uai;
     // Missing uai:// prefix
     CPPUNIT_ASSERT_THROW_MESSAGE(
         "Should throw invalid UAI string",
         invalid_uai.setCoinIdentity("ed25519.508:USDC-c76f1f"),
-        CborException
-    );
+        CborException);
 
     // Missing curve
     CPPUNIT_ASSERT_THROW_MESSAGE(
         "Should throw invalid UAI string",
         invalid_uai.setCoinIdentity("uai://508"),
-        CborException
-    );
+        CborException);
 
     // Invalid curve name
     CPPUNIT_ASSERT_THROW_MESSAGE(
         "Should throw invalid UAI string",
         invalid_uai.setCoinIdentity("uai://unknown.508"),
-        CborException
-    );
+        CborException);
 
     // Missing type
     CPPUNIT_ASSERT_THROW_MESSAGE(
         "Should throw invalid UAI string",
         invalid_uai.setCoinIdentity("uai://secp256k1"),
-        CborException
-    );
+        CborException);
 
     // Invalid type
     CPPUNIT_ASSERT_THROW_MESSAGE(
         "Should throw invalid UAI string",
         invalid_uai.setCoinIdentity("uai://secp256k1.invalid"),
-        CborException
-    );
+        CborException);
 
     // Invalid separator
     CPPUNIT_ASSERT_THROW_MESSAGE(
         "Should throw invalid UAI string",
         invalid_uai.setCoinIdentity("uai://secp256k1;56"),
-        CborException
-    );
+        CborException);
 
     // Invalid derivation path
     CPPUNIT_ASSERT_THROW_MESSAGE(
         "Should throw invalid UAI string",
         invalid_uai.setCoinIdentity("uai://secp256k1.0/56h/abcd"),
-        CborException
-    );
+        CborException);
 
     // Invalid master fingerprint text
     CPPUNIT_ASSERT_THROW_MESSAGE(
         "Should throw invalid UAI string",
         invalid_uai.setCoinIdentity("uai://secp256k1.0?master=54"),
-        CborException
-    );
+        CborException);
 
     // Invalid master fingerprint value
     CPPUNIT_ASSERT_THROW_MESSAGE(
         "Should throw invalid UAI string",
         invalid_uai.setCoinIdentity("uai://secp256k1.0?master_fingerprint=123f"),
-        CborException
-    );
+        CborException);
 
-    // Excessive backtracking test -> Can lead to infinite loop if 
+    // Excessive backtracking test -> Can lead to infinite loop if
     CPPUNIT_ASSERT_THROW_MESSAGE(
         "Should throw invalid UAI string",
         invalid_uai.setCoinIdentity("uai://secp256k1.60.137:0x7ceb23fd6bc0add59e62ac25578270cff1b9f619/44'/60'/0'/0/0?=master_fingerprint=123456789"),
-        CborException
-    );
+        CborException);
 }
