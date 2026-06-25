@@ -5,6 +5,7 @@
 #include <array>
 #include <iostream>
 #include <iomanip>
+#include <algorithm>
 
 #include "../src/hdkey_bip32.h"
 
@@ -60,6 +61,16 @@ inline std::string vectorToHex(const std::vector<uint8_t>& data) {
         oss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(byte);
     }
     return oss.str();
+}
+
+inline bool isHexString(std::string_view hexStr) {
+    if (hexStr.empty())
+        return false;
+
+    return std::all_of(hexStr.begin(), hexStr.end(), 
+                       [](unsigned char c) {
+                           return std::isxdigit(c);
+                       });
 }
 
 template <std::size_t N>

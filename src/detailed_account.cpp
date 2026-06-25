@@ -1,6 +1,7 @@
 #include "detailed_account.h"
 #include "uai.h"
 #include "output_descriptor_function.h"
+#include "../common/utils.h"
 
 #include <regex>
 #include <charconv>
@@ -67,8 +68,17 @@ void DetailedAccount::toMap(CborEncoder *parentEncoder) const
         err = cbor_encoder_create_array(&localEncoder, &arrayEncoder, m_tokenids.size());
         checkCborError(err, "Failed to create cbor array");
 
-        for (const std::string_view tokenid : m_tokenids)
+        for (std::string_view tokenid : m_tokenids)
         {
+            if (tokenid.size() >= 2 && tokenid[0] == '0' && (tokenid[1] == 'x' || tokenid[1] == 'X')) {
+                auto hex = tokenid.substr(2);
+                if (isHexString(hex)) {
+                    const auto& bytes = fromHex(std::string(hex));
+                    err = cbor_encode_byte_string(&arrayEncoder, bytes.data(), bytes.size());
+                    checkCborError(err, "Failed to encode tokenid hex bytes");
+                    continue;
+                }
+            }
             err = cbor_encode_text_string(&arrayEncoder, tokenid.data(), tokenid.length());
             checkCborError(err, "Failed to encode tokenid str");
         }
