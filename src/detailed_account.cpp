@@ -71,9 +71,9 @@ void DetailedAccount::toMap(CborEncoder *parentEncoder) const
         for (std::string_view tokenid : m_tokenids)
         {
             if (tokenid.size() >= 2 && tokenid[0] == '0' && (tokenid[1] == 'x' || tokenid[1] == 'X')) {
-                auto hex = tokenid.substr(2);
+                const auto hex = tokenid.substr(2);
                 if (isHexString(hex)) {
-                    const auto& bytes = fromHex(std::string(hex));
+                    const auto bytes = fromHex(hex);
                     err = cbor_encode_byte_string(&arrayEncoder, bytes.data(), bytes.size());
                     checkCborError(err, "Failed to encode tokenid hex bytes");
                     continue;

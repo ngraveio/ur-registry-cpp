@@ -1,11 +1,13 @@
 #pragma once
 
 #include <string>
+#include <string_view>
 #include <vector>
 #include <array>
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
+#include <charconv>
 
 #include "../src/hdkey_bip32.h"
 
@@ -41,14 +43,13 @@ inline std::string bytesToHex(const std::vector<uint8_t>& bytes)
     return hex;
 }
 
-inline std::vector<uint8_t> fromHex(const std::string &hex) {
+inline std::vector<uint8_t> fromHex(std::string_view hex) {
     std::vector<uint8_t> bytes;
     bytes.reserve(hex.size() / 2);
 
-    for (std::size_t i = 0; i < hex.size(); i += 2) {
-        auto byte = static_cast<uint8_t>(
-            std::stoul(hex.substr(i, 2), nullptr, 16)
-        );
+    for (std::size_t i = 0; i + 1 < hex.size(); i += 2) {
+        uint8_t byte = 0;
+        std::from_chars(hex.data() + i, hex.data() + i + 2, byte, 16);
         bytes.push_back(byte);
     }
 
@@ -68,7 +69,7 @@ inline bool isHexString(std::string_view hexStr) {
         return false;
 
     return std::all_of(hexStr.begin(), hexStr.end(), 
-                       [](unsigned char c) {
+                       [](uint8_t c) {
                            return std::isxdigit(c);
                        });
 }
