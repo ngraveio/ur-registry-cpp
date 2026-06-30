@@ -55,8 +55,9 @@ runs:
         git clone https://github.com/ngraveio/libwally-core-lite.git
         cd libwally-core-lite
         git checkout zero-main
+        git submodule update --init --recursive
         ./tools/autogen.sh
-        ./configure
+        ./configure --enable-zcash=yes
         make
         sudo make install
         echo "[libwally-core-lite] Done"
