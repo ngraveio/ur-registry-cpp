@@ -19,6 +19,7 @@ class TestEthSignRequest : public CppUnit::TestFixture
     CPPUNIT_TEST(DecodeIncorrectTags);
     CPPUNIT_TEST(DecodeNotUniqueMapKeys);
     CPPUNIT_TEST(DecodeIncorrectSize);
+    CPPUNIT_TEST(DecodeDataTypeOutOfRange);
     CPPUNIT_TEST(DecodeFuzzer);
 
     CPPUNIT_TEST_SUITE_END();
@@ -39,6 +40,7 @@ protected:
     void DecodeIncorrectTags(void);
     void DecodeNotUniqueMapKeys(void);
     void DecodeIncorrectSize(void);
+    void DecodeDataTypeOutOfRange(void);
     void DecodeFuzzer(void);
 
 private:

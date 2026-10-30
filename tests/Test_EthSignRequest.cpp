@@ -516,6 +516,43 @@ void TestEthSignRequest::DecodeIncorrectSize(void)
 }
 
 /**
+ * @brief Tests returning errors when the data type is outside the EIP-4527 range (1-4)
+ * {
+ *    1: 37(h'47E1C5370C43482EBA5AC18E7D190B67'),
+ *    2: h'02F86A82A4B1028083CDFE608301D13D94912CE59144191C1204E64559FE8253A0E49E654880B844A9059CBB000000000000000000000000371398AF172609F57F0F13BE4C1AAF48ACCEB59D0000000000000000000000000000000000000000000000001BC16D674EC80000C0',
+ *    3: <data type>,
+ *    4: 42161,
+ *    5: 304({1: [44, true, 60, true, 0, true, 0, false, 1, false], 2: 1906394030}),
+ *    6: h'9E9B5D5151B0F6BEEF3D90EEB36B12365C09BBB4'
+ * }
+ * with data type:
+ * 1. 0
+ * 2. 5
+ * 3. 99
+ * 4. 257
+ * 5. 2^64-1
+ *
+ */
+void TestEthSignRequest::DecodeDataTypeOutOfRange(void)
+{
+    EthSignRequest ethsignrequest;
+    auto urError = std::string("ur:eth-sign-request/oladtpdagdflvyskembnfxfddmrdhtsemnkicfbdioaohdjnaoyaimlfoxpaaolalssnzehnlsadttfsmwmedwvwmefycfcebgaavafehkzelfgunbvennihfdlarofyptahnsrkaeaeaeaeaeaeaeaeaeaeaeaeembwmkpechdsasyklbbsbwrngscypefdpstorentaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecwsejnioglspaeaertaxaeaacfoxpaahtaaddyoeadlecsdwykcsfnykaeykaewkadwkaocyjsoyfxplamghnnndhlgygypfynrnwsfsmhwyqdjebgenhhasrkqztpghlndr");
+    ValidateUrDecodingException(ethsignrequest, urError, CborErrorImproperValue, "1. Data type out of range failed");
+
+    urError = std::string("ur:eth-sign-request/oladtpdagdflvyskembnfxfddmrdhtsemnkicfbdioaohdjnaoyaimlfoxpaaolalssnzehnlsadttfsmwmedwvwmefycfcebgaavafehkzelfgunbvennihfdlarofyptahnsrkaeaeaeaeaeaeaeaeaeaeaeaeembwmkpechdsasyklbbsbwrngscypefdpstorentaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecwsejnioglspaeaertaxahaacfoxpaahtaaddyoeadlecsdwykcsfnykaeykaewkadwkaocyjsoyfxplamghnnndhlgygypfynrnwsfsmhwyqdjebgenhhasrkqzsntnlkgm");
+    ValidateUrDecodingException(ethsignrequest, urError, CborErrorImproperValue, "2. Data type out of range failed");
+
+    urError = std::string("ur:eth-sign-request/oladtpdagdflvyskembnfxfddmrdhtsemnkicfbdioaohdjnaoyaimlfoxpaaolalssnzehnlsadttfsmwmedwvwmefycfcebgaavafehkzelfgunbvennihfdlarofyptahnsrkaeaeaeaeaeaeaeaeaeaeaeaeembwmkpechdsasyklbbsbwrngscypefdpstorentaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecwsejnioglspaeaertaxcsiaaacfoxpaahtaaddyoeadlecsdwykcsfnykaeykaewkadwkaocyjsoyfxplamghnnndhlgygypfynrnwsfsmhwyqdjebgenhhasrkqztafxisrh");
+    ValidateUrDecodingException(ethsignrequest, urError, CborErrorImproperValue, "3. Data type out of range failed");
+
+    urError = std::string("ur:eth-sign-request/oladtpdagdflvyskembnfxfddmrdhtsemnkicfbdioaohdjnaoyaimlfoxpaaolalssnzehnlsadttfsmwmedwvwmefycfcebgaavafehkzelfgunbvennihfdlarofyptahnsrkaeaeaeaeaeaeaeaeaeaeaeaeembwmkpechdsasyklbbsbwrngscypefdpstorentaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecwsejnioglspaeaertaxcfadadaacfoxpaahtaaddyoeadlecsdwykcsfnykaeykaewkadwkaocyjsoyfxplamghnnndhlgygypfynrnwsfsmhwyqdjebgenhhasrkqzbzzmnsnt");
+    ValidateUrDecodingException(ethsignrequest, urError, CborErrorImproperValue, "4. Data type out of range failed");
+
+    urError = std::string("ur:eth-sign-request/oladtpdagdflvyskembnfxfddmrdhtsemnkicfbdioaohdjnaoyaimlfoxpaaolalssnzehnlsadttfsmwmedwvwmefycfcebgaavafehkzelfgunbvennihfdlarofyptahnsrkaeaeaeaeaeaeaeaeaeaeaeaeembwmkpechdsasyklbbsbwrngscypefdpstorentaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecwsejnioglspaeaertaxcwzmzmzmzmzmzmzmzmaacfoxpaahtaaddyoeadlecsdwykcsfnykaeykaewkadwkaocyjsoyfxplamghnnndhlgygypfynrnwsfsmhwyqdjebgenhhasrkqzfnjphkot");
+    ValidateUrDecodingException(ethsignrequest, urError, CborErrorImproperValue, "5. Data type out of range failed");
+}
+
+/**
  * @brief Fuzzing of the decoder with several malformed eth-sign-request UR types
  *
  */

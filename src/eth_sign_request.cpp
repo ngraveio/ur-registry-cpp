@@ -74,6 +74,11 @@ void EthSignRequest::fromMap(CborValue *map)
             err = cbor_value_get_uint64(&container, &dataType);
             checkCborError(err, "Failed to get uint");
 
+            if (dataType < static_cast<uint64_t>(DataType::EthTransactionData) ||
+                dataType > static_cast<uint64_t>(DataType::EthTypedTransaction))
+            {
+                throw CborException("Data type out of range", CborErrorImproperValue);
+            }
             m_data_type = static_cast<DataType>(dataType);
             break;
         }
