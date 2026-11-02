@@ -12,6 +12,7 @@ class TestSignRequest : public CppUnit::TestFixture
     CPPUNIT_TEST(validSignRequestWithTextStringAddress);
     CPPUNIT_TEST(signRequestMissingMandatoryFields);
     CPPUNIT_TEST(signRequestDecoderFuzzingTests);
+    CPPUNIT_TEST(signRequestTxtypeMaxUint32);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -23,6 +24,7 @@ public:
     void validSignRequestWithTextStringAddress();
     void signRequestMissingMandatoryFields();
     void signRequestDecoderFuzzingTests();
+    void signRequestTxtypeMaxUint32();
 
     static void Compare(const SignRequest &decodedSignRequest, const SignRequest &expectedSignRequest);
 };

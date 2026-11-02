@@ -123,6 +123,14 @@ inline void checkMaxUint8(uint64_t value)
     }
 }
 
+inline void checkMaxUint16(uint64_t value)
+{
+    if (value > std::numeric_limits<uint16_t>::max())
+    {
+        throw CborException("Value exceeds maximum uint16_t", CborErrorImproperValue);
+    }
+}
+
 inline void checkMaxUint32(uint64_t value)
 {
     if (value > std::numeric_limits<uint32_t>::max())

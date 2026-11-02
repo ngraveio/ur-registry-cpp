@@ -120,10 +120,13 @@ void Intent::fromMap(CborValue *cborMap)
                 err = cbor_value_advance(&paramTuple);
                 checkCborError(err, "Failed to advance");
 
-                // check for the encoding type int
-                checkIsInt(&paramTuple);
-                err = cbor_value_get_int(&paramTuple, &tmpParam.second);
-                checkCborError(err, "Failed to get int");
+                // check for the encoding type: uint .size 2
+                uint64_t encoding = 0;
+                checkIsUint(&paramTuple);
+                err = cbor_value_get_uint64(&paramTuple, &encoding);
+                checkCborError(err, "Failed to get uint");
+                checkMaxUint16(encoding);
+                tmpParam.second = static_cast<int>(encoding);
 
                 m_substitute_fields.fields_array.emplace_back(std::move(tmpParam));
 

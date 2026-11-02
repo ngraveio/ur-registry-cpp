@@ -272,6 +272,21 @@ void TestSignRequest::signRequestDecoderFuzzingTests()
     ValidateUrDecodingException(signRequest, invalidUr, CborErrorIO, "24. Fuzzer failed");
 }
 
+void TestSignRequest::signRequestTxtypeMaxUint32()
+{
+    // Fuzzer case 15 with a valid txtype (key 6). getTxtype() returns a uint, so larger values used to be truncated.
+    SignRequest signRequest;
+    signRequest.fromUr("ur:sign-request/osadtpdagdspoefsrfroadfdzconpsrpzmtswfnnmoaotaoyrhoeadayaocsfnaxtantjooyadlylrcsfzwkcsfzykaafxadaoaxahinjzinjskpiniehsjojoamcyzmzmzmzmatfeadaoaxaaahahmudyct");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("1. Txtype 2^32 - 1 failed", 0xFFFFFFFFu, signRequest.getTxtype().value());
+
+    // 2^32 used to read as 0
+    ValidateUrDecodingException(signRequest, "ur:sign-request/osadtpdagdspoefsrfroadfdzconpsrpzmtswfnnmoaotaoyrhoeadayaocsfnaxtantjooyadlylrcsfzwkcsfzykaafxadaoaxahinjzinjskpiniehsjojoamcwaeaeaeadaeaeaeaeatfeadaoaxaaahflswosws",
+                                CborErrorImproperValue, "2. Txtype 2^32 failed");
+    // 2^32 + 3 used to read as 3
+    ValidateUrDecodingException(signRequest, "ur:sign-request/osadtpdagdspoefsrfroadfdzconpsrpzmtswfnnmoaotaoyrhoeadayaocsfnaxtantjooyadlylrcsfzwkcsfzykaafxadaoaxahinjzinjskpiniehsjojoamcwaeaeaeadaeaeaeaxatfeadaoaxaaahsoganbbn",
+                                CborErrorImproperValue, "3. Txtype 2^32 + 3 failed");
+}
+
 void TestSignRequest::Compare(const SignRequest &decodedSignRequest, const SignRequest &expectedSignRequest)
 {
     CPPUNIT_ASSERT_EQUAL_MESSAGE(

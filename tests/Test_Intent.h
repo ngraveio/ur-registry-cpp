@@ -11,6 +11,8 @@ class TestIntent : public CppUnit::TestFixture
 
     CPPUNIT_TEST(testValidIntent);
     CPPUNIT_TEST(testIntentWrongParamTupleLength);
+    CPPUNIT_TEST(testIntentEncodingMaxUint16);
+    CPPUNIT_TEST(testIntentEncodingOutOfRange);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -20,6 +22,8 @@ public:
 
     void testValidIntent();
     void testIntentWrongParamTupleLength();
+    void testIntentEncodingMaxUint16();
+    void testIntentEncodingOutOfRange();
 
     static void Compare(const Intent &decodedIntent, const Intent &expectedIntent);
 };

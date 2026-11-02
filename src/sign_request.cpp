@@ -152,6 +152,7 @@ void SignRequest::fromMap(CborValue *cborMap)
             checkIsUint(&localDecoder);
             err = cbor_value_get_uint64(&localDecoder, &dataType);
             checkCborError(err, "Failed to get uint");
+            checkMaxUint32(dataType);
 
             m_txtype = dataType;
             break;
